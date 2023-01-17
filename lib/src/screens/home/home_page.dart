@@ -11,23 +11,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBodyBehindAppBar: false,
+        extendBody: false,
         body: ListView(
-      padding: screenPadding,
-      physics: const BouncingScrollPhysics(),
-      children: [
-        const VerticalGap(gap: 20),
-        const HeaderTile(),
-        const VerticalGap(gap: 10),
-        const TabTile(),
-        const VerticalGap(gap: 10),
-        Text(
-          "Recent Notes On Nazasmart Facility",
-          style: layer1,
-        ),
-        const VerticalGap(gap: 10),
-        const NotesList(),
-        const VerticalGap(gap: 20),
-      ],
-    ));
+          padding: screenPadding,
+          physics: const BouncingScrollPhysics(),
+          children: [
+            const VerticalGap(gap: 20),
+            const HeaderTile(),
+            const VerticalGap(gap: 10),
+            const TabTile(),
+            const VerticalGap(gap: 10),
+            Text(
+              "Recent Notes On Nazasmart Facility",
+              style: layer1,
+            ),
+            const VerticalGap(gap: 10),
+            const NotesList(),
+            const VerticalGap(gap: 20),
+          ],
+        ));
   }
 }

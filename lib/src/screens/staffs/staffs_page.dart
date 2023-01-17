@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:note/src/screens/add_staff/add_staffs_page.dart';
 import 'package:note/src/screens/staffs/components/staff_list.dart';
 import 'package:note/src/utils/constants.dart';
 
@@ -28,13 +29,25 @@ class StaffsPage extends StatelessWidget {
         ],
       ),
       floatingActionButton: CircleAvatar(
-        radius: 40.r,
+        radius: 30.r,
         child: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: kAnimationDuration,
+                pageBuilder: ((context, animation, _) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: const AddStaffsPage(),
+                  );
+                }),
+              ),
+            );
+          },
           icon: const Center(
             child: Icon(
               Icons.add_rounded,
-              size: 50,
+              size: 30,
               color: kWhiteColor,
             ),
           ),

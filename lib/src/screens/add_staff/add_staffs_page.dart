@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/utils/constants.dart';
-import 'package:note/src/widget/custom_back_button.dart';
-import 'package:note/src/widget/default_button.dart';
-import 'package:note/src/widget/vertical_gap.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+import '../../widget/vertical_gap.dart';
+
+class AddStaffsPage extends StatefulWidget {
+  const AddStaffsPage({Key? key}) : super(key: key);
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<AddStaffsPage> createState() => _AddStaffsPageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _AddStaffsPageState extends State<AddStaffsPage> {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
 
@@ -27,65 +25,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const Text('Profile'),
-        leading: customBackButton(context),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-      ),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 350.h,
-            child: Stack(
-              children: [
-                Container(
-                  height: 300.h,
-                  color: kGreyColor,
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: CircleAvatar(
-                    radius: 50.r,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                const Text('Colin Mark'),
-                const VerticalGap(gap: 10),
-                buildNameField(),
-                const VerticalGap(gap: 20),
-                buildEmailField(),
-                const VerticalGap(gap: 100),
-                Hero(
-                  tag: "button",
-                  child: DefaultButton(
-                      widget: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Save",
-                            style: heading2White,
-                          ),
-                        ],
-                      ),
-                      onTap: () {}),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Add Staff'),
+          centerTitle: true,
+        ),
+        body: ListView(
+          padding: screenPadding,
+          children: [
+            const Text("Add Staff to join the company"),
+            const VerticalGap(gap: 30),
+            buildNameField(),
+            const VerticalGap(gap: 10),
+            buildEmailField(),
+            const VerticalGap(gap: 10),
+            buildFacilityField(),
+          ],
+        ));
+  }
+
+  Widget buildFacilityField() {
+    return const Text("");
   }
 
   Widget buildNameField() {
