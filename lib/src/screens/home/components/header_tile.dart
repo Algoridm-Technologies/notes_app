@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/screens/notification/notification_page.dart';
 
 import '../../../utils/constants.dart';
 
@@ -34,7 +35,19 @@ class HeaderTile extends StatelessWidget {
           ),
           const Spacer(),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: kAnimationDuration,
+                  pageBuilder: ((context, animation, _) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: const NotificationPage(),
+                    );
+                  }),
+                ),
+              );
+            },
             icon: const Icon(
               Iconsax.notification4,
             ),

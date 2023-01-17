@@ -22,72 +22,73 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   Widget build(BuildContext context) {
     return Consumer<SetStateProvider>(builder: (context, v, c) {
       return Scaffold(
-        appBar: CustomAppBar(
-          title: '',
-        ),
-        body: Column(
-          children: [
-            const HeaderTile(),
-            Expanded(
-              child: ListView(
-                padding: screenPadding,
-                children: [
-                  const VerticalGap(gap: 20),
-                  Text(
-                    loremSentence,
-                    style: layer2,
-                  ),
-                  const VerticalGap(gap: 20),
-                ],
-              ),
-            )
-          ],
-        ),
-        bottomSheet: v.isReplying
-            ? const SizedBox()
-            : Container(
-                margin: screenPadding,
-                padding: const EdgeInsets.only(
-                  bottom: 5,
-                ),
-                height: 44.h,
-                width: double.infinity,
-                child: Row(
+          appBar: CustomAppBar(
+            title: '',
+          ),
+          body: Column(
+            children: [
+              const HeaderTile(),
+              Expanded(
+                child: ListView(
+                  padding: screenPadding,
                   children: [
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: kGreyColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            suffixIcon: Icon(
-                              Iconsax.microphone_slash_1,
-                              size: 25.sp,
+                    const VerticalGap(gap: 20),
+                    Text(
+                      loremSentence,
+                      style: layer2,
+                    ),
+                    const VerticalGap(gap: 20),
+                  ],
+                ),
+              )
+            ],
+          ),
+          bottomSheet: v.isReplying
+              ? Container(
+                  margin: screenPadding,
+                  padding: const EdgeInsets.only(
+                    bottom: 5,
+                  ),
+                  height: 44.h,
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                            right: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: kGreyColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              suffixIcon: Icon(
+                                Iconsax.microphone_slash_1,
+                                size: 25.sp,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    CircleAvatar(
-                      radius: 20.r,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.send,
-                          size: 25.sp,
+                      CircleAvatar(
+                        radius: 20.r,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.send,
+                            size: 25.sp,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-      );
+                    ],
+                  ),
+                )
+              : const SizedBox());
     });
   }
 }

@@ -3,8 +3,8 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../utils/constants.dart';
 
-class HeaderTile extends StatelessWidget {
-  const HeaderTile({Key? key}) : super(key: key);
+class NoteHeaderTile extends StatelessWidget {
+  const NoteHeaderTile({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(

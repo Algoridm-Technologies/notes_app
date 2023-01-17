@@ -13,8 +13,35 @@ var appTheme = ThemeData(
   primaryColorDark: kPrimaryColor1,
   primaryColorLight: kPrimaryColor1,
   appBarTheme: appBarTheme,
+  inputDecorationTheme: otpInputDecorationTheme,
 );
 
 var appBarTheme = const AppBarTheme(
   surfaceTintColor: kWhiteColor,
 );
+var otpInputDecorationTheme = InputDecorationTheme(
+  border: outlineInputBorder(),
+  enabledBorder: outlineInputBorder(),
+  errorBorder: errorInputBorder(),
+);
+
+OutlineInputBorder outlineInputBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5),
+    borderSide: const BorderSide(color: kTextColor1),
+  );
+}
+
+OutlineInputBorder enabledInputBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5),
+    borderSide: const BorderSide(color: kDefaultColor1),
+  );
+}
+
+OutlineInputBorder errorInputBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5),
+    borderSide: const BorderSide(color: kErrorColor1),
+  );
+}

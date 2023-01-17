@@ -103,23 +103,26 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const VerticalGap(gap: 50),
-                DefaultButton(
-                    color: kSecondaryColor,
-                    widget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Log out",
-                          style: heading2White,
-                        ),
-                        const HorizontalGap(gap: 5),
-                        const Icon(
-                          Iconsax.logout_1,
-                          color: kWhiteColor,
-                        )
-                      ],
-                    ),
-                    onTap: () {})
+                Hero(
+                  tag: "button",
+                  child: DefaultButton(
+                      color: kSecondaryColor,
+                      widget: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Log out",
+                            style: heading2White,
+                          ),
+                          const HorizontalGap(gap: 5),
+                          const Icon(
+                            Iconsax.logout_1,
+                            color: kWhiteColor,
+                          )
+                        ],
+                      ),
+                      onTap: () {}),
+                )
               ],
             ),
           )

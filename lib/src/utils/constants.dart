@@ -132,16 +132,4 @@ const String kAddressNullError = "Please Enter your address";
 const String FIELD_REQUIRED_MSG = "This field is required";
 const String loremSentence = '''
 Pariatur officia laborum incididunt duis elit id mollit mollit magna esse nulla cupidatat minim. Aute nisi aliquip fugiat deserunt ullamco. Excepteur id ullamco anim nisi magna esse esse mollit eu aliqua fugiat. Minim qui laborum proident mollit ex laborum incididunt et eu exercitation deserunt. Officia nulla aliqua cupidatat et anim reprehenderit laborum veniam. Consectetur cillum anim commodo ad do et magna Lorem aliquip laborum ut eu deserunt.Ea minim cupidatat consectetur ad amet deserunt minim velit officia qui ex et fugiat occaecat. Nisi incididunt aute ex amet minim ad ea sit officia qui aute. Eiusmod ut consectetur consectetur ad. Ad mollit nulla veniam reprehenderit occaecat reprehenderit reprehenderit veniam ad.Culpa laboris deserunt commodo reprehenderit aliqua aliquip commodo. Reprehenderit commodo amet do voluptate minim duis adipisicing ut exercitation nostrud sit. Commodo elit nulla reprehenderit consequat esse duis pariatur ullamco reprehenderit ea. Exercitation minim laborum ipsum duis ut magna qui aliquip tempor ipsum reprehenderit tempor tempor.Excepteur aliqua velit eiusmod amet proident est irure eiusmod minim. Magna ullamco aliqua sit fugiat enim fugiat labore ad est aliquip nisi irure officia quis. Fugiat enim fugiat proident veniam laborum amet id do labore incididunt.Sunt eiusmod commodo sint voluptate in non. Esse cupidatat esse anim esse reprehenderit irure veniam. Commodo cupidatat officia amet non. Labore quis amet esse id magna ad adipisicing sunt culpa cupidatat deserunt. Commodo labore dolore commodo id velit. Magna nostrud voluptate elit do esse non velit aute ea. Ex sunt ex officia officia veniam deserunt nulla ad ipsum est minim tempor veniam.Incididunt incididunt mollit labore sint exercitation id Lorem cillum ex ex. Tempor velit non enim non amet non fugiat eiusmod consectetur excepteur est minim proident cupidatat. Et ut enim dolore irure. Mollit consequat anim non nulla aliqua ea ea esse in laboris occaecat esse do consectetur.Magna voluptate elit cillum aliqua id cillum labore qui excepteur et nulla cupidatat. Adipisicing velit qui culpa consectetur. Voluptate in proident et reprehenderit labore tempor laborum ad est labore ad sit. Aliquip Lorem occaecat ex anim veniam non sunt officia ipsum qui et dolor commodo dolore. Lorem in amet sit elit pariatur.Fugiat voluptate enim nostrud irure sit commodo nisi sint mollit incididunt. Non fugiat veniam labore dolore enim ullamco qui veniam id exercitation proident irure dolore in. Id voluptate veniam aliqua sit ullamco anim consequat officia. Laborum Lorem incididunt Lorem voluptate sit. Lorem irure dolore tempor nisi anim qui nostrud officia tempor commodo. Exercitation voluptate reprehenderit ex proident minim eiusmod tempor dolore occaecat sunt nulla pariatur nostrud irure.''';
-final otpInputDecoration = InputDecoration(
-  contentPadding: const EdgeInsets.symmetric(vertical: 15),
-  border: outlineInputBorder(),
-  focusedBorder: outlineInputBorder(),
-  enabledBorder: outlineInputBorder(),
-);
 
-OutlineInputBorder outlineInputBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15),
-    borderSide: const BorderSide(color: kTextColor1),
-  );
-}

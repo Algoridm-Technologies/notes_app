@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/screens/notes/components/header_tile.dart';
+import 'package:note/src/screens/notes/components/note_header_tile.dart';
 import 'package:note/src/screens/notes/components/notes_list.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
@@ -40,7 +40,7 @@ class NotesPage extends StatelessWidget {
           ),
           Padding(
             padding: screenPadding,
-            child: const HeaderTile(),
+            child: const NoteHeaderTile(),
           ),
           Expanded(
             child: ListView(
