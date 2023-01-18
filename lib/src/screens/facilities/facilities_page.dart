@@ -14,36 +14,39 @@ class FacilitiesPage extends StatelessWidget {
           children: [
             const VerticalGap(gap: 50),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 8,
-                  childAspectRatio: 1 / 2 / 0.6,
-                  crossAxisSpacing: 12,
-                ),
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 80,
-                          width: 80,
-                          color: kSecondaryColor,
-                        ),
-                        Text("Facility $index"),
-                        const Text("data"),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              child: LayoutBuilder(builder: (context, value) {
+                print(value.smallest);
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 1 / 2 / 0.6,
+                    crossAxisSpacing: 12,
+                  ),
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 80,
+                            width: 80,
+                            color: kSecondaryColor,
+                          ),
+                          Text("Facility $index"),
+                          const Text("data"),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
             DefaultButton(
               widget: Text(
                 "Add Facility",
-                style: heading2White,
+                style: heading3White,
               ),
               onTap: () {},
             ),

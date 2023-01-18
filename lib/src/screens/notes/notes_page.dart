@@ -15,6 +15,7 @@ class NotesPage extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
+          automaticallyImplyLeading: false,
           actions: [
             Padding(
               padding: screenPadding,
@@ -58,7 +59,7 @@ class NotesPage extends StatelessWidget {
         ),
         bottomSheet: v.isChecking
             ? SizedBox(
-                height: 60,
+                height: 80,
                 width: double.infinity,
                 child: Column(
                   children: [

@@ -49,7 +49,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
             DefaultButton(
                 widget: Text(
                   "Add Staff",
-                  style: heading2White,
+                  style: heading3White,
                 ),
                 onTap: () {
                   AddingDialog.showAddingDialog(

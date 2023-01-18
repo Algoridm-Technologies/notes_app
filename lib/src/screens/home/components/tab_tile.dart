@@ -69,7 +69,7 @@ class TabTile extends StatelessWidget {
                   ),
                   Text(
                     title,
-                    style: heading2White,
+                    style: heading3White,
                   ),
                   Text(
                     subtitle,

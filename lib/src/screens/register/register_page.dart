@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
-import 'package:note/src/screens/register/register_page.dart';
+import 'package:note/src/screens/email_verification/email_verification_page.dart';
+import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   var passwordController = TextEditingController();
   var emailController = TextEditingController();
+  var nameController = TextEditingController();
   bool check = false;
-  bool isShowing = false;
+  bool isShowing = true;
 
   @override
   void dispose() {
     passwordController.dispose();
     emailController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -35,59 +37,40 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           const VerticalGap(gap: 50),
           Text(
-            "Sign In",
+            "Sign Up",
             style: heading,
           ),
           Text(
-            "Consectetur esse dolore magna ut proident.Amet ad velit Lorem quis.",
+            "Sunt dolor ea consectetur proident nisi cupidatat commodo velit anim dolor laborum.",
             style: layer2,
           ),
-          const VerticalGap(gap: 20),
+          const VerticalGap(gap: 30),
+          buildNameField(),
+          const VerticalGap(gap: 10),
           buildEmailField(),
-          const VerticalGap(gap: 30),
+          const VerticalGap(gap: 10),
           buildPasswordField(),
-          const VerticalGap(gap: 30),
-          Row(
-            children: [
-              Checkbox(
-                  activeColor: kAccentColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  value: check,
-                  onChanged: (v) {
-                    setState(() {
-                      check = !check;
-                    });
-                  }),
-              const Text("Remember Me"),
-              const Spacer(),
-              InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const ForgottenPasswordPage(),
-                          );
-                        }),
-                      ),
-                    );
-                  },
-                  child: const Text("Forgotten Password?"))
-            ],
-          ),
           const VerticalGap(gap: 50),
           Hero(
             tag: "button",
             child: DefaultButton(
               widget: Text(
-                "Sign In",
+                "Sign Up",
                 style: heading3White,
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: kAnimationDuration,
+                    pageBuilder: ((context, animation, _) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: const EmailVerificationPage(),
+                      );
+                    }),
+                  ),
+                );
+              },
             ),
           ),
           const VerticalGap(gap: 30),
@@ -100,13 +83,13 @@ class _LoginPageState extends State<LoginPage> {
                         pageBuilder: ((context, animation, _) {
                           return FadeTransition(
                             opacity: animation,
-                            child: const RegisterPage(),
+                            child: const LoginPage(),
                           );
                         }),
                       ),
                     );
                   },
-                  child: const Text("Dont Have An Account? Sign Up"))),
+                  child: const Text("Have An Account? Log in"))),
         ],
       ),
     );
@@ -144,6 +127,43 @@ class _LoginPageState extends State<LoginPage> {
             floatingLabelBehavior: FloatingLabelBehavior.never,
             prefixIcon: Icon(
               Iconsax.sms,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget buildNameField() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Full Name',
+            style: layer2,
+          ),
+        ),
+        const VerticalGap(gap: 10),
+        TextFormField(
+          controller: nameController,
+          validator: (value) {
+            if (nameController.text.isEmpty) {
+              return kNamelNullError;
+            }
+            return null;
+          },
+          onSaved: (String? value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: const [AutofillHints.name],
+          keyboardType: TextInputType.name,
+          decoration: const InputDecoration(
+            hintText: "Enter your Full Name",
+            labelText: "Full Name",
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            prefixIcon: Icon(
+              Iconsax.user,
             ),
           ),
         )

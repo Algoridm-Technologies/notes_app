@@ -35,7 +35,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
       ),
-      body: ListView(
+      body: Column(
         children: [
           SizedBox(
             height: 350.h,
@@ -49,40 +49,50 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  child: CircleAvatar(
-                    radius: 50.r,
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 50.r,
+                      ),
+                      const Text('Colin Mark'),
+                    ],
                   ),
                 )
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
+          Expanded(
+            child: ListView(
               children: [
-                const Text('Colin Mark'),
-                const VerticalGap(gap: 10),
-                buildNameField(),
-                const VerticalGap(gap: 20),
-                buildEmailField(),
-                const VerticalGap(gap: 100),
-                Hero(
-                  tag: "button",
-                  child: DefaultButton(
-                      widget: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Save",
-                            style: heading2White,
-                          ),
-                        ],
-                      ),
-                      onTap: () {}),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      const VerticalGap(gap: 10),
+                      buildNameField(),
+                      const VerticalGap(gap: 20),
+                      buildEmailField(),
+                      const VerticalGap(gap: 100),
+                      Hero(
+                        tag: "button",
+                        child: DefaultButton(
+                            widget: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Save",
+                                  style: heading3White,
+                                ),
+                              ],
+                            ),
+                            onTap: () {}),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -163,5 +173,4 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ],
     );
   }
-
 }

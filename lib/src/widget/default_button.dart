@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note/src/utils/constants.dart';
 
 class DefaultButton extends StatelessWidget {
@@ -11,7 +12,7 @@ class DefaultButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 52,
+      height: 52.h,
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
