@@ -5,8 +5,8 @@ import 'package:note/src/utils/constants.dart';
 var appTheme = ThemeData(
   fontFamily: GoogleFonts.nunito().fontFamily,
   useMaterial3: true,
-  splashColor: kPrimaryColor1,
-  hoverColor: kPrimaryColor1,
+  splashColor: kPrimaryColor1.withOpacity(0.2),
+  hoverColor: kPrimaryColor1.withOpacity(0.2),
   backgroundColor: kWhiteColor,
   scaffoldBackgroundColor: kWhiteColor,
   primaryColor: kPrimaryColor1,
@@ -20,6 +20,7 @@ var appBarTheme = const AppBarTheme(
   surfaceTintColor: kWhiteColor,
 );
 var otpInputDecorationTheme = InputDecorationTheme(
+  hintStyle: layer2,
   border: outlineInputBorder(),
   enabledBorder: outlineInputBorder(),
   errorBorder: errorInputBorder(),

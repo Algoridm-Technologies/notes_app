@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
           padding: screenPadding,
           physics: const BouncingScrollPhysics(),
           children: [
-            const VerticalGap(gap: 20),
+            const VerticalGap(gap: 30),
             const HeaderTile(),
             const VerticalGap(gap: 10),
             const TabTile(),

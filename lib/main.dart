@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note/src/provider/navigation/navigation_provider.dart';
+import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/screens/main/main_page.dart';
 import 'package:note/src/style/style.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => CheckProvider()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => SetStateProvider()),
       ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/screens/edit_profile/edit_profile_page.dart';
+import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
@@ -121,7 +122,19 @@ class ProfilePage extends StatelessWidget {
                           )
                         ],
                       ),
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            transitionDuration: kAnimationDuration,
+                            pageBuilder: ((context, animation, _) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: const LoginPage(),
+                              );
+                            }),
+                          ),
+                        );
+                      }),
                 )
               ],
             ),

@@ -14,6 +14,7 @@ class StaffsNotesList extends StatelessWidget {
         itemBuilder: ((context, index) {
           return NotesTile(
             isUser: false,
+            index: index,
             onTap: () {
               Navigator.of(context).push(
                 PageRouteBuilder(
