@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/screens/add_facility/add_facility_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 
-class FacilitiesPage extends StatelessWidget {
-  const FacilitiesPage({Key? key}) : super(key: key);
+class EmployerFacilitiesPage extends StatelessWidget {
+  const EmployerFacilitiesPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +16,6 @@ class FacilitiesPage extends StatelessWidget {
             const VerticalGap(gap: 50),
             Expanded(
               child: LayoutBuilder(builder: (context, value) {
-                print(value.smallest);
                 return GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
@@ -48,7 +48,19 @@ class FacilitiesPage extends StatelessWidget {
                 "Add Facility",
                 style: heading3White,
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: kAnimationDuration,
+                    pageBuilder: ((context, animation, _) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: const AddFacilityPage(),
+                      );
+                    }),
+                  ),
+                );
+              },
             ),
             const VerticalGap(gap: 50),
           ],

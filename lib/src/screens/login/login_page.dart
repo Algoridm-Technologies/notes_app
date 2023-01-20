@@ -6,6 +6,8 @@ import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 
+import '../choose_facility/choose_facility_page.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -33,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         physics: const BouncingScrollPhysics(),
         padding: screenPadding,
         children: [
-          const VerticalGap(gap: 50),
+          const VerticalGap(gap: 100),
           Text(
             "Sign In",
             style: heading,
@@ -87,7 +89,20 @@ class _LoginPageState extends State<LoginPage> {
                 "Sign In",
                 style: heading3White,
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: kAnimationDuration,
+                    pageBuilder: ((context, animation, _) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: const ChooseFacilityPage(),
+                      );
+                    }),
+                  ),
+                );
+                // AddingDialog.showAddingDialog(context: context, title: "Processing", subtitle: "Voluptate voluptate labore duis mollit cupidatat.");
+              },
             ),
           ),
           const VerticalGap(gap: 30),

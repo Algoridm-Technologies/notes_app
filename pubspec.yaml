@@ -57,6 +57,7 @@ dependencies:
 
   #responsive screen
   flutter_screenutil: ^5.5.4
+  undo: ^1.4.0
 
 dev_dependencies:
   flutter_test:

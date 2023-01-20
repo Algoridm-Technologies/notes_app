@@ -33,7 +33,7 @@ class LaunchSignUpPage extends StatelessWidget {
                 "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
                 style: layer2,
               ),
-              const VerticalGap(gap: 10),
+              const VerticalGap(gap: 30),
               OutlineButton(
                   widget: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +47,7 @@ class LaunchSignUpPage extends StatelessWidget {
                     ],
                   ),
                   onTap: () {}),
-              const VerticalGap(gap: 10),
+              const VerticalGap(gap: 30),
               DefaultButton(
                   widget: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +76,7 @@ class LaunchSignUpPage extends StatelessWidget {
                       ),
                     );
                   }),
-              const VerticalGap(gap: 10),
+              const VerticalGap(gap: 20),
               InkWell(
                   onTap: () {
                     Navigator.of(context).push(

@@ -10,6 +10,7 @@ const kPrimaryColor1 = Color(0xFF3EB489);
 const kSecondaryColor = Color(0xFFFF715B);
 const kAccentColor = Color(0xFF3F4042);
 const kWhiteColor = Color(0xFFFFFFFF);
+const kTransparentColor = Colors.transparent;
 const kGreyColor = Color(0xFFC5C5C5);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topCenter,

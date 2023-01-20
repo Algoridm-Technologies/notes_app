@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/provider/util/user_type_provider.dart';
 import 'package:note/src/screens/launch_sign_up/launch_sign_up_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/outline_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
+import 'package:provider/provider.dart';
 
 class LaunchPage extends StatelessWidget {
   const LaunchPage({Key? key}) : super(key: key);
@@ -32,10 +34,11 @@ class LaunchPage extends StatelessWidget {
               const VerticalGap(gap: 20),
               DefaultButton(
                   widget: Text(
-                    "I am a Staff",
+                    "I Am An Employee",
                     style: heading3White,
                   ),
                   onTap: () {
+                    Provider.of<UserTypeProvider>(context, listen: false).changeState(0);
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         transitionDuration: kAnimationDuration,
@@ -51,10 +54,11 @@ class LaunchPage extends StatelessWidget {
               const VerticalGap(gap: 20),
               OutlineButton(
                   widget: Text(
-                    "I am an Admin",
+                    "I Am An Employer",
                     style: heading3Default,
                   ),
                   onTap: () {
+                    Provider.of<UserTypeProvider>(context, listen: false).changeState(1);
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         transitionDuration: kAnimationDuration,

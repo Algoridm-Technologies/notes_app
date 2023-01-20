@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
         physics: const BouncingScrollPhysics(),
         padding: screenPadding,
         children: [
-          const VerticalGap(gap: 50),
+          const VerticalGap(gap: 100),
           Text(
             "Sign Up",
             style: heading,

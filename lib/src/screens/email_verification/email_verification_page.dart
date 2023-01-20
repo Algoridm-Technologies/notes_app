@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:note/src/screens/main/main_page.dart';
+import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
+import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/util/user_type_provider.dart';
 import '../../utils/constants.dart';
 import '../../widget/default_button.dart';
 import '../../widget/vertical_gap.dart';
@@ -21,11 +24,13 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         padding: screenPadding,
         child: Column(
           children: [
-            const VerticalGap(gap: 50),
-            const Align(
+            const VerticalGap(gap: 150),
+            Align(
                 alignment: Alignment.topLeft,
-                child:
-                    Text("Enter The Code we sent to officialrrye@gmail.com")),
+                child: Text(
+                  "Enter The Code we sent to officialrrye@gmail.com",
+                  style: heading2,
+                )),
             const VerticalGap(gap: 30),
             buildNameField(),
             const VerticalGap(gap: 30),
@@ -43,7 +48,12 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                       pageBuilder: ((context, animation, _) {
                         return FadeTransition(
                           opacity: animation,
-                          child: const MainPage(),
+                          child: Provider.of<UserTypeProvider>(context,
+                                          listen: false)
+                                      .userType ==
+                                  0
+                              ? const EmployeeMainPage()
+                              : const EmployerMainPage(),
                         );
                       }),
                     ),

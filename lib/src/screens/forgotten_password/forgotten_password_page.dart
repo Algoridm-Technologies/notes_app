@@ -22,7 +22,7 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
         padding: screenPadding,
         child: Column(
           children: [
-            const VerticalGap(gap: 50),
+            const VerticalGap(gap: 100),
             Align(
               alignment: Alignment.topLeft,
               child: Text(

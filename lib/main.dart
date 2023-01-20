@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:note/src/provider/navigation/navigation_provider.dart';
 import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
+import 'package:note/src/provider/util/tab_provider.dart';
+import 'package:note/src/provider/util/user_type_provider.dart';
 import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/style/style.dart';
 import 'package:note/src/utils/constants.dart';
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => UserTypeProvider()),
+        ChangeNotifierProvider(create: (_) => TabProvider()),
         ChangeNotifierProvider(create: (_) => CheckProvider()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => SetStateProvider()),

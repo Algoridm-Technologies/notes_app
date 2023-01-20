@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/screens/main/main_page.dart';
+import 'package:note/src/widget/success_dialogue.dart';
 
 import '../../utils/constants.dart';
 import '../../widget/default_button.dart';
@@ -24,7 +24,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         padding: screenPadding,
         child: Column(
           children: [
-            const VerticalGap(gap: 50),
+            const VerticalGap(gap: 100),
             Align(
               alignment: Alignment.topLeft,
               child: Text(
@@ -50,17 +50,22 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                   style: heading3White,
                 ),
                 onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: kAnimationDuration,
-                      pageBuilder: ((context, animation, _) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: const MainPage(),
-                        );
-                      }),
-                    ),
+                  SuccessDialog.showSuccessDialog(
+                    context: context,
+                    title: "title",
+                    subtitle: "subtitle",
                   );
+                  // Navigator.of(context).push(
+                  //   PageRouteBuilder(
+                  //     transitionDuration: kAnimationDuration,
+                  //     pageBuilder: ((context, animation, _) {
+                  //       return FadeTransition(
+                  //         opacity: animation,
+                  //         child: const MainPage(),
+                  //       );
+                  //     }),
+                  //   ),
+                  // );
                 },
               ),
             ),

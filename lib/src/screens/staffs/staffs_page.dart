@@ -6,8 +6,8 @@ import 'package:note/src/utils/constants.dart';
 
 import '../../widget/vertical_gap.dart';
 
-class StaffsPage extends StatelessWidget {
-  const StaffsPage({Key? key}) : super(key: key);
+class EmployerStaffsPage extends StatelessWidget {
+  const EmployerStaffsPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +53,7 @@ class StaffsPage extends StatelessWidget {
           ),
         ),
       ),
+   
     );
   }
 }

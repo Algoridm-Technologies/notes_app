@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/utils/constants.dart';
-import 'package:note/src/widget/adding_dialogue.dart';
+import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
@@ -52,7 +52,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
                   style: heading3White,
                 ),
                 onTap: () {
-                  AddingDialog.showAddingDialog(
+                  ProcessingDialog.showProcessingDialog(
                       context: context,
                       title: "Adding Staff",
                       subtitle:

@@ -40,7 +40,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                     loremSentence,
                     style: layer2,
                   ),
-                  const VerticalGap(gap: 300),
+                  const VerticalGap(gap: 400),
                 ],
               ),
             )
@@ -49,7 +49,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
         bottomSheet: Consumer<SetStateProvider>(builder: (con, v, c) {
           return v.isReplying
               ? SizedBox(
-                  height: 200,
+                  height: 400.h,
                   child: Column(
                     children: [
                       const VerticalGap(gap: 20),
