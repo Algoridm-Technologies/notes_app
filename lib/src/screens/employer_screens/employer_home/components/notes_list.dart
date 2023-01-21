@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note/src/widget/notes_tile.dart';
 
 import '../../../../utils/constants.dart';
-import '../../../notes_details/notes_details_page.dart';
+import '../../notes_details/notes_details_page.dart';
 
 
 

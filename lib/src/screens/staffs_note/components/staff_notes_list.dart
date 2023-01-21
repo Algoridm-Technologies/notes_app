@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note/src/screens/notes_details/notes_details_page.dart';
+import 'package:note/src/screens/employer_screens/notes_details/notes_details_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/notes_tile.dart';
 

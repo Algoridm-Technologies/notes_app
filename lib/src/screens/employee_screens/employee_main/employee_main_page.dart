@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/provider/navigation/navigation_provider.dart';
+import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
+import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
 import 'package:note/src/screens/employee_screens/employee_home/employee_home_page.dart';
 import 'package:note/src/screens/employee_screens/employee_notes/employee_notes_page.dart';
 import 'package:note/src/screens/employee_screens/employee_profile/employee_profile_page.dart';
@@ -16,7 +17,7 @@ class EmployeeMainPage extends StatelessWidget {
       const EmployeeNotesPage(),
       const EmployeeProfilePage(),
     ];
-    return Consumer<NavigationProvider>(
+    return Consumer<EmployeeNavigationProvider>(
       builder: (context, value, child) {
         return Scaffold(
           body: SafeArea(

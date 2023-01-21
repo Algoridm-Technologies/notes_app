@@ -38,7 +38,8 @@ class LaunchPage extends StatelessWidget {
                     style: heading3White,
                   ),
                   onTap: () {
-                    Provider.of<UserTypeProvider>(context, listen: false).changeState(0);
+                    Provider.of<UserTypeProvider>(context, listen: false)
+                        .changeState(0);
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         transitionDuration: kAnimationDuration,
@@ -58,7 +59,8 @@ class LaunchPage extends StatelessWidget {
                     style: heading3Default,
                   ),
                   onTap: () {
-                    Provider.of<UserTypeProvider>(context, listen: false).changeState(1);
+                    Provider.of<UserTypeProvider>(context, listen: false)
+                        .changeState(1);
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         transitionDuration: kAnimationDuration,

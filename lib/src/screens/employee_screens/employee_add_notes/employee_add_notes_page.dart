@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:note/src/utils/constants.dart';
@@ -39,11 +40,23 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
                 if (changes.canUndo) {
                   changes.undo();
                   controller.text = body;
+
+                  controller.selection = TextSelection.fromPosition(
+                      TextPosition(offset: controller.text.length));
                 }
               },
-              icon: Icon(
-                Iconsax.undo,
-                color: changes.canUndo ? kTextColor1 : kGreyColor,
+              icon: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: changes.canUndo ? kTextColor1 : kGreyColor,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      8.r,
+                    )),
+                child: Icon(
+                  Iconsax.undo,
+                  color: changes.canUndo ? kTextColor1 : kGreyColor,
+                ),
               ),
             ),
           ),
@@ -54,11 +67,23 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
                   if (changes.canRedo) {
                     changes.redo();
                     controller.text = body;
+
+                    controller.selection = TextSelection.fromPosition(
+                        TextPosition(offset: controller.text.length));
                   }
                 },
-                icon: Icon(
-                  Iconsax.redo,
-                  color: changes.canRedo ? kTextColor1 : kGreyColor,
+                icon: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: changes.canRedo ? kTextColor1 : kGreyColor,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        8.r,
+                      )),
+                  child: Icon(
+                    Iconsax.redo,
+                    color: changes.canRedo ? kTextColor1 : kGreyColor,
+                  ),
                 )),
           ),
           Padding(
@@ -108,6 +133,9 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
                 onChanged: (value) {
                   changes.add(Change(body, () => body = value, (v) => body = v,
                       description: "increase"));
+
+                  // controller.selection = TextSelection.fromPosition(
+                  //     TextPosition(offset: controller.text.length));
                 },
                 style: heading3,
                 maxLines: null,

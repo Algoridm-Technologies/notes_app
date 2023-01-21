@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note/src/provider/util/check_provider.dart';
-import 'package:note/src/screens/notes_details/notes_details_page.dart';
+import 'package:note/src/screens/employee_screens/employee_notes_details/employee_notes_details_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/notes_tile.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,7 @@ class OtherNotesList extends StatelessWidget {
                     pageBuilder: ((context, animation, _) {
                       return FadeTransition(
                         opacity: animation,
-                        child: const NotesDetailPage(),
+                        child: const EmployeeNotesDetailPage(),
                       );
                     }),
                   ),

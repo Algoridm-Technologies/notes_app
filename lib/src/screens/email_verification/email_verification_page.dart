@@ -16,7 +16,8 @@ class EmailVerificationPage extends StatefulWidget {
 }
 
 class _EmailVerificationPageState extends State<EmailVerificationPage> {
-  var nameController = TextEditingController();
+  var codeController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +33,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                   style: heading2,
                 )),
             const VerticalGap(gap: 30),
-            buildNameField(),
+            Form(
+                key: _formkey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: buildNameField()),
             const VerticalGap(gap: 30),
             Hero(
               tag: "button",
@@ -42,22 +46,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                   style: heading3White,
                 ),
                 onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: kAnimationDuration,
-                      pageBuilder: ((context, animation, _) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: Provider.of<UserTypeProvider>(context,
-                                          listen: false)
-                                      .userType ==
-                                  0
-                              ? const EmployeeMainPage()
-                              : const EmployerMainPage(),
-                        );
-                      }),
-                    ),
-                  );
+                  verifyUser();
                 },
               ),
             ),
@@ -76,6 +65,31 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     );
   }
 
+  verifyUser() {
+    var userType =
+        Provider.of<UserTypeProvider>(context, listen: false).userType;
+
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      debugPrint(userType.toString());
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          transitionDuration: kAnimationDuration,
+          pageBuilder: ((context, animation, _) {
+            return FadeTransition(
+              opacity: animation,
+              child: Provider.of<UserTypeProvider>(context, listen: false)
+                          .userType ==
+                      0
+                  ? const EmployeeMainPage()
+                  : const EmployerMainPage(),
+            );
+          }),
+        ),
+      );
+    }
+  }
+
   Widget buildNameField() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -89,22 +103,26 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         ),
         const VerticalGap(gap: 10),
         TextFormField(
-          controller: nameController,
+          style: heading1,
+          controller: codeController,
+          
           textAlign: TextAlign.center,
           maxLength: 4,
           validator: (value) {
-            if (nameController.text.isEmpty) {
-              return kNamelNullError;
+            if (codeController.text.isEmpty) {
+              return FIELD_REQUIRED_MSG;
             }
             return null;
           },
           onSaved: (String? value) {},
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          autofillHints: const [AutofillHints.name],
-          keyboardType: TextInputType.name,
-          decoration: const InputDecoration(
+          autofillHints: const [AutofillHints.countryCode],
+          keyboardType: TextInputType.number,
+          decoration:  InputDecoration(
+            
             floatingLabelBehavior: FloatingLabelBehavior.never,
             hintText: "- - - -",
+            hintStyle: heading1
           ),
         )
       ],

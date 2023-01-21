@@ -29,7 +29,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(
+          'Profile',
+          style: heading3White,
+        ),
         leading: customBackButton(context),
         elevation: 0,
         backgroundColor: Colors.transparent,

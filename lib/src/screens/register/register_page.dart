@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/screens/email_verification/email_verification_page.dart';
 import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/util/user_type_provider.dart';
+import '../email_verification/email_verification_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var passwordController = TextEditingController();
   var emailController = TextEditingController();
   var nameController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
   bool check = false;
   bool isShowing = true;
 
@@ -31,66 +35,62 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        padding: screenPadding,
-        children: [
-          const VerticalGap(gap: 100),
-          Text(
-            "Sign Up",
-            style: heading,
-          ),
-          Text(
-            "Sunt dolor ea consectetur proident nisi cupidatat commodo velit anim dolor laborum.",
-            style: layer2,
-          ),
-          const VerticalGap(gap: 30),
-          buildNameField(),
-          const VerticalGap(gap: 10),
-          buildEmailField(),
-          const VerticalGap(gap: 10),
-          buildPasswordField(),
-          const VerticalGap(gap: 50),
-          Hero(
-            tag: "button",
-            child: DefaultButton(
-              widget: Text(
+      body: Form(
+        key: _formkey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: AutofillGroup(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: screenPadding,
+            children: [
+              const VerticalGap(gap: 100),
+              Text(
                 "Sign Up",
-                style: heading3White,
+                style: heading,
               ),
-              onTap: () {
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    transitionDuration: kAnimationDuration,
-                    pageBuilder: ((context, animation, _) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: const EmailVerificationPage(),
-                      );
-                    }),
+              Text(
+                "Sunt dolor ea consectetur proident nisi cupidatat commodo velit anim dolor laborum.",
+                style: layer2,
+              ),
+              const VerticalGap(gap: 30),
+              buildNameField(),
+              const VerticalGap(gap: 10),
+              buildEmailField(),
+              const VerticalGap(gap: 10),
+              buildPasswordField(),
+              const VerticalGap(gap: 50),
+              Hero(
+                tag: "button",
+                child: DefaultButton(
+                  widget: Text(
+                    "Sign Up",
+                    style: heading3White,
                   ),
-                );
-              },
-            ),
-          ),
-          const VerticalGap(gap: 30),
-          Center(
-              child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const LoginPage(),
-                          );
-                        }),
-                      ),
-                    );
+                    registerUser();
                   },
-                  child: const Text("Have An Account? Log in"))),
-        ],
+                ),
+              ),
+              const VerticalGap(gap: 30),
+              Center(
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            transitionDuration: kAnimationDuration,
+                            pageBuilder: ((context, animation, _) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: const LoginPage(),
+                              );
+                            }),
+                          ),
+                        );
+                      },
+                      child: const Text("Have An Account? Log in"))),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -220,5 +220,26 @@ class _RegisterPageState extends State<RegisterPage> {
         )
       ],
     );
+  }
+
+  registerUser() {
+    var userType =
+        Provider.of<UserTypeProvider>(context, listen: false).userType;
+
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      debugPrint(userType.toString());
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          transitionDuration: kAnimationDuration,
+          pageBuilder: ((context, animation, _) {
+            return FadeTransition(
+              opacity: animation,
+              child: const EmailVerificationPage(),
+            );
+          }),
+        ),
+      );
+    }
   }
 }

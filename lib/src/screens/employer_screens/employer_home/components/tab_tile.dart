@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/provider/navigation/navigation_provider.dart';
+import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class TabTile extends StatelessWidget {
           ),
           background: kPrimaryColor1,
           onTap: () {
-            Provider.of<NavigationProvider>(context, listen: false)
+            Provider.of<EmployerNavigationProvider>(context, listen: false)
                 .changePage(1);
           },
         ),
@@ -38,7 +38,7 @@ class TabTile extends StatelessWidget {
           ),
           background: kSecondaryColor,
           onTap: () {
-            Provider.of<NavigationProvider>(context, listen: false)
+            Provider.of<EmployerNavigationProvider>(context, listen: false)
                 .changePage(3);
           },
         ),

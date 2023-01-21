@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/screens/edit_profile/edit_profile_page.dart';
-import 'package:note/src/screens/login/login_page.dart';
+import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/vertical_gap.dart';
+import 'package:provider/provider.dart';
 
 class EmployeeProfilePage extends StatelessWidget {
   const EmployeeProfilePage({Key? key}) : super(key: key);
@@ -15,7 +17,10 @@ class EmployeeProfilePage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(
+          'Profile',
+          style: heading3White,
+        ),
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -119,13 +124,16 @@ class EmployeeProfilePage extends StatelessWidget {
                               ],
                             ),
                             onTap: () {
+                              Provider.of<EmployeeNavigationProvider>(context,
+                                      listen: false)
+                                  .changePage(0);
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   transitionDuration: kAnimationDuration,
                                   pageBuilder: ((context, animation, _) {
                                     return FadeTransition(
                                       opacity: animation,
-                                      child: const LoginPage(),
+                                      child: const LaunchPage(),
                                     );
                                   }),
                                 ),

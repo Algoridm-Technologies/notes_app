@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:note/src/screens/notification/notification_page.dart';
 
 import '../../../../utils/constants.dart';
-
 
 class HeaderTile extends StatelessWidget {
   const HeaderTile({Key? key}) : super(key: key);
@@ -49,8 +48,8 @@ class HeaderTile extends StatelessWidget {
                 ),
               );
             },
-            icon: const Icon(
-              Iconsax.notification4,
+            icon: SvgPicture.asset(
+              'assets/icons/notification.svg',
             ),
           ),
         ],

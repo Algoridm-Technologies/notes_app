@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/screens/employee_screens/employee_notes_details/employee_notes_details_page.dart';
 import 'package:note/src/widget/notes_tile.dart';
 
 import '../../../../utils/constants.dart';
-import '../../../notes_details/notes_details_page.dart';
-
-
 
 class NotesList extends StatelessWidget {
   const NotesList({Key? key}) : super(key: key);
@@ -19,13 +17,13 @@ class NotesList extends StatelessWidget {
             isUser: false,
             index: index,
             onTap: () {
-               Navigator.of(context).push(
+              Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: kAnimationDuration,
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: const NotesDetailPage(),
+                      child: const EmployeeNotesDetailPage(),
                     );
                   }),
                 ),
