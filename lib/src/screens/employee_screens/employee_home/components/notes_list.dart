@@ -6,6 +6,7 @@ import '../../../../utils/constants.dart';
 
 class NotesList extends StatelessWidget {
   const NotesList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

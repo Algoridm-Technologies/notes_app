@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String appName = "Note";
 const String appVersion = "v 0.0.0.1";
+const String baseUrl = "https://noteapp-api.herokuapp.com/api/v1";
 
 const kPrimaryColor1 = Color(0xFF3EB489);
 const kSecondaryColor = Color(0xFFFF715B);
