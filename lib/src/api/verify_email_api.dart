@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 
 class VerifyEmailApi {
-  Future<String> verifyEmailApi({
+  static Future<dynamic> verifyEmail({
     required String email,
     required String otp,
   }) async {
@@ -12,12 +12,7 @@ class VerifyEmailApi {
         'email': email,
         'otp': otp,
       });
-
-      if (response.statusCode == 200) {
-        return 'Success';
-      } else {
-        return 'Failed';
-      }
+      return response.body;
     } catch (e) {
       return 'Error';
     }

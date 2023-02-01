@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/google_auth_api.dart';
 import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/screens/register/register_page.dart';
 import 'package:note/src/utils/constants.dart';
@@ -9,8 +12,17 @@ import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/outline_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 
-class LaunchSignUpPage extends StatelessWidget {
+import '../../widget/custom_snackbar.dart';
+import '../../widget/processing_dialogue.dart';
+
+class LaunchSignUpPage extends StatefulWidget {
   const LaunchSignUpPage({Key? key}) : super(key: key);
+
+  @override
+  State<LaunchSignUpPage> createState() => _LaunchSignUpPageState();
+}
+
+class _LaunchSignUpPageState extends State<LaunchSignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +58,9 @@ class LaunchSignUpPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: () {}),
+                  onTap: () {
+                    googleSign();
+                  }),
               const VerticalGap(gap: 30),
               DefaultButton(
                   widget: Row(
@@ -97,5 +111,42 @@ class LaunchSignUpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  googleSign() async {
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "title", subtitle: "subtitle");
+
+    await GoogleAuthApi.googleAuthApi().then((value) {
+      ProcessingDialog.cancelDialog(context);
+      print(value);
+
+      if (jsonDecode(value)['error'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['error']);
+      }
+      if (jsonDecode(value)['password'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['password'][0]);
+      }
+      if (jsonDecode(value)['success'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['success']);
+        // Navigator.of(context).push(
+        //   PageRouteBuilder(
+        //     transitionDuration: kAnimationDuration,
+        //     pageBuilder: ((context, animation, _) {
+        //       return FadeTransition(
+        //         opacity: animation,
+        //         child: EmailVerificationPage(
+        //           email: emailController.text,
+        //           source: "reset",
+        //         ),
+        //       );
+        //     }),
+        //   ),
+        // );
+      }
+    });
   }
 }

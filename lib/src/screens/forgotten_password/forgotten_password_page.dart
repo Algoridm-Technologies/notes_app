@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/screens/new_password/new_password_page.dart';
+import 'package:note/src/api/request_password_reset_api.dart';
+import 'package:note/src/screens/email_verification/email_verification_page.dart';
 
 import '../../utils/constants.dart';
+import '../../widget/custom_snackbar.dart';
 import '../../widget/default_button.dart';
+import '../../widget/processing_dialogue.dart';
 import '../../widget/vertical_gap.dart';
 
 class ForgottenPasswordPage extends StatefulWidget {
@@ -46,17 +51,7 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
                   style: heading3White,
                 ),
                 onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: kAnimationDuration,
-                      pageBuilder: ((context, animation, _) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: const NewPasswordPage(),
-                        );
-                      }),
-                    ),
-                  );
+                  resendEmailOtp();
                 },
               ),
             ),
@@ -65,6 +60,45 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
         ),
       ),
     );
+  }
+
+  resendEmailOtp() async {
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "title", subtitle: "subtitle");
+
+    await RequestPasswordResetOtpApi.requestPasswordResetOtp(
+            email: emailController.text)
+        .then((value) {
+      ProcessingDialog.cancelDialog(context);
+      print(value);
+
+      if (jsonDecode(value)['error'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['error']);
+      }
+      if (jsonDecode(value)['password'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['password'][0]);
+      }
+      if (jsonDecode(value)['success'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['success']);
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            transitionDuration: kAnimationDuration,
+            pageBuilder: ((context, animation, _) {
+              return FadeTransition(
+                opacity: animation,
+                child: EmailVerificationPage(
+                  email: emailController.text,
+                  source: "reset",
+                ),
+              );
+            }),
+          ),
+        );
+      }
+    });
   }
 
   Widget buildNameField() {

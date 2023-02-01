@@ -1,16 +1,21 @@
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 
-class ResendEmailVerificationApi {
-  static Future<String> resendEmailVerification({
+class ChangeEmailApi {
+  Future<String> changeEmail({
     required String email,
   }) async {
     try {
-      dynamic url = Uri.parse("$baseUrl/auth/resend-email-verification-otp/");
+      dynamic url = Uri.parse("$baseUrl/profiles/change-email/");
       var response = await http.post(url, body: {
         'email': email,
       });
-      return response.body;
+
+      if (response.statusCode == 200) {
+        return 'Success';
+      } else {
+        return 'Failed';
+      }
     } catch (e) {
       return 'Error';
     }

@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:note/src/screens/notification/notification_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../utils/constants.dart';
 
-class HeaderTile extends StatelessWidget {
+class HeaderTile extends StatefulWidget {
   const HeaderTile({Key? key}) : super(key: key);
+
+  @override
+  State<HeaderTile> createState() => _HeaderTileState();
+}
+
+class _HeaderTileState extends State<HeaderTile> {
+  String name = "";
+  @override
+  void initState() {
+    super.initState();
+    fetchName();
+  }
+
+  fetchName() async {
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token") ?? "";
+    Map<String, dynamic> data = Jwt.parseJwt(token);
+    
+    name = data["full_name"];
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -24,7 +48,7 @@ class HeaderTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Koln Mark",
+                name,
                 style: heading2,
               ),
               Text(

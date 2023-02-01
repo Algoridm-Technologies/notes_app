@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/provider/util/user_type_provider.dart';
+import 'package:note/src/api/login_user_api.dart';
+import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
 import 'package:note/src/screens/register/register_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
+import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
-import 'package:provider/provider.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../choose_facility/choose_facility_page.dart';
 
@@ -127,25 +132,48 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginUser() async {
-    var userType =
-        Provider.of<UserTypeProvider>(context, listen: false).userType;
-
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
-      debugPrint(userType.toString());
-        Navigator.of(context).push(
-      PageRouteBuilder(
-        transitionDuration: kAnimationDuration,
-        pageBuilder: ((context, animation, _) {
-          return FadeTransition(
-            opacity: animation,
-            child: const ChooseFacilityPage(),
-          );
-        }),
-      ),
-    );
+      ProcessingDialog.showProcessingDialog(
+          context: context, title: "title", subtitle: "subtitle");
+      await LoginUserApi.loginUserApi(
+        email: emailController.text,
+        password: passwordController.text,
+      ).then((value) async {
+        ProcessingDialog.cancelDialog(context);
+        var prefs = await SharedPreferences.getInstance();
+
+        prefs.setString("token", jsonDecode(value)['access']).then((_) {
+          Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
+
+          if (data["is_employer"] == "true") {
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: kAnimationDuration,
+                pageBuilder: ((context, animation, _) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: const EmployerMainPage(),
+                  );
+                }),
+              ),
+            );
+          } else {
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: kAnimationDuration,
+                pageBuilder: ((context, animation, _) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: const ChooseFacilityPage(),
+                  );
+                }),
+              ),
+            );
+          }
+        });
+      });
     }
-  
   }
 
   Widget buildEmailField() {

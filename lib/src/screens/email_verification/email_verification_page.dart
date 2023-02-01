@@ -1,15 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
-import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
 
-import '../../provider/util/user_type_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:note/src/api/check_password_reset_api.dart';
+import 'package:note/src/api/resend_email_otp_api.dart';
+import 'package:note/src/api/verify_email_api.dart';
+import 'package:note/src/screens/new_password/new_password_page.dart';
+import 'package:note/src/widget/custom_snackbar.dart';
+import 'package:note/src/widget/processing_dialogue.dart';
+
 import '../../utils/constants.dart';
 import '../../widget/default_button.dart';
 import '../../widget/vertical_gap.dart';
+import '../login/login_page.dart';
 
 class EmailVerificationPage extends StatefulWidget {
-  const EmailVerificationPage({Key? key}) : super(key: key);
+  final String email;
+  final String source;
+  const EmailVerificationPage(
+      {Key? key, required this.email, required this.source})
+      : super(key: key);
 
   @override
   State<EmailVerificationPage> createState() => _EmailVerificationPageState();
@@ -29,7 +38,8 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
             Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "Enter The Code we sent to officialrrye@gmail.com",
+                  "Enter The Code we sent to ${widget.email} ",
+                  textAlign: TextAlign.center,
                   style: heading2,
                 )),
             const VerticalGap(gap: 30),
@@ -46,14 +56,20 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                   style: heading3White,
                 ),
                 onTap: () {
-                  verifyUser();
+                  if (widget.source == "reset") {
+                    checkResetOtp();
+                  } else {
+                    verifyUser();
+                  }
                 },
               ),
             ),
             const VerticalGap(gap: 30),
             Center(
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  resendEmailOtp();
+                },
                 child: const Text(
                   "Did'nt Get Any Code? Resend Code",
                 ),
@@ -65,29 +81,97 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     );
   }
 
-  verifyUser() {
-    var userType =
-        Provider.of<UserTypeProvider>(context, listen: false).userType;
-
+  verifyUser() async {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
-      debugPrint(userType.toString());
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          transitionDuration: kAnimationDuration,
-          pageBuilder: ((context, animation, _) {
-            return FadeTransition(
-              opacity: animation,
-              child: Provider.of<UserTypeProvider>(context, listen: false)
-                          .userType ==
-                      0
-                  ? const EmployeeMainPage()
-                  : const EmployerMainPage(),
-            );
-          }),
-        ),
-      );
+      ProcessingDialog.showProcessingDialog(
+          context: context, title: "title", subtitle: "subtitle");
+
+      await VerifyEmailApi.verifyEmail(
+              email: widget.email, otp: codeController.text)
+          .then((value) {
+        ProcessingDialog.cancelDialog(context);
+
+        if (jsonDecode(value)['error'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['error']);
+        }
+        if (jsonDecode(value)['success'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['success']);
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: kAnimationDuration,
+              pageBuilder: ((context, animation, _) {
+                return FadeTransition(
+                    opacity: animation, child: const LoginPage());
+              }),
+            ),
+          );
+        }
+      });
     }
+  }
+
+  checkResetOtp() async {
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      ProcessingDialog.showProcessingDialog(
+          context: context, title: "title", subtitle: "subtitle");
+
+      await CheckPasswordResetOtpApi.checkPasswordResetOtp(
+              email: widget.email, otp: codeController.text)
+          .then((value) {
+        ProcessingDialog.cancelDialog(context);
+
+        if (jsonDecode(value)['error'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['error']);
+        }
+        if (jsonDecode(value)['success'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['success']);
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: kAnimationDuration,
+              pageBuilder: ((context, animation, _) {
+                return FadeTransition(
+                    opacity: animation, child: const NewPasswordPage());
+              }),
+            ),
+          );
+        }
+      });
+    }
+  }
+
+  resendEmailOtp() async {
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "title", subtitle: "subtitle");
+
+    await ResendEmailVerificationApi.resendEmailVerification(
+            email: widget.email)
+        .then((value) {
+      ProcessingDialog.cancelDialog(context);
+
+      if (jsonDecode(value)['error'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['error']);
+      }
+      if (jsonDecode(value)['success'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['success']);
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            transitionDuration: kAnimationDuration,
+            pageBuilder: ((context, animation, _) {
+              return FadeTransition(
+                  opacity: animation, child: const LoginPage());
+            }),
+          ),
+        );
+      }
+    });
   }
 
   Widget buildNameField() {
@@ -105,7 +189,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         TextFormField(
           style: heading1,
           controller: codeController,
-          
           textAlign: TextAlign.center,
           maxLength: 4,
           validator: (value) {
@@ -118,12 +201,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           autofillHints: const [AutofillHints.countryCode],
           keyboardType: TextInputType.number,
-          decoration:  InputDecoration(
-            
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            hintText: "- - - -",
-            hintStyle: heading1
-          ),
+          decoration: InputDecoration(
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              hintText: "- - - -",
+              hintStyle: heading1),
         )
       ],
     );

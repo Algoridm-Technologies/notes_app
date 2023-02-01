@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:note/src/provider/authentification/user_auth.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
@@ -6,6 +7,8 @@ import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/provider/util/tab_provider.dart';
 import 'package:note/src/provider/util/user_type_provider.dart';
+import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
+import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/style/style.dart';
@@ -17,14 +20,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   var prefs = await SharedPreferences.getInstance();
   var token = prefs.getString("token") ?? "";
-  runApp(MyApp(token: token));
+  Map<String, dynamic> data = Jwt.parseJwt(token);
+  var isEmployer = data["is_employer"];
+  runApp(MyApp(token: token, isEmployer: isEmployer));
 }
 
 class MyApp extends StatelessWidget {
   final String token;
-  const MyApp({super.key, required this.token});
+  final bool isEmployer;
+  const MyApp({super.key, required this.token, required this.isEmployer});
   @override
   Widget build(BuildContext context) {
+    print(isEmployer);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserTypeProvider()),
@@ -41,7 +48,11 @@ class MyApp extends StatelessWidget {
             title: appName,
             debugShowCheckedModeBanner: false,
             theme: appTheme,
-            home: token == "" ? const LaunchPage() : const LoginPage(),
+            home: token == ""
+                ? const LaunchPage()
+                : isEmployer
+                    ? const EmployerMainPage()
+                    : const EmployeeMainPage(),
             // home: TestPage(),
           );
         },

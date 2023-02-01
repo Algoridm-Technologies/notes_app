@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 
 class RegisterUserApi {
-  Future<String> registerUser({
+  static Future<dynamic> registerUser({
     required String fullName,
     required String email,
     required bool isEmployer,
@@ -14,14 +14,12 @@ class RegisterUserApi {
         'full_name': fullName,
         'email': email,
         'password': password,
-        'is_employer': isEmployer,
+        'is_employer': isEmployer.toString(),
       });
+      print(response.body);
+      print(response.statusCode);
 
-      if (response.statusCode == 200) {
-        return 'Success';
-      } else {
-        return 'Failed';
-      }
+      return response.body;
     } catch (e) {
       return 'Error';
     }

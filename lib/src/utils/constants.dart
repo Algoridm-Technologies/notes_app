@@ -133,8 +133,11 @@ const defaultDuration = Duration(milliseconds: 250);
 // Form Error
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+final RegExp passwordValidatorRegExp = RegExp(r"(?=.*[A-Z])(?=.*[a-z])\w+");
 const String kEmailNullError = "Please Enter your email";
 const String kInvalidEmailError = "Please Enter Valid Email";
+const String kInvalidPasswordError =
+    "Password should contain at least 1 uppercase, 1 lowercase, 1 symbol and number,";
 const String kPassNullError = "Please Enter your password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";

@@ -7,8 +7,15 @@ import 'components/header_tile.dart';
 import 'components/notes_list.dart';
 import 'components/tab_tile.dart';
 
-class EmployerHomePage extends StatelessWidget {
+class EmployerHomePage extends StatefulWidget {
   const EmployerHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<EmployerHomePage> createState() => _EmployerHomePageState();
+}
+
+class _EmployerHomePageState extends State<EmployerHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

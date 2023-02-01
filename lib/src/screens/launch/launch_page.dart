@@ -6,6 +6,7 @@ import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/outline_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LaunchPage extends StatelessWidget {
   const LaunchPage({Key? key}) : super(key: key);
@@ -37,20 +38,23 @@ class LaunchPage extends StatelessWidget {
                     "I Am An Employee",
                     style: heading3White,
                   ),
-                  onTap: () {
-                    Provider.of<UserTypeProvider>(context, listen: false)
-                        .changeState(0);
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const LaunchSignUpPage(),
-                          );
-                        }),
-                      ),
-                    );
+                  onTap: () async {
+                    var prefs = await SharedPreferences.getInstance();
+                    prefs.setBool("isEmployer", false).then((value) {
+                      Provider.of<UserTypeProvider>(context, listen: false)
+                          .changeState(0);
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          transitionDuration: kAnimationDuration,
+                          pageBuilder: ((context, animation, _) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: const LaunchSignUpPage(),
+                            );
+                          }),
+                        ),
+                      );
+                    });
                   }),
               const VerticalGap(gap: 20),
               OutlineButton(
@@ -58,20 +62,23 @@ class LaunchPage extends StatelessWidget {
                     "I Am An Employer",
                     style: heading3Default,
                   ),
-                  onTap: () {
-                    Provider.of<UserTypeProvider>(context, listen: false)
-                        .changeState(1);
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const LaunchSignUpPage(),
-                          );
-                        }),
-                      ),
-                    );
+                  onTap: () async {
+                    var prefs = await SharedPreferences.getInstance();
+                    prefs.setBool("isEmployer", true).then((value) {
+                      Provider.of<UserTypeProvider>(context, listen: false)
+                          .changeState(0);
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          transitionDuration: kAnimationDuration,
+                          pageBuilder: ((context, animation, _) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: const LaunchSignUpPage(),
+                            );
+                          }),
+                        ),
+                      );
+                    });
                   }),
               const VerticalGap(gap: 20),
             ],

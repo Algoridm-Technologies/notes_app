@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/set_new_password_api.dart';
 import 'package:note/src/widget/success_dialogue.dart';
 
 import '../../utils/constants.dart';
+import '../../widget/custom_snackbar.dart';
 import '../../widget/default_button.dart';
+import '../../widget/processing_dialogue.dart';
 import '../../widget/vertical_gap.dart';
+import '../login/login_page.dart';
 
 class NewPasswordPage extends StatefulWidget {
   const NewPasswordPage({Key? key}) : super(key: key);
@@ -50,11 +56,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                   style: heading3White,
                 ),
                 onTap: () {
-                  SuccessDialog.showSuccessDialog(
-                    context: context,
-                    title: "title",
-                    subtitle: "subtitle",
-                  );
+                  setNewPassword();
                   // Navigator.of(context).push(
                   //   PageRouteBuilder(
                   //     transitionDuration: kAnimationDuration,
@@ -96,6 +98,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               return kPassNullError;
             } else if (passwordController.text.length < 8) {
               return kShortPassError;
+            } else if (!passwordController.text.contains(RegExp(
+                r"((?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+~?])(?=.*[0-9]))"))) {
+              return kInvalidPasswordError;
             }
             return null;
           },
@@ -150,6 +155,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             } else if (passwordController.text !=
                 confirmPasswordController.text) {
               return kMatchPassError;
+            } else if (!confirmPasswordController.text.contains(RegExp(
+                r"((?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+~?])(?=.*[0-9]))"))) {
+              return kInvalidPasswordError;
             }
             return null;
           },
@@ -179,5 +187,42 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         )
       ],
     );
+  }
+
+  setNewPassword() async {
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "title", subtitle: "subtitle");
+
+    await SetNewPasswordApi.setNewPassword(
+      password: confirmPasswordController.text,
+    ).then((value) {
+      ProcessingDialog.cancelDialog(context);
+      print(value);
+
+      if (jsonDecode(value)['error'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['error']);
+      }
+      if (jsonDecode(value)['success'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['success']);
+        SuccessDialog.showSuccessDialog(
+          context: context,
+          title: "title",
+          subtitle: "subtitle",
+        );
+        Future.delayed(const Duration(seconds: 2)).then((value) {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: kAnimationDuration,
+              pageBuilder: ((context, animation, _) {
+                return FadeTransition(
+                    opacity: animation, child: const LoginPage());
+              }),
+            ),
+          );
+        });
+      }
+    });
   }
 }

@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/register_user_api.dart';
 import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/default_button.dart';
+import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../provider/util/user_type_provider.dart';
 import '../email_verification/email_verification_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -191,6 +195,9 @@ class _RegisterPageState extends State<RegisterPage> {
               return kPassNullError;
             } else if (passwordController.text.length < 8) {
               return kShortPassError;
+            } else if (!passwordController.text.contains(RegExp(
+                r"((?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+~?])(?=.*[0-9]))"))) {
+              return kInvalidPasswordError;
             }
             return null;
           },
@@ -222,24 +229,44 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  registerUser() {
-    var userType =
-        Provider.of<UserTypeProvider>(context, listen: false).userType;
+  registerUser() async {
+    var prefs = await SharedPreferences.getInstance();
 
     if (_formkey.currentState!.validate()) {
+      ProcessingDialog.showProcessingDialog(
+          context: context, title: "title", subtitle: "subtitle");
       _formkey.currentState!.save();
-      debugPrint(userType.toString());
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          transitionDuration: kAnimationDuration,
-          pageBuilder: ((context, animation, _) {
-            return FadeTransition(
-              opacity: animation,
-              child: const EmailVerificationPage(),
-            );
-          }),
-        ),
-      );
+      await RegisterUserApi.registerUser(
+              fullName: nameController.text,
+              email: emailController.text,
+              isEmployer: prefs.getBool('isEmployer') ?? false,
+              password: passwordController.text)
+          .then((value) {
+        ProcessingDialog.cancelDialog(context);
+        // print(value['success']);
+        if (jsonDecode(value)["email"] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)["email"][0]);
+        }
+        if (jsonDecode(value)["success"] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)["success"][0]);
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: kAnimationDuration,
+              pageBuilder: ((context, animation, _) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: EmailVerificationPage(
+                    email: emailController.text,
+                    source: "register",
+                  ),
+                );
+              }),
+            ),
+          );
+        }
+      });
     }
   }
 }
