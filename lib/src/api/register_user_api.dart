@@ -16,8 +16,7 @@ class RegisterUserApi {
         'password': password,
         'is_employer': isEmployer.toString(),
       });
-      print(response.body);
-      print(response.statusCode);
+  
 
       return response.body;
     } catch (e) {

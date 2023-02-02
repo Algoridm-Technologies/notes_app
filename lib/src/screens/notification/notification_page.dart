@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/api/list_notification_api.dart';
 import 'package:note/src/screens/notification/components/notification_tile.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 
@@ -6,6 +7,7 @@ class NotificationPage extends StatelessWidget {
   const NotificationPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    ListNotificationApi.listNotification();
     return Scaffold(
       appBar: AppBar(
         leading: customBackButton(context),

@@ -3,10 +3,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:note/src/api/add_facility_api.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/default_button.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/database/profile_detail_provider.dart';
+import '../../widget/processing_dialogue.dart';
 import '../../widget/vertical_gap.dart';
 
 class AddFacilityPage extends StatefulWidget {
@@ -52,9 +56,25 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
                   "Add Facility",
                   style: heading3White,
                 ),
-                onTap: () {}),
+                onTap: () {
+                  updateProfile();
+                }),
           ],
         ));
+  }
+
+  updateProfile() async {
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "title", subtitle: "subtitle");
+    await AddFacilityApi.addFacility(
+            name: nameController.text,
+            location: locationController.text,
+            file: imagePath!)
+        .then((value) {
+      Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+      ProcessingDialog.cancelDialog(context);
+      print(value);
+    });
   }
 
   Widget buildImageField() {

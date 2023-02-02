@@ -1,17 +1,18 @@
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileDetailApi {
-  Future<String> getProfileDetail() async {
+  static Future<String> getProfileDetail() async {
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token");
     try {
       dynamic url = Uri.parse("$baseUrl/profiles/detail/");
-      var response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        return 'Success';
-      } else {
-        return 'Failed';
-      }
+      var response = await http.get(url, headers: {
+        "Authorization": "Bearer $token",
+      });
+      print(response.body);
+      return response.body;
     } catch (e) {
       return 'Error';
     }

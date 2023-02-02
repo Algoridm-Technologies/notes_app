@@ -13,11 +13,7 @@ class LoginUserApi {
         'password': password,
       });
 
-      if (response.statusCode.toString()[0] == "2") {
-        return response.body;
-      } else {
-        return 'Failed';
-      }
+      return response.body;
     } catch (e) {
       return 'Error';
     }

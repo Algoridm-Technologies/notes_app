@@ -1,35 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:jwt_decode/jwt_decode.dart';
+import 'package:note/src/provider/database/access_provider.dart';
 import 'package:note/src/screens/notification/notification_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../utils/constants.dart';
 
-class HeaderTile extends StatefulWidget {
+class HeaderTile extends StatelessWidget {
   const HeaderTile({Key? key}) : super(key: key);
-
-  @override
-  State<HeaderTile> createState() => _HeaderTileState();
-}
-
-class _HeaderTileState extends State<HeaderTile> {
-  String name = "";
-  @override
-  void initState() {
-    super.initState();
-    fetchName();
-  }
-
-  fetchName() async {
-    var prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("token") ?? "";
-    Map<String, dynamic> data = Jwt.parseJwt(token);
-    
-    name = data["full_name"];
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +26,15 @@ class _HeaderTileState extends State<HeaderTile> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                name,
-                style: heading2,
+              Consumer<AccessProvider>(
+                builder: (context, value, child) {
+                  return Text(
+                    value.isLoggedIn
+                        ? value.model!.fullName ?? ""
+                        : "Loading...",
+                    style: heading2,
+                  );
+                },
               ),
               Text(
                 "Good day",

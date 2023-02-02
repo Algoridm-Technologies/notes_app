@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/screens/edit_profile/edit_profile_page.dart';
 import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/utils/constants.dart';
@@ -11,8 +15,22 @@ import 'package:provider/provider.dart';
 
 import '../../../provider/navigation/employer_navigation_provider.dart';
 
-class EmployerProfilePage extends StatelessWidget {
+class EmployerProfilePage extends StatefulWidget {
   const EmployerProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<EmployerProfilePage> createState() => _EmployerProfilePageState();
+}
+
+class _EmployerProfilePageState extends State<EmployerProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,142 +45,191 @@ class EmployerProfilePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 350.h,
-            child: Stack(
-              children: [
-                Container(
-                  height: 270.h,
-                  color: kGreyColor,
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: SizedBox(
-                    height: 130.h,
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 50.r,
-                        ),
-                        const Text('Colin Mark'),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: kAnimationDuration,
-                              pageBuilder: ((context, animation, _) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: const EditProfilePage(),
-                                );
-                              }),
-                            ),
-                          );
-                        },
-                        title: const Text(
-                          "Personal Information",
-                        ),
-                        trailing: const Icon(
-                          Iconsax.arrow_right_3,
-                        ),
-                        leading: const Icon(
-                          Iconsax.user,
-                        ),
-                        subtitle: const Text(
-                          "Manage your informations Details names, Email, Etc.",
-                        ),
-                      ),
-                      ListTile(
-                        onTap: () {},
-                        title: const Text(
-                          "Security",
-                        ),
-                        trailing: const Icon(
-                          Iconsax.arrow_right_3,
-                        ),
-                        leading: const Icon(
-                          Iconsax.user,
-                        ),
-                        subtitle: const Text(
-                          "Manage your informations Details names, Email, Etc.",
-                        ),
-                      ),
-                      ListTile(
-                        onTap: () {},
-                        title: const Text(
-                          "Deleted Message",
-                        ),
-                        trailing: const Icon(
-                          Iconsax.arrow_right_3,
-                        ),
-                        leading: const Icon(
-                          Iconsax.trash,
-                        ),
-                        subtitle: const Text(
-                          "Manage your informations Details names, Email, Etc.",
-                        ),
-                      ),
-                      const VerticalGap(gap: 50),
-                      Hero(
-                        tag: "button",
-                        child: DefaultButton(
-                            color: kSecondaryColor,
-                            widget: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Log out",
-                                  style: heading3White,
+      body: Consumer<ProfileDetailProvider>(
+        builder: (context, value, child) {
+          return Column(
+            children: [
+              SizedBox(
+                height: 350.h,
+                child: Stack(
+                  children: [
+                    value.isLoggedIn
+                        ? value.model!.avatar == null
+                            ? Container(
+                                height: 300.h,
+                                color: kGreyColor,
+                              )
+                            : Container(
+                                height: 300.h,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(value.model!.avatar!),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                const HorizontalGap(gap: 5),
-                                const Icon(
-                                  Iconsax.logout_1,
-                                  color: kWhiteColor,
-                                )
+                                child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 10.0, sigmaY: 10.0),
+                                    child: Container(
+                                      color: kWhiteColor.withOpacity(0.0),
+                                    )),
+                              )
+                        : Container(
+                            height: 300.h,
+                            color: kGreyColor,
+                          ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: SizedBox(
+                        height: 130.h,
+                        child: Consumer<ProfileDetailProvider>(
+                          builder: (context, value, child) {
+                            return Column(
+                              children: [
+                                value.isLoggedIn
+                                    ? value.model!.avatar == null
+                                        ? CircleAvatar(
+                                            radius: 50.r,
+                                            child: Text(value.isLoggedIn
+                                                ? value.model!.fullName
+                                                    .toString()[0]
+                                                : ""),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 50.r,
+                                            backgroundImage: NetworkImage(
+                                                value.model!.avatar!),
+                                          )
+                                    : CircleAvatar(
+                                        radius: 50.r,
+                                        child: const Center(
+                                            child:
+                                                CupertinoActivityIndicator()),
+                                      ),
+                                Text(value.isLoggedIn
+                                    ? value.model!.fullName ?? ""
+                                    : ""),
                               ],
-                            ),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: [
+                          ListTile(
                             onTap: () {
-                              Provider.of<EmployerNavigationProvider>(context,
-                                      listen: false)
-                                  .changePage(0);
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   transitionDuration: kAnimationDuration,
                                   pageBuilder: ((context, animation, _) {
                                     return FadeTransition(
                                       opacity: animation,
-                                      child: const LaunchPage(),
+                                      child: const EditProfilePage(),
                                     );
                                   }),
                                 ),
                               );
-                            }),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+                            },
+                            title: const Text(
+                              "Personal Information",
+                            ),
+                            trailing: const Icon(
+                              Iconsax.arrow_right_3,
+                            ),
+                            leading: const Icon(
+                              Iconsax.user,
+                            ),
+                            subtitle: const Text(
+                              "Manage your informations Details names, Email, Etc.",
+                            ),
+                          ),
+                          ListTile(
+                            onTap: () {},
+                            title: const Text(
+                              "Security",
+                            ),
+                            trailing: const Icon(
+                              Iconsax.arrow_right_3,
+                            ),
+                            leading: const Icon(
+                              Iconsax.user,
+                            ),
+                            subtitle: const Text(
+                              "Manage your informations Details names, Email, Etc.",
+                            ),
+                          ),
+                          ListTile(
+                            onTap: () {},
+                            title: const Text(
+                              "Deleted Message",
+                            ),
+                            trailing: const Icon(
+                              Iconsax.arrow_right_3,
+                            ),
+                            leading: const Icon(
+                              Iconsax.trash,
+                            ),
+                            subtitle: const Text(
+                              "Manage your informations Details names, Email, Etc.",
+                            ),
+                          ),
+                          const VerticalGap(gap: 50),
+                          Hero(
+                            tag: "button",
+                            child: DefaultButton(
+                                color: kSecondaryColor,
+                                widget: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Log out",
+                                      style: heading3White,
+                                    ),
+                                    const HorizontalGap(gap: 5),
+                                    const Icon(
+                                      Iconsax.logout_1,
+                                      color: kWhiteColor,
+                                    )
+                                  ],
+                                ),
+                                onTap: () {
+                                  Provider.of<EmployerNavigationProvider>(
+                                          context,
+                                          listen: false)
+                                      .changePage(0);
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration: kAnimationDuration,
+                                      pageBuilder: ((context, animation, _) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: const LaunchPage(),
+                                        );
+                                      }),
+                                    ),
+                                  );
+                                }),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

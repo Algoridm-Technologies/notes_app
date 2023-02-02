@@ -1,10 +1,18 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/update_profile_api.dart';
+import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/default_button.dart';
+import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -16,6 +24,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
+  File? imageUrl;
 
   @override
   void dispose() {
@@ -38,67 +47,149 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 350.h,
-            child: Stack(
-              children: [
-                Container(
-                  height: 300.h,
-                  color: kGreyColor,
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50.r,
-                      ),
-                      const Text('Colin Mark'),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      const VerticalGap(gap: 10),
-                      buildNameField(),
-                      const VerticalGap(gap: 20),
-                      buildEmailField(),
-                      const VerticalGap(gap: 100),
-                      Hero(
-                        tag: "button",
-                        child: DefaultButton(
-                            widget: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Save",
-                                  style: heading3White,
-                                ),
-                              ],
+      body: Consumer<ProfileDetailProvider>(
+        builder: (context, value, child) {
+          if (value.isLoggedIn && emailController.text.isEmpty ||
+              nameController.text.isEmpty) {
+            emailController.text = value.model!.email ?? "";
+            nameController.text = value.model!.fullName ?? "";
+          }
+
+          return Column(
+            children: [
+              SizedBox(
+                height: 350.h,
+                child: Stack(
+                  children: [
+                    value.model!.avatar == null
+                        ? Container(
+                            height: 300.h,
+                            color: kGreyColor,
+                          )
+                        : Container(
+                            height: 300.h,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(value.model!.avatar!),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            onTap: () {}),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+                            child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                    sigmaX: 10.0, sigmaY: 10.0),
+                                child: Container(
+                                  color: kWhiteColor.withOpacity(0.0),
+                                )),
+                          ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          chooseImage();
+                        },
+                        child: Column(children: [
+                          imageUrl == null
+                              ? SizedBox(
+                                  child: value.model!.avatar == null
+                                      ? CircleAvatar(
+                                          radius: 50.r,
+                                          child: Text(value.model!.fullName
+                                              .toString()[0]),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 50.r,
+                                          backgroundImage: NetworkImage(
+                                              value.model!.avatar!),
+                                        ),
+                                )
+                              : CircleAvatar(
+                                  radius: 50.r,
+                                  backgroundImage: FileImage(imageUrl!),
+                                ),
+                          Text(value.isLoggedIn
+                              ? value.model!.fullName ?? ""
+                              : "")
+                        ]),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: [
+                          const VerticalGap(gap: 10),
+                          buildNameField(),
+                          const VerticalGap(gap: 20),
+                          buildEmailField(),
+                          const VerticalGap(gap: 100),
+                          Hero(
+                            tag: "button",
+                            child: DefaultButton(
+                                widget: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Save",
+                                      style: heading3White,
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  updateProfile();
+                                }),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
+  }
+
+  chooseImage() async {
+    var result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        imageUrl = File(result.paths.first!);
+      });
+    }
+  }
+
+  updateProfile() async {
+    
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "title", subtitle: "subtitle");
+    if (imageUrl == null) {
+      await UpdateProfileApi.updateProfile(fullName: nameController.text)
+          .then((value) {
+        Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+        ProcessingDialog.cancelDialog(context);
+        print(value);
+      });
+    } else {
+      await UpdateProfileApi.updateProfile(
+              fullName: nameController.text, d: imageUrl!)
+          .then((value) {
+        Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+        ProcessingDialog.cancelDialog(context);
+        print(value);
+      });
+    }
   }
 
   Widget buildNameField() {

@@ -7,6 +7,7 @@ import 'package:note/src/screens/employer_screens/employer_main/employer_main_pa
 import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
 import 'package:note/src/screens/register/register_page.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
@@ -123,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         );
                       },
-                      child: const Text("Dont Have An Account? Sign Up"))),
+                      child: const Text("Don't Have An Account? Sign Up"))),
             ],
           ),
         ),
@@ -141,12 +142,19 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       ).then((value) async {
         ProcessingDialog.cancelDialog(context);
+        
+        if (jsonDecode(value)['error'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['error']);
+          return;
+        }
         var prefs = await SharedPreferences.getInstance();
+        prefs.setString("refresh", jsonDecode(value)['refresh']);
 
         prefs.setString("token", jsonDecode(value)['access']).then((_) {
           Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
 
-          if (data["is_employer"] == "true") {
+          if (data["is_employer"] == true) {
             Navigator.of(context).push(
               PageRouteBuilder(
                 transitionDuration: kAnimationDuration,
