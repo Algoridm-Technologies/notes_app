@@ -1,19 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:jwt_decode/jwt_decode.dart';
-import 'package:note/src/api/refresh.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
 import 'package:note/src/screens/facilities/facilities_page.dart';
 import 'package:note/src/screens/staffs/staffs_page.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:note/src/utils/refresh_token.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../model/access_model.dart';
 import '../../../provider/database/access_provider.dart';
+import '../../../provider/database/facility_provider.dart';
+import '../../../provider/database/profile_detail_provider.dart';
 import '../employer_home/employer_home_page.dart';
 import '../employer_notes/employer_notes_page.dart';
 import '../employer_profile/employer_profile_page.dart';
@@ -30,22 +27,16 @@ class _EmployerMainPageState extends State<EmployerMainPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<AccessProvider>(context, listen: false).setModel();
+      refreshAndFetchData();
     });
   }
 
   refreshAndFetchData() async {
-    // var refresh = await RefreshApi.refresh();
-
-    // var prefs = await SharedPreferences.getInstance();
-    // prefs.setString("refresh", jsonDecode(refresh)['refresh']);
-    // prefs.setString("token", jsonDecode(refresh)['access']);
-    // var token = prefs.getString("token") ?? "";
-
-    // Map<String, dynamic> data = Jwt.parseJwt(token);
-
-    //   Provider.of<AccessProvider>(context, listen: false)
-    //       .setModel(AccessModel.fromMap(data));
+    await RefreshToken.refreshToken().then((value) {
+      Provider.of<AccessProvider>(context, listen: false).setAccess();
+      Provider.of<FacilityProvider>(context, listen: false).getFacility();
+      Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
+    });
   }
 
   @override

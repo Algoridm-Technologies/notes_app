@@ -33,7 +33,7 @@ class TabTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "December 02 2033 ",
+                        "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ",
                         style: heading3White,
                       ),
                       Text(

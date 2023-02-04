@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: Form(
         key: _formkey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: AutofillGroup(
           child: ListView(
             physics: const BouncingScrollPhysics(),
@@ -203,8 +203,8 @@ class _RegisterPageState extends State<RegisterPage> {
           },
           onSaved: (String? value) {},
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          autofillHints: const [AutofillHints.email],
-          keyboardType: TextInputType.emailAddress,
+          autofillHints: const [AutofillHints.password],
+          keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             hintText: "Enter your password",
             labelText: "Password",
@@ -233,9 +233,10 @@ class _RegisterPageState extends State<RegisterPage> {
     var prefs = await SharedPreferences.getInstance();
 
     if (_formkey.currentState!.validate()) {
+         _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
           context: context, title: "title", subtitle: "subtitle");
-      _formkey.currentState!.save();
+   
       await RegisterUserApi.registerUser(
               fullName: nameController.text,
               email: emailController.text,

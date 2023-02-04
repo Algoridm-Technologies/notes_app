@@ -24,14 +24,6 @@ class EmployerProfilePage extends StatefulWidget {
 
 class _EmployerProfilePageState extends State<EmployerProfilePage> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -120,6 +112,7 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                   ],
                 ),
               ),
+        
               Expanded(
                 child: ListView(
                   children: [

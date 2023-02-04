@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:note/src/utils/constants.dart';
 
 class ProcessingDialog {
@@ -24,7 +25,10 @@ class ProcessingDialog {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const CircularProgressIndicator.adaptive(),
+                  SizedBox(
+                     height: 100.h,
+              width: 100.w,
+                    child: LottieBuilder.asset('assets/animations/loading.json')),
                   Text(
                     title,
                     style: heading2,

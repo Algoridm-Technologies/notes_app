@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:note/src/provider/authentification/user_auth.dart';
 import 'package:note/src/provider/database/access_provider.dart';
+import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
@@ -19,9 +20,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   var isEmployer = false;
   var prefs = await SharedPreferences.getInstance();
+  // var token =  "";
   var token = prefs.getString("token") ?? "";
+  // token = "th";
   if (token != "") {
     Map<String, dynamic> data = Jwt.parseJwt(token);
 
@@ -48,6 +52,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SetStateProvider()),
         ChangeNotifierProvider(create: (_) => AccessProvider()),
         ChangeNotifierProvider(create: (_) => ProfileDetailProvider()),
+        ChangeNotifierProvider(create: (_) => FacilityProvider()),
       ],
       child: ScreenUtilInit(
         builder: (context, child) {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note/src/api/add_facility_api.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_back_button.dart';
+import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:provider/provider.dart';
 
@@ -69,11 +71,15 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
     await AddFacilityApi.addFacility(
             name: nameController.text,
             location: locationController.text,
-            file: imagePath!)
+            d: imagePath!)
         .then((value) {
-      Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+      Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
       ProcessingDialog.cancelDialog(context);
       print(value);
+      if (jsonDecode(value)['success'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['success']);
+      }
     });
   }
 

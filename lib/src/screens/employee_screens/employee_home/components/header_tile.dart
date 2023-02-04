@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:note/src/screens/notification/notification_page.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../provider/database/profile_detail_provider.dart';
 import '../../../../utils/constants.dart';
 
 class HeaderTile extends StatelessWidget {
@@ -23,9 +25,13 @@ class HeaderTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Koln Mark",
-                style: heading2,
+              Consumer<ProfileDetailProvider>(
+                builder: (context, value, child) => Text(
+                  value.isLoggedIn
+                      ? value.model!.fullName ?? ""
+                      : "Not loggedin",
+                  style: heading2,
+                ),
               ),
               Text(
                 "Good day",

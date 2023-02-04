@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Form(
         key: _formkey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: AutofillGroup(
           child: ListView(
             physics: const BouncingScrollPhysics(),
@@ -141,8 +141,9 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       ).then((value) async {
+        print(value);
         ProcessingDialog.cancelDialog(context);
-        
+
         if (jsonDecode(value)['error'] != null) {
           CustomSnackBar.showSnackbar(
               context: context, title: jsonDecode(value)['error']);

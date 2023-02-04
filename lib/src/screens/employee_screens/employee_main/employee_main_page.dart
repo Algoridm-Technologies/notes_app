@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/screens/employee_screens/employee_home/employee_home_page.dart';
 import 'package:note/src/screens/employee_screens/employee_notes/employee_notes_page.dart';
@@ -7,8 +8,32 @@ import 'package:note/src/screens/employee_screens/employee_profile/employee_prof
 import 'package:note/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-class EmployeeMainPage extends StatelessWidget {
+import '../../../provider/database/access_provider.dart';
+import '../../../utils/refresh_token.dart';
+
+class EmployeeMainPage extends StatefulWidget {
   const EmployeeMainPage({Key? key}) : super(key: key);
+
+  @override
+  State<EmployeeMainPage> createState() => _EmployeeMainPageState();
+}
+
+class _EmployeeMainPageState extends State<EmployeeMainPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refreshAndFetchData();
+    });
+  }
+
+  refreshAndFetchData() async {
+    await RefreshToken.refreshToken().then((value) {
+      Provider.of<AccessProvider>(context, listen: false).setAccess();
+      Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var pages = [

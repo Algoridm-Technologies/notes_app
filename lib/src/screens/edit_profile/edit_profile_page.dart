@@ -171,13 +171,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   updateProfile() async {
-    
     ProcessingDialog.showProcessingDialog(
         context: context, title: "title", subtitle: "subtitle");
     if (imageUrl == null) {
       await UpdateProfileApi.updateProfile(fullName: nameController.text)
           .then((value) {
-        Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+        Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
         ProcessingDialog.cancelDialog(context);
         print(value);
       });
@@ -185,7 +184,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       await UpdateProfileApi.updateProfile(
               fullName: nameController.text, d: imageUrl!)
           .then((value) {
-        Provider.of<ProfileDetailProvider>(context, listen: false).getModel();
+        Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
         ProcessingDialog.cancelDialog(context);
         print(value);
       });

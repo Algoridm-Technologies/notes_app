@@ -8,9 +8,10 @@ class ProfileDetailProvider extends ChangeNotifier {
   ProfileDetailModel? get model => _model!;
   bool get isLoggedIn => _model != null;
 
-  getModel() async {
+  getDetails() async {
     await RefreshToken.refreshToken();
     var data = await ProfileDetailApi.getProfileDetail();
+    
     _model = ProfileDetailModel.fromJson(data);
     notifyListeners();
   }

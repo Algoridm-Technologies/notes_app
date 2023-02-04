@@ -1,11 +1,18 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/add_user_api.dart';
+import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
+import 'package:provider/provider.dart';
 
 import '../../widget/vertical_gap.dart';
 
@@ -19,6 +26,7 @@ class AddStaffsPage extends StatefulWidget {
 class _AddStaffsPageState extends State<AddStaffsPage> {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -26,6 +34,9 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
     emailController.dispose();
     super.dispose();
   }
+
+  String selectedFacility = "Select Facility";
+  String selectedFacilityId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -35,30 +46,29 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
           leading: customBackButton(context),
           centerTitle: true,
         ),
-        body: ListView(
-          padding: screenPadding,
-          children: [
-            const Text("Add Staff to join the company"),
-            const VerticalGap(gap: 30),
-            buildNameField(),
-            const VerticalGap(gap: 10),
-            buildEmailField(),
-            const VerticalGap(gap: 10),
-            buildFacilityField(),
-            const VerticalGap(gap: 50),
-            DefaultButton(
-                widget: Text(
-                  "Add Staff",
-                  style: heading3White,
-                ),
-                onTap: () {
-                  ProcessingDialog.showProcessingDialog(
-                      context: context,
-                      title: "Adding Staff",
-                      subtitle:
-                          "Irure nulla utconsequat esse tempor voluptat in aliquip qui adipisicing reprehenderit cupidatat. Quis eiusmod excepteur tempor exercitation aliquip ea consectetur pariatur nostrud adipisicing.");
-                }),
-          ],
+        body: Form(
+          key: _formkey,
+          child: ListView(
+            padding: screenPadding,
+            children: [
+              const Text("Add Staff to join the company"),
+              const VerticalGap(gap: 30),
+              buildNameField(),
+              const VerticalGap(gap: 10),
+              buildEmailField(),
+              const VerticalGap(gap: 10),
+              buildFacilityField(),
+              const VerticalGap(gap: 50),
+              DefaultButton(
+                  widget: Text(
+                    "Add Staff",
+                    style: heading3White,
+                  ),
+                  onTap: () {
+                    addStaff();
+                  }),
+            ],
+          ),
         ));
   }
 
@@ -94,7 +104,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
                     size: 24.r,
                   ),
                   const HorizontalGap(gap: 10),
-                  const Text("NazaFacility"),
+                  Text(selectedFacility),
                   const Spacer(),
                   Icon(
                     Iconsax.arrow_down_1,
@@ -105,6 +115,33 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
         ),
       ],
     );
+  }
+
+  addStaff() async {
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      ProcessingDialog.showProcessingDialog(
+          context: context,
+          title: "Adding Staff",
+          subtitle:
+              "Irure nulla utconsequat esse tempor voluptat in aliquip qui adipisicing reprehenderit cupidatat. Quis eiusmod excepteur tempor exercitation aliquip ea consectetur pariatur nostrud adipisicing.");
+      await AddUserApi.addUser(
+              fullName: nameController.text,
+              email: emailController.text,
+              facilityId: selectedFacilityId)
+          .then((value) {
+        print(value);
+        ProcessingDialog.cancelDialog(context);
+        if (jsonDecode(value)['success'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['success']);
+        }
+        if (jsonDecode(value)['email'] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)['email'][0]);
+        }
+      });
+    }
   }
 
   Widget buildNameField() {
@@ -200,14 +237,26 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
             content: SizedBox(
               height: 300.h,
               width: 200.w,
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    title: const Text("Nasafacility"),
-                  );
+              child: Consumer<FacilityProvider>(
+                builder: (context, value, child) {
+                  return value.isLoading
+                      ? const CupertinoActivityIndicator()
+                      : ListView.builder(
+                          itemCount: value.list.length,
+                          itemBuilder: (context, index) {
+                            var data = value.list[index]!;
+                            return ListTile(
+                              onTap: () {
+                                setState(() {
+                                  selectedFacility = data.title ?? "";
+                                  selectedFacilityId = data.id ?? "";
+                                });
+                                Navigator.pop(context);
+                              },
+                              title: Text(data.title ?? ""),
+                            );
+                          },
+                        );
                 },
               ),
             ),
