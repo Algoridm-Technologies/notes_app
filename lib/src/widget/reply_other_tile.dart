@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note/src/model/note_detail_model.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 
 class ReplyOtherTile extends StatelessWidget {
-  const ReplyOtherTile({Key? key}) : super(key: key);
+  final Replies reply;
+  const ReplyOtherTile({Key? key, required this.reply}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,14 +32,13 @@ class ReplyOtherTile extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Koln Mark",
+                      reply.user!,
                       style: GoogleFonts.inter(
                         color: kPrimaryColor1,
                       ),
                     ),
                   ),
-                  const Text(
-                      "Veniam et ex laborum dolor commodo nostrud anim laboris eu sint labore Lorem do cillum. Ex Lorem laborum mollit consectetur dolor velit voluptate est esse dolor dolore. Id ipsum ipsum proident aute adipisicing mollit non. Reprehenderit cupidatat eiusmod labore et Lorem officia cupidatat. Et fugiat dolore magna nostrud ad cillum pariatur veniam sit tempor. Tempor cillum voluptate in labore anim mollit eu non elit. Minim aliquip deserunt aute sint."),
+                  Text(reply.text??""),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(

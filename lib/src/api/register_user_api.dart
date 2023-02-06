@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:note/src/utils/constants.dart';
 
 class RegisterUserApi {
   static Future<dynamic> registerUser({
@@ -9,14 +8,14 @@ class RegisterUserApi {
     required String password,
   }) async {
     try {
-      dynamic url = Uri.parse("$baseUrl/auth/register/");
+      dynamic url =
+          Uri.parse("https://noteapp-api.herokuapp.com/api/v1/auth/register/");
       var response = await http.post(url, body: {
         'full_name': fullName,
         'email': email,
         'password': password,
         'is_employer': isEmployer.toString(),
       });
-  
 
       return response.body;
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
 import 'package:note/src/screens/facilities/facilities_page.dart';
 import 'package:note/src/screens/staffs/staffs_page.dart';
@@ -36,6 +37,8 @@ class _EmployerMainPageState extends State<EmployerMainPage> {
       Provider.of<AccessProvider>(context, listen: false).setAccess();
       Provider.of<FacilityProvider>(context, listen: false).getFacility();
       Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
+      Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+          .getFacility();
     });
   }
 

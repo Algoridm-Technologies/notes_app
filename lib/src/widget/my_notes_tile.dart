@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:note/src/model/employee_and_note_model.dart';
 import 'package:note/src/provider/util/check_provider.dart';
-import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
 
+import '../model/employee_note_model.dart';
 import '../utils/constants.dart';
 
-class NotesTile extends StatelessWidget {
+class MyNotesTile extends StatelessWidget {
   final bool isUser;
   final VoidCallback onTap;
   final int index;
-  final Notes note;
-  const NotesTile({
+  final MyNotes note;
+  const MyNotesTile({
     Key? key,
     required this.isUser,
     required this.onTap,
@@ -79,25 +78,6 @@ class NotesTile extends StatelessWidget {
                             const VerticalGap(gap: 5),
                             Row(
                               children: [
-                                isUser
-                                    ? const SizedBox()
-                                    : CircleAvatar(
-                                        radius: 15.sp,
-                                        backgroundImage:
-                                            NetworkImage(note.user!.avatar!),
-                                      ),
-                                isUser
-                                    ? const SizedBox()
-                                    : const HorizontalGap(gap: 10),
-                                isUser
-                                    ? const SizedBox()
-                                    : Text(
-                                        "${note.user!.fullName}",
-                                        style: subTitle,
-                                      ),
-                                isUser
-                                    ? const SizedBox()
-                                    : const HorizontalGap(gap: 10),
                                 Text(
                                   DateFormat()
                                       .format(DateTime.parse(note.updatedAt!)),

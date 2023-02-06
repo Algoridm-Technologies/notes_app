@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:note/src/model/employee_and_note_model.dart';
+import 'package:note/src/model/employee_note_model.dart';
 import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/vertical_gap.dart';
@@ -9,12 +9,12 @@ import 'package:provider/provider.dart';
 
 import '../utils/constants.dart';
 
-class NotesTile extends StatelessWidget {
+class OtherNotesTile extends StatelessWidget {
   final bool isUser;
   final VoidCallback onTap;
   final int index;
-  final Notes note;
-  const NotesTile({
+  final TeamMatesNotes note;
+  const OtherNotesTile({
     Key? key,
     required this.isUser,
     required this.onTap,

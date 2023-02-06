@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/provider/database/employee_note_provider.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/screens/employee_screens/employee_home/employee_home_page.dart';
@@ -31,6 +32,7 @@ class _EmployeeMainPageState extends State<EmployeeMainPage> {
     await RefreshToken.refreshToken().then((value) {
       Provider.of<AccessProvider>(context, listen: false).setAccess();
       Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
+      Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
     });
   }
 

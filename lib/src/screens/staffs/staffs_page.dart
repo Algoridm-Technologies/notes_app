@@ -4,12 +4,14 @@ import 'package:note/src/screens/add_staff/add_staffs_page.dart';
 import 'package:note/src/screens/staffs/components/staff_list.dart';
 import 'package:note/src/utils/constants.dart';
 
+import '../../api/employee_and_note_api.dart';
 import '../../widget/vertical_gap.dart';
 
 class EmployerStaffsPage extends StatelessWidget {
   const EmployerStaffsPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    EmployeeAndNoteApi.currentEmployeeAndFacility();
     return Scaffold(
       body: Column(
         children: [
@@ -53,7 +55,6 @@ class EmployerStaffsPage extends StatelessWidget {
           ),
         ),
       ),
-   
     );
   }
 }

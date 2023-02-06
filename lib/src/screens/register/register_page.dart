@@ -233,16 +233,17 @@ class _RegisterPageState extends State<RegisterPage> {
     var prefs = await SharedPreferences.getInstance();
 
     if (_formkey.currentState!.validate()) {
-         _formkey.currentState!.save();
+      _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
           context: context, title: "title", subtitle: "subtitle");
-   
+
       await RegisterUserApi.registerUser(
               fullName: nameController.text,
               email: emailController.text,
               isEmployer: prefs.getBool('isEmployer') ?? false,
               password: passwordController.text)
           .then((value) {
+        print(value);
         ProcessingDialog.cancelDialog(context);
         // print(value['success']);
         if (jsonDecode(value)["email"] != null) {

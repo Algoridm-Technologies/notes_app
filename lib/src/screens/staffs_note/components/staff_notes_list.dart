@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/model/employee_and_note_model.dart';
 import 'package:note/src/screens/employer_screens/notes_details/notes_details_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/notes_tile.dart';
@@ -15,6 +16,7 @@ class StaffsNotesList extends StatelessWidget {
           return NotesTile(
             isUser: false,
             index: index,
+            note: Notes(),
             onTap: () {
               Navigator.of(context).push(
                 PageRouteBuilder(

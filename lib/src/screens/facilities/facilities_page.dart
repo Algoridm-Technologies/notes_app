@@ -4,15 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note/src/api/employee_and_note_api.dart';
 import 'package:note/src/api/select_facility_api.dart';
+import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/screens/add_facility/add_facility_page.dart';
 import 'package:note/src/utils/constants.dart';
-import 'package:note/src/utils/refresh_token.dart';
 import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
+
+import '../../utils/refresh_token.dart';
 
 class EmployerFacilitiesPage extends StatefulWidget {
   const EmployerFacilitiesPage({Key? key}) : super(key: key);
@@ -66,8 +68,11 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                                         height: 80,
                                         width: 80,
                                         decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           image: DecorationImage(
                                             image: NetworkImage(data.image!),
+                                            fit: BoxFit.cover,
                                             onError: (exception, stackTrace) =>
                                                 Container(
                                               color: kGreyColor,
@@ -114,22 +119,24 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
   }
 
   selectFacility(String id, String name) async {
+    print(id);
     ProcessingDialog.showProcessingDialog(
         context: context,
         title: "Changing Facility",
         subtitle: "Changing to $name ");
-    await RefreshToken.refreshToken();
-    await SelectFacilityApi.selectFacility(id: id).then((value) {
+    // await RefreshToken.refreshToken();
+    // await EmployeeAndNoteApi.currentEmployeeAndFacility().then((value) {
+    //   print(value);
+    // });
+    await SelectFacilityApi.selectFacility(id: id).then((value) async {
       ProcessingDialog.cancelDialog(context);
+      print(value);
       if (jsonDecode(value)["success"] != null) {
         CustomSnackBar.showSnackbar(
             context: context, title: jsonDecode(value)["success"]);
       }
-
-      print(value);
-    });
-    await EmployeeAndNoteApi.currentEmployeeAndFacility().then((value) {
-      print(value);
+      Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+          .getFacility();
     });
   }
 }

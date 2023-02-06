@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/model/note_detail_model.dart';
+import 'package:note/src/provider/database/note_detail_employee_provider.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/reply_other_tile.dart';
 import 'package:note/src/widget/reply_user_tile.dart';
 import 'package:note/src/widget/vertical_gap.dart';
+import 'package:provider/provider.dart';
 import 'package:undo/undo.dart';
 
+import '../../../api/note_reply_api.dart';
+import '../../../utils/refresh_token.dart';
 import 'components/header_tile.dart';
 
 class EmployeeNotesDetailPage extends StatefulWidget {
@@ -20,6 +25,7 @@ class EmployeeNotesDetailPage extends StatefulWidget {
 
 class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
   var controller = TextEditingController();
+  var replyController = TextEditingController();
   var changes = ChangeStack();
   var body = "";
   @override
@@ -105,17 +111,23 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
           children: [
             const HeaderTile(),
             Expanded(
-              child: ListView(
-                padding: screenPadding,
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  const VerticalGap(gap: 20),
-                  Text(
-                    loremSentence,
-                    style: layer2,
-                  ),
-                  const VerticalGap(gap: 400),
-                ],
+              child: Consumer<NoteDetailEmployeeProvider>(
+                builder: (context, value, child) {
+                  return ListView(
+                    padding: screenPadding,
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      const VerticalGap(gap: 20),
+                      Text(
+                        value.model == null
+                            ? "Loading"
+                            : value.model!.text ?? "",
+                        style: layer2,
+                      ),
+                      const VerticalGap(gap: 400),
+                    ],
+                  );
+                },
               ),
             )
           ],
@@ -156,7 +168,9 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                   itemCount: 10,
                   itemBuilder: (c, i) {
                     return vn[i] == 1
-                        ? const ReplyOtherTile()
+                        ? const ReplyOtherTile(
+                            reply: Replies(),
+                          )
                         : const ReplyUserTile();
                   },
                 ),
@@ -184,6 +198,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                         ),
                         child: Center(
                           child: TextField(
+                            controller: replyController,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -200,7 +215,17 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                     CircleAvatar(
                       radius: 20.r,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          var noteId = Provider.of<NoteDetailEmployeeProvider>(
+                                  context,
+                                  listen: false)
+                              .model!
+                              .id!;
+                          sendReply(
+                              noteId: noteId,
+                              replyId: "",
+                              text: replyController.text);
+                        },
                         icon: Icon(
                           Icons.send,
                           size: 25.sp,
@@ -253,14 +278,18 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                   ),
                   const VerticalGap(gap: 20),
                   Expanded(
-                    child: ListView.builder(
-                      padding: screenPadding,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: 10,
-                      itemBuilder: (c, i) {
-                        return vn[i] == 1
-                            ? const ReplyOtherTile()
-                            : const ReplyUserTile();
+                    child: Consumer<NoteDetailEmployeeProvider>(
+                      builder: (context, value, child) {
+                        return ListView.builder(
+                          padding: screenPadding,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: 10,
+                          itemBuilder: (c, i) {
+                            return const ReplyOtherTile(
+                              reply: Replies(),
+                            );
+                          },
+                        );
                       },
                     ),
                   ),
@@ -287,6 +316,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                             ),
                             child: Center(
                               child: TextField(
+                                controller: replyController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -303,7 +333,18 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                         CircleAvatar(
                           radius: 20.r,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              var noteId =
+                                  Provider.of<NoteDetailEmployeeProvider>(
+                                          context,
+                                          listen: false)
+                                      .model!
+                                      .id!;
+                              sendReply(
+                                  noteId: noteId,
+                                  replyId: "",
+                                  text: replyController.text);
+                            },
                             icon: Icon(
                               Icons.send,
                               size: 25.sp,
@@ -318,5 +359,20 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
             ),
           );
         });
+  }
+
+  sendReply({
+    required String noteId,
+    required String replyId,
+    required String text,
+  }) async {
+    await RefreshToken.refreshToken();
+    print('object');
+    await NoteReplyApi.noteReply(noteId: noteId, replyId: replyId, text: text)
+        .then((value) {
+      print(value);
+      Provider.of<NoteDetailEmployeeProvider>(context, listen: false)
+          .getFacility(noteId);
+    });
   }
 }

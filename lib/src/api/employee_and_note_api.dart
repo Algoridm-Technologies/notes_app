@@ -10,6 +10,7 @@ class EmployeeAndNoteApi {
       dynamic url = Uri.parse("$baseUrl/notes/employer-dashboard/");
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
+        // "Cookie": "sessionid=ddsntj7fzkqv39uys8wy30rfapmdh0h0",
       });
       print(response.body);
       if (response.statusCode.toString()[0] == "2") {

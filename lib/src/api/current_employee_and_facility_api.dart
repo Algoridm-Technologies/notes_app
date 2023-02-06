@@ -3,9 +3,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentEmployeeAndFacilityApi {
-  static Future<String> currentEmployeeAndFacility({
-    required String noteId,
-  }) async {
+  static Future<String> currentEmployeeAndFacility() async {
     try {
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString("token");

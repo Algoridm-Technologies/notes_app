@@ -1,11 +1,17 @@
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogoutApi {
-  Future<String> logout() async {
+  static Future<String> logout() async {
     try {
-      dynamic url = Uri.parse("$baseUrl/auth/set-new-password/");
-      var response = await http.get(url);
+      var prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString("token");
+      dynamic url = Uri.parse("$baseUrl/auth/logout/");
+      var response = await http.get(url, headers: {
+        "Authorization": "Bearer $token",
+      });
+      print(response.body);
 
       if (response.statusCode == 200) {
         return 'Success';

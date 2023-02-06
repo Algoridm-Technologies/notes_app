@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/request_password_reset_api.dart';
 import 'package:note/src/screens/email_verification/email_verification_page.dart';
+import 'package:note/src/screens/email_verification/email_verification_reset_page.dart';
 
 import '../../utils/constants.dart';
 import '../../widget/custom_snackbar.dart';
@@ -89,7 +90,7 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
             pageBuilder: ((context, animation, _) {
               return FadeTransition(
                 opacity: animation,
-                child: EmailVerificationPage(
+                child: EmailVerificationResetPage(
                   email: emailController.text,
                   source: "reset",
                 ),

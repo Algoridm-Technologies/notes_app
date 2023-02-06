@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
-          context: context, title: "title", subtitle: "subtitle");
+          context: context, title: "Sign in", subtitle: "Signing in user");
       await LoginUserApi.loginUserApi(
         email: emailController.text,
         password: passwordController.text,
@@ -144,11 +144,17 @@ class _LoginPageState extends State<LoginPage> {
         print(value);
         ProcessingDialog.cancelDialog(context);
 
+        if (value == "Error") {
+          CustomSnackBar.showSnackbar(
+              context: context, title: "Something went wrong");
+          return;
+        }
         if (jsonDecode(value)['error'] != null) {
           CustomSnackBar.showSnackbar(
               context: context, title: jsonDecode(value)['error']);
           return;
         }
+
         var prefs = await SharedPreferences.getInstance();
         prefs.setString("refresh", jsonDecode(value)['refresh']);
 

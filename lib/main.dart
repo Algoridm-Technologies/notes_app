@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:note/src/provider/authentification/user_auth.dart';
 import 'package:note/src/provider/database/access_provider.dart';
+import 'package:note/src/provider/database/employee_and_note_provider.dart';
+import 'package:note/src/provider/database/employee_note_provider.dart';
 import 'package:note/src/provider/database/facility_provider.dart';
+import 'package:note/src/provider/database/note_by_employee_provider.dart';
+import 'package:note/src/provider/database/note_detail_employee_provider.dart';
+import 'package:note/src/provider/database/note_detail_employer_provider.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
@@ -53,6 +58,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AccessProvider()),
         ChangeNotifierProvider(create: (_) => ProfileDetailProvider()),
         ChangeNotifierProvider(create: (_) => FacilityProvider()),
+        ChangeNotifierProvider(create: (_) => EmployeeAndNoteProvider()),
+        ChangeNotifierProvider(create: (_) => EmployeeNoteProvider()),
+        ChangeNotifierProvider(create: (_) => NoteDetailEmployeeProvider()),
+        ChangeNotifierProvider(create: (_) => NoteDetailEmployerProvider()),
+        ChangeNotifierProvider(create: (_) => NoteByEmployeeProvider()),
       ],
       child: ScreenUtilInit(
         builder: (context, child) {

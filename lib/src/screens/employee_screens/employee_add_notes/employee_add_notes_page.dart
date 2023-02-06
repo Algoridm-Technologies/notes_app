@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/add_note_api.dart';
+import 'package:note/src/provider/database/employee_note_provider.dart';
 
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
+import 'package:provider/provider.dart';
 import 'package:undo/undo.dart';
 
 import '../../../widget/custom_snackbar.dart';
@@ -182,15 +184,13 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
 
   addNote() async {
     ProcessingDialog.showProcessingDialog(
-        context: context,
-        title: "Adding Note",
-        subtitle:
-            "Irure nulla utconsequat esse tempor voluptat in aliquip qui adipisicing reprehenderit cupidatat. Quis eiusmod excepteur tempor exercitation aliquip ea consectetur pariatur nostrud adipisicing.");
+        context: context, title: "Adding Note", subtitle: "Adding new Note");
     await AddNoteApi.addNote(
       title: titleTextController.text,
       body: bodyTextController.text,
     ).then((value) {
-      print(value);
+      Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+
       ProcessingDialog.cancelDialog(context);
       if (jsonDecode(value)['success'] != null) {
         CustomSnackBar.showSnackbar(

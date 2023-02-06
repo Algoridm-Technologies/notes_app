@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/logout_api.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/screens/edit_profile/edit_profile_page.dart';
 import 'package:note/src/screens/launch/launch_page.dart';
@@ -112,7 +113,6 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                   ],
                 ),
               ),
-        
               Expanded(
                 child: ListView(
                   children: [
@@ -196,22 +196,24 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                                     )
                                   ],
                                 ),
-                                onTap: () {
-                                  Provider.of<EmployerNavigationProvider>(
-                                          context,
-                                          listen: false)
-                                      .changePage(0);
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      transitionDuration: kAnimationDuration,
-                                      pageBuilder: ((context, animation, _) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: const LaunchPage(),
-                                        );
-                                      }),
-                                    ),
-                                  );
+                                onTap: () async {
+                                  await LogoutApi.logout().then((value) {
+                                    Provider.of<EmployerNavigationProvider>(
+                                            context,
+                                            listen: false)
+                                        .changePage(0);
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        transitionDuration: kAnimationDuration,
+                                        pageBuilder: ((context, animation, _) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: const LaunchPage(),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  });
                                 }),
                           )
                         ],

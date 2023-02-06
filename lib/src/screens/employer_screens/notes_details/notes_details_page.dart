@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/note_reply_api.dart';
+import 'package:note/src/model/note_detail_model.dart';
+import 'package:note/src/provider/database/note_detail_employer_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/screens/employer_screens/notes_details/components/header_tile.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:note/src/utils/refresh_token.dart';
 import 'package:note/src/widget/custom_appbar.dart';
 import 'package:note/src/widget/reply_other_tile.dart';
-import 'package:note/src/widget/reply_user_tile.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,8 @@ class NotesDetailPage extends StatefulWidget {
 
 class _NotesDetailPageState extends State<NotesDetailPage> {
   var controller = TextEditingController();
+  var replyController = TextEditingController();
+
   var isReplying = false;
   List vn = [1, 2, 1, 2, 1, 1, 2, 1, 2, 1];
   @override
@@ -31,17 +36,21 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
           children: [
             const HeaderTile(),
             Expanded(
-              child: ListView(
-                padding: screenPadding,
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  const VerticalGap(gap: 20),
-                  Text(
-                    loremSentence,
-                    style: layer2,
-                  ),
-                  const VerticalGap(gap: 400),
-                ],
+              child: Consumer<NoteDetailEmployerProvider>(
+                builder: (context, value, child) {
+                  return ListView(
+                    padding: screenPadding,
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      const VerticalGap(gap: 20),
+                      Text(
+                        value.isLoading ? "" : value.model!.text ?? "",
+                        style: layer2,
+                      ),
+                      const VerticalGap(gap: 400),
+                    ],
+                  );
+                },
               ),
             )
           ],
@@ -79,13 +88,17 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                       ),
                       const VerticalGap(gap: 20),
                       Expanded(
-                        child: ListView.builder(
-                          padding: screenPadding,
-                          itemCount: 10,
-                          itemBuilder: (c, i) {
-                            return vn[i] == 1
-                                ? const ReplyOtherTile()
-                                : const ReplyUserTile();
+                        child: Consumer<NoteDetailEmployerProvider>(
+                          builder: (context, value, child) {
+                            return ListView.builder(
+                              padding: screenPadding,
+                              itemCount: value.list.length,
+                              itemBuilder: (c, i) {
+                                return ReplyOtherTile(
+                                  reply: value.list[i],
+                                );
+                              },
+                            );
                           },
                         ),
                       ),
@@ -112,6 +125,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                 ),
                                 child: Center(
                                   child: TextField(
+                                    controller: replyController,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       enabledBorder: InputBorder.none,
@@ -128,7 +142,19 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                             CircleAvatar(
                               radius: 20.r,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  var noteId =
+                                      Provider.of<NoteDetailEmployerProvider>(
+                                              context,
+                                              listen: false)
+                                          .model!
+                                          .id!;
+
+                                  sendReply(
+                                      noteId: noteId,
+                                      replyId: "",
+                                      text: replyController.text);
+                                },
                                 icon: Icon(
                                   Icons.send,
                                   size: 25.sp,
@@ -143,6 +169,20 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                 )
               : const SizedBox();
         }));
+  }
+
+  sendReply({
+    required String noteId,
+    required String replyId,
+    required String text,
+  }) async {
+    await RefreshToken.refreshToken();
+    await NoteReplyApi.noteReply(noteId: noteId, replyId: replyId, text: text)
+        .then((value) {
+      print(value);
+      Provider.of<NoteDetailEmployerProvider>(context, listen: false)
+          .getFacility(noteId);
+    });
   }
 
   showButtonSheet(BuildContext con) {
@@ -188,9 +228,9 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                       physics: const BouncingScrollPhysics(),
                       itemCount: 10,
                       itemBuilder: (c, i) {
-                        return vn[i] == 1
-                            ? const ReplyOtherTile()
-                            : const ReplyUserTile();
+                        return const ReplyOtherTile(
+                          reply: Replies(),
+                        );
                       },
                     ),
                   ),

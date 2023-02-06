@@ -191,13 +191,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
   setNewPassword() async {
     ProcessingDialog.showProcessingDialog(
-        context: context, title: "title", subtitle: "subtitle");
+        context: context,
+        title: "Password Change",
+        subtitle: "Changing password");
 
     await SetNewPasswordApi.setNewPassword(
       password: confirmPasswordController.text,
     ).then((value) {
       ProcessingDialog.cancelDialog(context);
-      
+      print(value);
 
       if (jsonDecode(value)['error'] != null) {
         CustomSnackBar.showSnackbar(
