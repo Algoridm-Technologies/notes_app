@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note/src/screens/add_staff/add_staffs_page.dart';
 import 'package:note/src/screens/staffs/components/staff_list.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/employee_and_note_api.dart';
+import '../../provider/database/current_facility_provider.dart';
 import '../../widget/vertical_gap.dart';
 
 class EmployerStaffsPage extends StatelessWidget {
@@ -20,9 +22,15 @@ class EmployerStaffsPage extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: screenPadding,
-              child: Text(
-                "Nazasmart Facility",
-                style: heading3,
+              child: Consumer<CurrentFacilityProvider>(
+                builder: (context, value, child) {
+                  return Text(
+                    !value.isLoggedIn
+                        ? "No facility Selected"
+                        : "Recent Notes On ${value.model!.facilityName} Facility",
+                    style: heading3,
+                  );
+                },
               ),
             ),
           ),

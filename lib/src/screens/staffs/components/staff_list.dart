@@ -13,39 +13,42 @@ class StaffsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(child: Consumer<EmployeeAndNoteProvider>(
       builder: (context, value, child) {
-        return ListView.builder(
-          itemCount: value.em.length,
-          itemBuilder: (context, index) {
-            var data = value.em[index]!;
-            return Column(
-              children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(data.avatar ?? ""),
-                  ),
-                  title: Text("${data.fullName}"),
-                  onTap: () {
-                    Provider.of<NoteByEmployeeProvider>(context, listen: false)
-                        .getFacility(employeeId: data.id!);
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const StaffsNotePage(),
+        return value.em.isEmpty
+            ? const Center(child: Text("No staff"))
+            : ListView.builder(
+                itemCount: value.em.length,
+                itemBuilder: (context, index) {
+                  var data = value.em[index]!;
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(data.avatar ?? ""),
+                        ),
+                        title: Text("${data.fullName}"),
+                        onTap: () {
+                          Provider.of<NoteByEmployeeProvider>(context,
+                                  listen: false)
+                              .getFacility(employeeId: data.id!);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: kAnimationDuration,
+                              pageBuilder: ((context, animation, _) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: const StaffsNotePage(),
+                                );
+                              }),
+                            ),
                           );
-                        }),
+                        },
                       ),
-                    );
-                  },
-                ),
-                const VerticalGap(gap: 10),
-              ],
-            );
-          },
-        );
+                      const VerticalGap(gap: 10),
+                    ],
+                  );
+                },
+              );
       },
     ));
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:note/src/provider/database/current_facility_provider.dart';
 import 'package:note/src/provider/database/note_detail_employer_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +24,15 @@ class HeaderTile extends StatelessWidget {
                 children: [
                   const Icon(Iconsax.note_favorite),
                   const HorizontalGap(gap: 20),
-                  Text(
-                    'Nazasmart Facility',
-                    style: heading3,
+                  Consumer<CurrentFacilityProvider>(
+                    builder: (context, value, child) {
+                      return Text(
+                        value.isLoggedIn
+                            ? value.model!.facilityName ?? ""
+                            : 'Nazasmart Facility',
+                        style: heading3,
+                      );
+                    },
                   ),
                   const Spacer(),
                   IconButton(

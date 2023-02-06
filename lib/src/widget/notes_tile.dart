@@ -81,11 +81,15 @@ class NotesTile extends StatelessWidget {
                               children: [
                                 isUser
                                     ? const SizedBox()
-                                    : CircleAvatar(
-                                        radius: 15.sp,
-                                        backgroundImage:
-                                            NetworkImage(note.user!.avatar!),
-                                      ),
+                                    : note.user!.avatar == null
+                                        ? CircleAvatar(
+                                            radius: 15.sp,
+                                          )
+                                        : CircleAvatar(
+                                            radius: 15.sp,
+                                            backgroundImage: NetworkImage(
+                                                note.user!.avatar!),
+                                          ),
                                 isUser
                                     ? const SizedBox()
                                     : const HorizontalGap(gap: 10),

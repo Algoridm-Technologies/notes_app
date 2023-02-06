@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:note/src/api/check_password_reset_api.dart';
 import 'package:note/src/api/resend_email_otp_api.dart';
-import 'package:note/src/api/verify_email_api.dart';
 import 'package:note/src/screens/new_password/new_password_page.dart';
 import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
@@ -11,7 +10,6 @@ import 'package:note/src/widget/processing_dialogue.dart';
 import '../../utils/constants.dart';
 import '../../widget/default_button.dart';
 import '../../widget/vertical_gap.dart';
-import '../login/login_page.dart';
 
 class EmailVerificationResetPage extends StatefulWidget {
   final String email;
@@ -21,10 +19,12 @@ class EmailVerificationResetPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<EmailVerificationResetPage> createState() => _EmailVerificationResetPageState();
+  State<EmailVerificationResetPage> createState() =>
+      _EmailVerificationResetPageState();
 }
 
-class _EmailVerificationResetPageState extends State<EmailVerificationResetPage> {
+class _EmailVerificationResetPageState
+    extends State<EmailVerificationResetPage> {
   var codeController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
   @override
@@ -59,7 +59,7 @@ class _EmailVerificationResetPageState extends State<EmailVerificationResetPage>
                   if (widget.source == "reset") {
                     checkResetOtp();
                   } else {
-                    verifyUser();
+                    checkResetOtp();
                   }
                 },
               ),
@@ -81,44 +81,44 @@ class _EmailVerificationResetPageState extends State<EmailVerificationResetPage>
     );
   }
 
-  verifyUser() async {
-    if (_formkey.currentState!.validate()) {
-      _formkey.currentState!.save();
-      ProcessingDialog.showProcessingDialog(
-          context: context, title: "title", subtitle: "subtitle");
+  // verifyUser() async {
+  //   if (_formkey.currentState!.validate()) {
+  //     _formkey.currentState!.save();
+  //     ProcessingDialog.showProcessingDialog(
+  //         context: context, title: "Otp", subtitle: "Verifying otp");
 
-      await VerifyEmailApi.verifyEmail(
-              email: widget.email, otp: codeController.text)
-          .then((value) {
-        print(value);
-        ProcessingDialog.cancelDialog(context);
+  //     await VerifyEmailApi.verifyEmail(
+  //             email: widget.email, otp: codeController.text)
+  //         .then((value) {
+  //       print(value);
+  //       ProcessingDialog.cancelDialog(context);
 
-        if (jsonDecode(value)['error'] != null) {
-          CustomSnackBar.showSnackbar(
-              context: context, title: jsonDecode(value)['error']);
-        }
-        if (jsonDecode(value)['success'] != null) {
-          CustomSnackBar.showSnackbar(
-              context: context, title: jsonDecode(value)['success']);
-          Navigator.of(context).push(
-            PageRouteBuilder(
-              transitionDuration: kAnimationDuration,
-              pageBuilder: ((context, animation, _) {
-                return FadeTransition(
-                    opacity: animation, child: const LoginPage());
-              }),
-            ),
-          );
-        }
-      });
-    }
-  }
+  //       if (jsonDecode(value)['error'] != null) {
+  //         CustomSnackBar.showSnackbar(
+  //             context: context, title: jsonDecode(value)['error']);
+  //       }
+  //       if (jsonDecode(value)['success'] != null) {
+  //         CustomSnackBar.showSnackbar(
+  //             context: context, title: jsonDecode(value)['success']);
+  //         Navigator.of(context).push(
+  //           PageRouteBuilder(
+  //             transitionDuration: kAnimationDuration,
+  //             pageBuilder: ((context, animation, _) {
+  //               return FadeTransition(
+  //                   opacity: animation, child: const LoginPage());
+  //             }),
+  //           ),
+  //         );
+  //       }
+  //     });
+  //   }
+  // }
 
   checkResetOtp() async {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
-          context: context, title: "title", subtitle: "subtitle");
+          context: context, title: "Otp", subtitle: "verify otp");
 
       await CheckPasswordResetOtpApi.checkPasswordResetOtp(
               email: widget.email, otp: codeController.text)

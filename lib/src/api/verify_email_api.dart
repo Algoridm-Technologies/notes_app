@@ -12,6 +12,14 @@ class VerifyEmailApi {
         'email': email,
         'otp': otp,
       });
+      print(response.body);
+      print(response.headers["set-cookie"]);
+      String? rawCookie = response.headers["set-cookie"];
+      if (rawCookie != null) {
+        int index = rawCookie.indexOf(';');
+        String v = (index == -1) ? rawCookie : rawCookie.substring(0, index);
+        // prefs.setString("session", v);
+      }
       return response.body;
     } catch (e) {
       return 'Error';

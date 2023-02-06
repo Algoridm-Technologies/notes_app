@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/provider/database/current_facility_provider.dart';
 
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/vertical_gap.dart';
+import 'package:provider/provider.dart';
 
 import 'components/header_tile.dart';
 import 'components/notes_list.dart';
@@ -15,7 +17,6 @@ class EmployerHomePage extends StatefulWidget {
 }
 
 class _EmployerHomePageState extends State<EmployerHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +31,15 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
             const VerticalGap(gap: 10),
             const TabTile(),
             const VerticalGap(gap: 10),
-            Text(
-              "Recent Notes On Nazasmart Facility",
-              style: layer1,
+            Consumer<CurrentFacilityProvider>(
+              builder: (context, value, child) {
+                return Text(
+                  !value.isLoggedIn
+                      ? "No facility Selected"
+                      : "Recent Notes On ${value.model!.facilityName} Facility",
+                  style: layer1,
+                );
+              },
             ),
             const VerticalGap(gap: 10),
             const NotesList(),

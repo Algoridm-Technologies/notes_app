@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:note/src/provider/authentification/user_auth.dart';
 import 'package:note/src/provider/database/access_provider.dart';
+import 'package:note/src/provider/database/current_facility_provider.dart';
 import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/database/employee_note_provider.dart';
 import 'package:note/src/provider/database/facility_provider.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NoteDetailEmployeeProvider()),
         ChangeNotifierProvider(create: (_) => NoteDetailEmployerProvider()),
         ChangeNotifierProvider(create: (_) => NoteByEmployeeProvider()),
+        ChangeNotifierProvider(create: (_) => CurrentFacilityProvider()),
       ],
       child: ScreenUtilInit(
         builder: (context, child) {

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note/src/api/employee_and_note_api.dart';
 import 'package:note/src/api/select_facility_api.dart';
+import 'package:note/src/provider/database/current_facility_provider.dart';
 import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/screens/add_facility/add_facility_page.dart';
@@ -13,8 +13,6 @@ import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
-
-import '../../utils/refresh_token.dart';
 
 class EmployerFacilitiesPage extends StatefulWidget {
   const EmployerFacilitiesPage({Key? key}) : super(key: key);
@@ -135,6 +133,10 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
         CustomSnackBar.showSnackbar(
             context: context, title: jsonDecode(value)["success"]);
       }
+      Provider.of<CurrentFacilityProvider>(context, listen: false)
+          .setAccess(facilityName: name, facilityId: id);
+          Provider.of<CurrentFacilityProvider>(context, listen: false)
+          .getAccess();
       Provider.of<EmployeeAndNoteProvider>(context, listen: false)
           .getFacility();
     });

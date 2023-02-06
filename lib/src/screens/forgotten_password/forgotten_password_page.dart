@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/request_password_reset_api.dart';
-import 'package:note/src/screens/email_verification/email_verification_page.dart';
 import 'package:note/src/screens/email_verification/email_verification_reset_page.dart';
 
 import '../../utils/constants.dart';
@@ -65,7 +64,9 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
 
   resendEmailOtp() async {
     ProcessingDialog.showProcessingDialog(
-        context: context, title: "title", subtitle: "subtitle");
+        context: context,
+        title: "Email reset",
+        subtitle: "Sending otp for this email ${emailController.text} ");
 
     await RequestPasswordResetOtpApi.requestPasswordResetOtp(
             email: emailController.text)

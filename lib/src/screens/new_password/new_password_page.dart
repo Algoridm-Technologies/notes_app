@@ -210,8 +210,8 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             context: context, title: jsonDecode(value)['success']);
         SuccessDialog.showSuccessDialog(
           context: context,
-          title: "title",
-          subtitle: "subtitle",
+          title: "Password Reset",
+          subtitle: "You've successfully changed your password",
         );
         Future.delayed(const Duration(seconds: 2)).then((value) {
           Navigator.of(context).push(

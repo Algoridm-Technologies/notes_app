@@ -9,10 +9,11 @@ class GetSingleNoteEmployerDetailApi {
     try {
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString("token");
+      var session = prefs.getString("session");
       dynamic url = Uri.parse("$baseUrl/notes/employer-dashboard/$noteId/");
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
-        "Cookie": "sessionid=ddsntj7fzkqv39uys8wy30rfapmdh0h0",
+        "Cookie": "$session",
       });
       print(response.body);
       if (response.statusCode.toString()[0] == "2") {

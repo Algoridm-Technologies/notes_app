@@ -14,7 +14,6 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
   bool get isEmpty => model == null;
   getFacility(String noteId) async {
     _isLoading = true;
-    print("1 $isEmpty");
     var facility = await GetSingleNoteEmployerDetailApi.getSingleNoteDetail(
         noteId: noteId);
 
@@ -22,7 +21,6 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
       _list = [];
       _model = null;
       _isLoading = false;
-      print("2 $isEmpty");
       notifyListeners();
     } else {
       var myModel = NoteDetailModel.fromJson(jsonDecode(facility));
