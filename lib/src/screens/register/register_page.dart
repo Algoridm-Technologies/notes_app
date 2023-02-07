@@ -243,7 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
               isEmployer: prefs.getBool('isEmployer') ?? false,
               password: passwordController.text)
           .then((value) {
-        print(value);
+  
         ProcessingDialog.cancelDialog(context);
         // print(value['success']);
         if (jsonDecode(value)["email"] != null) {

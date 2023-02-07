@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:note/src/provider/database/note_detail_employee_provider.dart';
+import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/constants.dart';
@@ -29,17 +30,15 @@ class HeaderTile extends StatelessWidget {
                 children: [
                   const Icon(Iconsax.note_favorite),
                   const HorizontalGap(gap: 20),
-                  Text(
-                    'Nazasmart Facility',
-                    style: heading3,
-                  ),
+                  Consumer<ProfileDetailProvider>(
+                      builder: (context, value, child) {
+                    return Text(
+                      '${value.model!.facility} Facility',
+                      style: heading3,
+                    );
+                  }),
                   const Spacer(),
-                  // IconButton(
-                  //   onPressed: () {},
-                  //   icon: const Icon(
-                  //     Iconsax.trash,
-                  //   ),
-                  // ),
+                 
                 ],
               ),
             ),

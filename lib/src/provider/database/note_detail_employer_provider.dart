@@ -26,9 +26,9 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
       var myModel = NoteDetailModel.fromJson(jsonDecode(facility));
       _model = myModel;
       _list = myModel.replies!;
-    
+
       _isLoading = false;
-  print("3 $isEmpty");
+
       notifyListeners();
     }
   }

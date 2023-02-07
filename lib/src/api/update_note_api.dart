@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/utils/refresh_token.dart';
@@ -16,7 +14,7 @@ class UpdateNoteApi {
     var token = prefs.getString("token");
     try {
       dynamic url = Uri.parse("$baseUrl/notes/employee-dashboard/$noteId/");
-      
+
       var request = http.MultipartRequest("PATCH", url);
 
       request.fields['title'] = title;
@@ -26,15 +24,14 @@ class UpdateNoteApi {
         "Content-Type": "multipart/form-data",
       });
 
-    
       var response = await request.send();
 
       var data = await http.Response.fromStream(response);
-      print(data.body);
+     
 
       return data.body;
     } catch (e) {
-      print(e);
+     
       return 'Error';
     }
   }

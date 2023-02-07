@@ -130,7 +130,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
               email: emailController.text,
               facilityId: selectedFacilityId)
           .then((value) {
-        print(value);
+       
         ProcessingDialog.cancelDialog(context);
         if (jsonDecode(value)['success'] != null &&
             jsonDecode(value)['data'] != null) {

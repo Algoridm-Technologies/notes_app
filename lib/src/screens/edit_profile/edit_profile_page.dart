@@ -180,7 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .then((value) {
         Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
         ProcessingDialog.cancelDialog(context);
-        print(value);
+     
       });
     } else {
       await UpdateProfileApi.updateProfile(
@@ -188,7 +188,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .then((value) {
         Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
         ProcessingDialog.cancelDialog(context);
-        print(value);
+      
       });
     }
   }

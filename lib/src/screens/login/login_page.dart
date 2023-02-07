@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/login_user_api.dart';
+import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
 import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
 import 'package:note/src/screens/register/register_page.dart';
@@ -13,8 +14,6 @@ import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../choose_facility/choose_facility_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -141,7 +140,6 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       ).then((value) async {
-        print(value);
         ProcessingDialog.cancelDialog(context);
 
         if (value == "Error") {
@@ -180,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                 pageBuilder: ((context, animation, _) {
                   return FadeTransition(
                     opacity: animation,
-                    child: const ChooseFacilityPage(),
+                    child: const EmployeeMainPage(),
                   );
                 }),
               ),

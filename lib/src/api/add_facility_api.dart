@@ -30,10 +30,10 @@ class AddFacilityApi {
       var response = await request.send();
 
       var data = await http.Response.fromStream(response);
-      print(data.body);
+  
       return data.body;
     } catch (e) {
-      print(e);
+  
       return 'Error';
     }
   }

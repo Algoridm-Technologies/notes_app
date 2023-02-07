@@ -39,14 +39,6 @@ class MyNotesTile extends StatelessWidget {
                 color: kWhiteColor,
                 child: InkWell(
                   onTap: onTap,
-                  onLongPress: () {
-                    v.positions.clear();
-                    if (v.isChecking) {
-                      v.changeIsChecking(false);
-                    } else {
-                      v.changeIsChecking(true);
-                    }
-                  },
                   child: Row(
                     children: [
                       Container(

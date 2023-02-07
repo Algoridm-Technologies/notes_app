@@ -13,33 +13,37 @@ class StaffsNotesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<NoteByEmployeeProvider>(
       builder: (context, value, child) {
-        return ListView.builder(
-            itemCount: value.myList.length,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: ((context, index) {
-              return EmployeeNotesTile(
-                isUser: false,
-                index: index,
-                note: value.myList[index]!,
-                onTap: () {
-                  Provider.of<NoteDetailEmployerProvider>(context,
-                          listen: false)
-                      .getFacility(value.myList[index]!.id!);
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: kAnimationDuration,
-                      pageBuilder: ((context, animation, _) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: const NotesDetailPage(),
-                        );
-                      }),
-                    ),
-                  );
-                },
-              );
-            }));
+        return value.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : value.myList.isEmpty
+                ? const Center(child: Text("No item"))
+                : ListView.builder(
+                    itemCount: value.myList.length,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: ((context, index) {
+                      return EmployeeNotesTile(
+                        isUser: false,
+                        index: index,
+                        note: value.myList[index]!,
+                        onTap: () {
+                          Provider.of<NoteDetailEmployerProvider>(context,
+                                  listen: false)
+                              .getFacility(value.myList[index]!.id!);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: kAnimationDuration,
+                              pageBuilder: ((context, animation, _) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: const NotesDetailPage(),
+                                );
+                              }),
+                            ),
+                          );
+                        },
+                      );
+                    }));
       },
     );
   }

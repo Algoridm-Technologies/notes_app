@@ -38,7 +38,9 @@ class ReplyOtherTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(reply.text??""),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(reply.text ?? "")),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(

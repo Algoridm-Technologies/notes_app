@@ -15,7 +15,7 @@ class NoteDetailEmployeeProvider extends ChangeNotifier {
     _isLoading = true;
     var facility = await GetSingleNoteEmployeeDetailApi.getSingleNoteDetail(
         noteId: noteId);
-    print(facility);
+   
 
     if (facility == "Failed" || facility == "Error") {
       _list = [];

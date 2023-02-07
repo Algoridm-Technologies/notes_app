@@ -9,6 +9,7 @@ import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/provider/database/note_by_employee_provider.dart';
 import 'package:note/src/provider/database/note_detail_employee_provider.dart';
 import 'package:note/src/provider/database/note_detail_employer_provider.dart';
+import 'package:note/src/provider/database/notification_provider.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NoteDetailEmployerProvider()),
         ChangeNotifierProvider(create: (_) => NoteByEmployeeProvider()),
         ChangeNotifierProvider(create: (_) => CurrentFacilityProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: ScreenUtilInit(
         builder: (context, child) {

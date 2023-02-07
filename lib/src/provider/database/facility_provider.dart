@@ -8,10 +8,11 @@ import '../../api/list_facility_api.dart';
 class FacilityProvider extends ChangeNotifier {
   List<Facilities?> _list = [];
   List<Facilities?> get list => _list;
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
   getFacility() async {
     _isLoading = true;
+    notifyListeners();
     var facility = await ListFacilityApi.listFacility();
 
     if (facility == "Failed" && facility == "Error") {

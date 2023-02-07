@@ -11,7 +11,6 @@ class LogoutApi {
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
       });
-      print(response.body);
 
       if (response.statusCode == 200) {
         return 'Success';

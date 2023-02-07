@@ -206,6 +206,13 @@ fullName:json['full_name'] == null ? null : json['full_name'] as String,
 avatar:json['avatar'] == null ? null : json['avatar'] as String
     );
 }
+ factory Employees.fromMap(Map<String, dynamic> map) {
+    return Employees(
+      id: map['id'] != null ? map['id'] as String : null,
+      fullName: map['full_name'] != null ? map['full_name'] as String : null,
+      avatar: map['avatar'] != null ? map['avatar'] as String : null,
+    );
+  }
 
 @override
 String toString(){

@@ -11,7 +11,6 @@ class ProfileDetailApi {
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
       });
-      print(response.body);
       return response.body;
     } catch (e) {
       return 'Error';

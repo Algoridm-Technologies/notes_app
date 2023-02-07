@@ -13,7 +13,9 @@ class NotesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<EmployeeAndNoteProvider>(
       builder: (context, value, child) {
-        return value.list.isEmpty
+        return 
+        
+        value.list.isEmpty
             ? const Center(child: Text('No note'))
             : ListView.builder(
                 itemCount: value.list.length,

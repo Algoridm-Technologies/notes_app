@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -7,8 +9,13 @@ import 'package:note/src/provider/database/note_detail_employer_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../api/delect_note_api.dart';
+import '../../../../provider/database/employee_and_note_provider.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/refresh_token.dart';
+import '../../../../widget/custom_snackbar.dart';
 import '../../../../widget/horizontal_gap.dart';
+import '../../../../widget/processing_dialogue.dart';
 
 class HeaderTile extends StatelessWidget {
   const HeaderTile({Key? key}) : super(key: key);
@@ -36,7 +43,27 @@ class HeaderTile extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      ProcessingDialog.showProcessingDialog(
+                          context: context,
+                          title: "Deleting Note",
+                          subtitle: 'Deleting this note(s)');
+                      var list = <String>[value.model!.id!];
+                      await RefreshToken.refreshToken();
+                      await DeleteNoteApi.deleteNote(id: list).then((value) {
+                        print(value);
+                        ProcessingDialog.cancelDialog(context);
+                        if (jsonDecode(value)['success'] != null) {
+                          CustomSnackBar.showSnackbar(
+                              context: context,
+                              title: jsonDecode(value)['success']);
+                          Provider.of<EmployeeAndNoteProvider>(context,
+                                  listen: false)
+                              .getFacility();
+                          Navigator.pop(context);
+                        }
+                      });
+                    },
                     icon: const Icon(
                       Iconsax.trash,
                     ),
@@ -83,6 +110,8 @@ class HeaderTile extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 15.sp,
+                    backgroundColor: kPrimaryColor1.withOpacity(0.2),
+                    child: Text(value.model!.user![0].toUpperCase()),
                   ),
                   const HorizontalGap(gap: 10),
                   Text(

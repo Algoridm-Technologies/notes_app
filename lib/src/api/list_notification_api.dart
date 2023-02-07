@@ -3,7 +3,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListNotificationApi {
-  static Future<String> listNotification() async {
+  static Future<dynamic> listNotification() async {
     try {
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString("token");
@@ -11,7 +11,6 @@ class ListNotificationApi {
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
       });
-      print(response.body);
       return response.body;
     } catch (e) {
       return 'Error';

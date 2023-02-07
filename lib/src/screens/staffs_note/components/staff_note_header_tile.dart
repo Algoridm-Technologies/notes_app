@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 
 class StaffNoteHeaderTile extends StatelessWidget {
@@ -19,9 +20,14 @@ class StaffNoteHeaderTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(image),
-              ),
+              image == ""
+                  ? CircleAvatar(
+                      backgroundColor: kPrimaryColor1.withOpacity(0.2),
+                      child: Text(name[0].toUpperCase()),
+                    )
+                  : CircleAvatar(
+                      backgroundImage: NetworkImage(image),
+                    ),
             ],
           ),
           const HorizontalGap(gap: 10),

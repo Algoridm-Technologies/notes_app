@@ -15,7 +15,6 @@ class NoteByEmployeeApi {
         "Authorization": "Bearer $token",
         "cookie": "$session",
       });
-      print('-->${response.body}');
       return response.body;
     } catch (e) {
       return 'Error';

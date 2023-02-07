@@ -12,7 +12,6 @@ import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/database/profile_detail_provider.dart';
 import '../../widget/processing_dialogue.dart';
 import '../../widget/vertical_gap.dart';
 
@@ -78,7 +77,7 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
         .then((value) {
       Provider.of<FacilityProvider>(context, listen: false).getFacility();
       ProcessingDialog.cancelDialog(context);
-      print(value);
+     
       if (jsonDecode(value)['success'] != null) {
         CustomSnackBar.showSnackbar(
             context: context, title: jsonDecode(value)['success']);

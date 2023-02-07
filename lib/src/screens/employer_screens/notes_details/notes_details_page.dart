@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -22,6 +23,7 @@ class NotesDetailPage extends StatefulWidget {
 class _NotesDetailPageState extends State<NotesDetailPage> {
   var controller = TextEditingController();
   var replyController = TextEditingController();
+  var loading = false;
 
   var isReplying = false;
   List vn = [1, 2, 1, 2, 1, 1, 2, 1, 2, 1];
@@ -89,15 +91,17 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                       Expanded(
                         child: Consumer<NoteDetailEmployerProvider>(
                           builder: (context, value, child) {
-                            return ListView.builder(
-                              padding: screenPadding,
-                              itemCount: value.list.length,
-                              itemBuilder: (c, i) {
-                                return ReplyOtherTile(
-                                  reply: value.list[i],
-                                );
-                              },
-                            );
+                            return value.list.isEmpty
+                                ? const Center(child: Text("No reply"))
+                                : ListView.builder(
+                                    padding: screenPadding,
+                                    itemCount: value.list.length,
+                                    itemBuilder: (c, i) {
+                                      return ReplyOtherTile(
+                                        reply: value.list[i],
+                                      );
+                                    },
+                                  );
                           },
                         ),
                       ),
@@ -138,28 +142,34 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                 ),
                               ),
                             ),
-                            CircleAvatar(
-                              radius: 20.r,
-                              child: IconButton(
-                                onPressed: () {
-                                  var noteId =
-                                      Provider.of<NoteDetailEmployerProvider>(
-                                              context,
-                                              listen: false)
-                                          .model!
-                                          .id!;
+                            loading
+                                ? CircleAvatar(
+                                    radius: 20.r,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.r,
+                                    ))
+                                : CircleAvatar(
+                                    radius: 20.r,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        var noteId = Provider.of<
+                                                    NoteDetailEmployerProvider>(
+                                                context,
+                                                listen: false)
+                                            .model!
+                                            .id!;
 
-                                  sendReply(
-                                      noteId: noteId,
-                                      replyId: "",
-                                      text: replyController.text);
-                                },
-                                icon: Icon(
-                                  Icons.send,
-                                  size: 25.sp,
-                                ),
-                              ),
-                            ),
+                                        sendReply(
+                                            noteId: noteId,
+                                            replyId: "",
+                                            text: replyController.text);
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        size: 25.sp,
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),
@@ -175,10 +185,18 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     required String replyId,
     required String text,
   }) async {
+    setState(() {
+      loading = true;
+    });
     await RefreshToken.refreshToken();
-    await NoteReplyApi.noteReply(noteId: noteId, replyId: replyId, text: text)
-        .then((value) {
-      print(value);
+    await NoteReplyApi.noteReply(
+      noteId: noteId,
+      replyId: replyId,
+      text: text,
+    ).then((value) {
+      setState(() {
+        loading = false;
+      });
       Provider.of<NoteDetailEmployerProvider>(context, listen: false)
           .getFacility(noteId);
     });
@@ -224,16 +242,18 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                       ),
                       const VerticalGap(gap: 20),
                       Expanded(
-                        child: ListView.builder(
-                          padding: screenPadding,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: value.list.length,
-                          itemBuilder: (c, i) {
-                            return ReplyOtherTile(
-                              reply: value.list[i],
-                            );
-                          },
-                        ),
+                        child: value.list.isEmpty
+                            ? const Center(child: Text("No reply"))
+                            : ListView.builder(
+                                padding: screenPadding,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: value.list.length,
+                                itemBuilder: (c, i) {
+                                  return ReplyOtherTile(
+                                    reply: value.list[i],
+                                  );
+                                },
+                              ),
                       ),
                       Container(
                         margin: screenPadding,
@@ -272,21 +292,27 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                 ),
                               ),
                             ),
-                            CircleAvatar(
-                              radius: 20.r,
-                              child: IconButton(
-                                onPressed: () {
-                                  sendReply(
-                                      noteId: value.model!.id!,
-                                      replyId: "",
-                                      text: replyController.text);
-                                },
-                                icon: Icon(
-                                  Icons.send,
-                                  size: 25.sp,
-                                ),
-                              ),
-                            ),
+                            loading
+                                ? CircleAvatar(
+                                    radius: 20.r,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.r,
+                                    ))
+                                : CircleAvatar(
+                                    radius: 20.r,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        sendReply(
+                                            noteId: value.model!.id!,
+                                            replyId: "",
+                                            text: replyController.text);
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        size: 25.sp,
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),

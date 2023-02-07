@@ -21,13 +21,13 @@ class CheckProvider extends ChangeNotifier {
 
   addToList(String position) {
     _positions.add(position);
-    print(_positions);
+   
     notifyListeners();
   }
 
   removeToList(String position) {
     _positions.remove(position);
-    print(_positions);
+ 
     notifyListeners();
   }
 }

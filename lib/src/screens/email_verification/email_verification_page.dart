@@ -90,7 +90,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       await VerifyEmailApi.verifyEmail(
               email: widget.email, otp: codeController.text)
           .then((value) {
-        print(value);
+       
         ProcessingDialog.cancelDialog(context);
 
         if (jsonDecode(value)['error'] != null) {

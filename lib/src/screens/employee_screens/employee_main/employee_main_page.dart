@@ -10,6 +10,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/database/access_provider.dart';
+import '../../../provider/database/notification_provider.dart';
 import '../../../utils/refresh_token.dart';
 
 class EmployeeMainPage extends StatefulWidget {
@@ -33,6 +34,8 @@ class _EmployeeMainPageState extends State<EmployeeMainPage> {
       Provider.of<AccessProvider>(context, listen: false).setAccess();
       Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
       Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+       Provider.of<NotificationProvider>(context, listen: false)
+                .getFacility();
     });
   }
 

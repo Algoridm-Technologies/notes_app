@@ -13,6 +13,7 @@ class EmployeeNoteProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   getFacility() async {
     _isLoading = true;
+    notifyListeners();
     var facility =
         await CurrentEmployeeAndFacilityApi.currentEmployeeAndFacility();
 

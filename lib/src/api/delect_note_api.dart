@@ -21,7 +21,7 @@ class DeleteNoteApi {
 
       return response.body;
     } catch (e) {
-      print(e);
+    
       return 'Error';
     }
   }

@@ -56,15 +56,14 @@ class EmployeeNotesPage extends StatelessWidget {
               child: const NoteTabTile(),
             ),
             Expanded(
-              child: Consumer<TabProvider>(builder: (context, v, c) {
-                return ListView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: screenPadding,
-                  children: [
-                    v.tab == 0 ? const YourNotesList() : const OtherNotesList(),
-                  ],
-                );
-              }),
+              child: Padding(
+                padding: screenPadding,
+                child: Consumer<TabProvider>(builder: (context, v, c) {
+                  return v.tab == 0
+                      ? const YourNotesList()
+                      : const OtherNotesList();
+                }),
+              ),
             ),
           ],
         ),

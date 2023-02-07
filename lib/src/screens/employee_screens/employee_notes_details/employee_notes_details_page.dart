@@ -36,8 +36,10 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
   @override
   void initState() {
     super.initState();
-    bodyTextController.addListener(() {
-      setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      bodyTextController.addListener(() {
+        setState(() {});
+      });
     });
   }
 
@@ -443,10 +445,10 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
     required String text,
   }) async {
     await RefreshToken.refreshToken();
-    print('object');
+   
     await NoteReplyApi.noteReply(noteId: noteId, replyId: replyId, text: text)
         .then((value) {
-      print(value);
+    
       Provider.of<NoteDetailEmployeeProvider>(context, listen: false)
           .getFacility(noteId);
     });

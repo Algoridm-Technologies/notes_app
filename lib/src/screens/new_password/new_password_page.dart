@@ -199,7 +199,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       password: confirmPasswordController.text,
     ).then((value) {
       ProcessingDialog.cancelDialog(context);
-      print(value);
+  
 
       if (jsonDecode(value)['error'] != null) {
         CustomSnackBar.showSnackbar(

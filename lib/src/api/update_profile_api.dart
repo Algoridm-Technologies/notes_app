@@ -31,7 +31,7 @@ class UpdateProfileApi {
       var response = await request.send();
 
       var data = await http.Response.fromStream(response);
-      print(data.body);
+  
 
       return "re.body";
     } catch (e) {

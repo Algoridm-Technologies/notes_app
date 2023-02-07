@@ -12,8 +12,6 @@ class LoginUserApi {
         'email': email,
         'password': password,
       });
-        print(response.body);
-      print(response.headers["set-cookie"]);
       String? rawCookie = response.headers["set-cookie"];
       if (rawCookie != null) {
         int index = rawCookie.indexOf(';');
@@ -23,7 +21,7 @@ class LoginUserApi {
 
       return response.body;
     } catch (e) {
-      print(e);
+     
       return 'Error';
     }
   }

@@ -15,7 +15,6 @@ class GetSingleNoteEmployerDetailApi {
         "Authorization": "Bearer $token",
         "Cookie": "$session",
       });
-      print(response.body);
       if (response.statusCode.toString()[0] == "2") {
         return response.body;
       } else {
