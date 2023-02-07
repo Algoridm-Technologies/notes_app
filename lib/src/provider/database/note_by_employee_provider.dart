@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/note_by_employee_api.dart';
-import 'package:note/src/model/employee_note_model.dart';
+
+import '../../model/employee_and_note_model.dart';
+import '../../model/note_by_employee_model.dart';
 
 class NoteByEmployeeProvider extends ChangeNotifier {
-  List<MyNotes?> _myList = [];
-  List<TeamMatesNotes?> _teamList = [];
-  List<MyNotes?> get myList => _myList;
-  List<TeamMatesNotes?> get em => _teamList;
+  List<Notes?> _myList = [];
+  List<Notes?> get myList => _myList;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   getFacility({required String employeeId}) async {
@@ -19,14 +19,12 @@ class NoteByEmployeeProvider extends ChangeNotifier {
 
     if (facility == "Failed" || facility == "Error") {
       _myList = [];
-      _teamList = [];
       _isLoading = false;
       notifyListeners();
     } else {
-      var model = EmployeeNoteModel.fromJson(jsonDecode(facility));
+      var model = NoteByEmployeeModel.fromJson(jsonDecode(facility));
 
-      _myList = model.myNotes!;
-      _teamList = model.teamMatesNotes!;
+      _myList = model.notes!;
       _isLoading = false;
 
       notifyListeners();

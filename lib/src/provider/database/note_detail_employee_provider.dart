@@ -5,8 +5,8 @@ import 'package:note/src/api/get_single_note_employee_api.dart';
 import 'package:note/src/model/note_detail_model.dart';
 
 class NoteDetailEmployeeProvider extends ChangeNotifier {
-  List<dynamic> _list = [];
-  List<dynamic> get list => _list;
+  List<Replies> _list = [];
+  List<Replies> get list => _list;
   NoteDetailModel? _model;
   NoteDetailModel? get model => _model;
   bool _isLoading = false;

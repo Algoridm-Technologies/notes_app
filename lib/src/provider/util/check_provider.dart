@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CheckProvider extends ChangeNotifier {
-  final List<int> _positions = [];
+  final List<String> _positions = [];
   bool _isChecking = false;
   int _selected = -1;
 
-  List<int> get positions => _positions;
+  List<String> get positions => _positions;
   bool get isChecking => _isChecking;
   int get selected => _selected;
 
@@ -19,13 +19,15 @@ class CheckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  addToList(int position) {
+  addToList(String position) {
     _positions.add(position);
+    print(_positions);
     notifyListeners();
   }
 
-  removeToList(int position) {
+  removeToList(String position) {
     _positions.remove(position);
+    print(_positions);
     notifyListeners();
   }
 }

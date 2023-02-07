@@ -13,6 +13,9 @@ import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../api/logout_api.dart';
 
 class EmployeeProfilePage extends StatelessWidget {
   const EmployeeProfilePage({Key? key}) : super(key: key);
@@ -181,22 +184,27 @@ class EmployeeProfilePage extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                onTap: () {
-                                  Provider.of<EmployeeNavigationProvider>(
-                                          context,
-                                          listen: false)
-                                      .changePage(0);
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      transitionDuration: kAnimationDuration,
-                                      pageBuilder: ((context, animation, _) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: const LaunchPage(),
-                                        );
-                                      }),
-                                    ),
-                                  );
+                                onTap: () async {
+                                  var prefs =
+                                      await SharedPreferences.getInstance();
+                                  await LogoutApi.logout().then((value) {
+                                    prefs.setString("token", "");
+                                    Provider.of<EmployeeNavigationProvider>(
+                                            context,
+                                            listen: false)
+                                        .changePage(0);
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        transitionDuration: kAnimationDuration,
+                                        pageBuilder: ((context, animation, _) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: const LaunchPage(),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  });
                                 }),
                           )
                         ],

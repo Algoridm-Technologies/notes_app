@@ -9,13 +9,13 @@ class UpdateNoteApi {
   static Future<String> updateNote({
     required String title,
     required String text,
-    required String? facilityId,
+    required String? noteId,
   }) async {
     await RefreshToken.refreshToken();
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     try {
-      dynamic url = Uri.parse("$baseUrl/notes/employee-dashboard/$facilityId/");
+      dynamic url = Uri.parse("$baseUrl/notes/employee-dashboard/$noteId/");
       
       var request = http.MultipartRequest("PATCH", url);
 

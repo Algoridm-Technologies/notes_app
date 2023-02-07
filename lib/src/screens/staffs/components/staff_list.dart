@@ -37,7 +37,10 @@ class StaffsList extends StatelessWidget {
                               pageBuilder: ((context, animation, _) {
                                 return FadeTransition(
                                   opacity: animation,
-                                  child: const StaffsNotePage(),
+                                  child: StaffsNotePage(
+                                    name: data.fullName ?? "",
+                                    image: data.avatar ?? "",
+                                  ),
                                 );
                               }),
                             ),

@@ -9,16 +9,14 @@ class NoteByEmployeeApi {
     try {
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString("token");
-      dynamic url = Uri.parse("$baseUrl/notes/employee-dashboard/$employeeId/");
+      var session = prefs.getString("session");
+      dynamic url = Uri.parse("$baseUrl/notes/employee-notes/$employeeId/");
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
+        "cookie": "$session",
       });
       print('-->${response.body}');
-      if (response.statusCode.toString()[0] == "2") {
-        return response.body;
-      } else {
-        return "Failed";
-      }
+      return response.body;
     } catch (e) {
       return 'Error';
     }

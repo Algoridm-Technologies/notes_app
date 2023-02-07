@@ -3,7 +3,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 
 class StaffNoteHeaderTile extends StatelessWidget {
-  const StaffNoteHeaderTile({Key? key}) : super(key: key);
+  final String name;
+  final String image;
+  const StaffNoteHeaderTile({Key? key, required this.name, required this.image})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -15,12 +18,14 @@ class StaffNoteHeaderTile extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              CircleAvatar(),
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(image),
+              ),
             ],
           ),
           const HorizontalGap(gap: 10),
-          const Text('Koln Mark'),
+          Text(name),
           const Spacer(),
           IconButton(
             onPressed: () {},

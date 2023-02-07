@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/note_reply_api.dart';
-import 'package:note/src/model/note_detail_model.dart';
 import 'package:note/src/provider/database/note_detail_employer_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/screens/employer_screens/notes_details/components/header_tile.dart';
@@ -200,92 +199,102 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
         initialChildSize: 0.7,
         // snap: true,
         builder: (context, s) {
-          return Container(
-            decoration: const BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                )),
-            child: Scaffold(
-              body: Column(
-                children: [
-                  const VerticalGap(gap: 20),
-                  Padding(
-                    padding: screenPadding,
-                    child: Center(
-                        child: Hero(
-                            tag: "text",
-                            child: Text(
-                              "All Replies",
-                              style: heading3,
-                            ))),
-                  ),
-                  const VerticalGap(gap: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      padding: screenPadding,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: 10,
-                      itemBuilder: (c, i) {
-                        return const ReplyOtherTile(
-                          reply: Replies(),
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: screenPadding,
-                    padding: const EdgeInsets.only(
-                      bottom: 5,
-                    ),
-                    height: 54.h,
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                              right: 10,
-                            ),
-                            padding: const EdgeInsets.all(
-                              10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: kGreyColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  suffixIcon: Icon(
-                                    Iconsax.microphone_slash_1,
-                                    size: 25.sp,
+          return Consumer<NoteDetailEmployerProvider>(
+            builder: (context, value, child) {
+              return Container(
+                decoration: const BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )),
+                child: Scaffold(
+                  body: Column(
+                    children: [
+                      const VerticalGap(gap: 20),
+                      Padding(
+                        padding: screenPadding,
+                        child: Center(
+                            child: Hero(
+                                tag: "text",
+                                child: Text(
+                                  "All Replies",
+                                  style: heading3,
+                                ))),
+                      ),
+                      const VerticalGap(gap: 20),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: screenPadding,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: value.list.length,
+                          itemBuilder: (c, i) {
+                            return ReplyOtherTile(
+                              reply: value.list[i],
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: screenPadding,
+                        padding: const EdgeInsets.only(
+                          bottom: 5,
+                        ),
+                        height: 54.h,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 10,
+                                ),
+                                padding: const EdgeInsets.all(
+                                  10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: kGreyColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: TextField(
+                                    controller: replyController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      suffixIcon: Icon(
+                                        Iconsax.microphone_slash_1,
+                                        size: 25.sp,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 20.r,
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.send,
-                              size: 25.sp,
+                            CircleAvatar(
+                              radius: 20.r,
+                              child: IconButton(
+                                onPressed: () {
+                                  sendReply(
+                                      noteId: value.model!.id!,
+                                      replyId: "",
+                                      text: replyController.text);
+                                },
+                                icon: Icon(
+                                  Icons.send,
+                                  size: 25.sp,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         });
   }

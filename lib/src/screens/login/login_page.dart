@@ -255,8 +255,8 @@ class _LoginPageState extends State<LoginPage> {
           },
           onSaved: (String? value) {},
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          autofillHints: const [AutofillHints.email],
-          keyboardType: TextInputType.emailAddress,
+          autofillHints: const [AutofillHints.password],
+          keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             hintText: "Enter your password",
             labelText: "Password",

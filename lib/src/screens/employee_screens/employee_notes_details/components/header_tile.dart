@@ -9,11 +9,18 @@ import '../../../../utils/constants.dart';
 import '../../../../widget/horizontal_gap.dart';
 
 class HeaderTile extends StatelessWidget {
-  const HeaderTile({Key? key}) : super(key: key);
+  final TextEditingController tileTextController;
+  const HeaderTile({Key? key, required this.tileTextController})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Consumer<NoteDetailEmployeeProvider>(
       builder: (context, value, child) {
+        if (value.model != null) {
+          if (tileTextController.text.isEmpty) {
+            tileTextController.text = value.model!.title ?? "";
+          }
+        }
         return Column(
           children: [
             Padding(
@@ -40,10 +47,23 @@ class HeaderTile extends StatelessWidget {
               padding: screenPadding,
               child: Row(
                 children: [
-                  Text(
-                    value.model == null ? "Loading" : value.model!.title ?? "",
-                    style: heading1,
+                  Expanded(
+                    child: TextField(
+                      style: heading1,
+                      controller: tileTextController,
+                      decoration: InputDecoration(
+                        hintText: "Title Goes Here",
+                        hintStyle: heading1,
+                        border: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                      ),
+                    ),
                   ),
+                  // Text(
+                  //   value.model == null ? "Loading" : value.model!.title ?? "",
+                  //   style: heading1,
+                  // ),
                   const Spacer(),
                   IconButton(
                     onPressed: () {

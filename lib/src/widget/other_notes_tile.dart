@@ -118,15 +118,15 @@ class OtherNotesTile extends StatelessWidget {
                 child: v.isChecking
                     ? IconButton(
                         onPressed: () {
-                          if (v.positions.contains(index)) {
-                            v.removeToList(index);
+                          if (v.positions.contains(index.toString())) {
+                            v.removeToList(index.toString());
                           } else {
-                            v.addToList(index);
+                            v.addToList(index.toString());
                           }
                         },
                         icon: Icon(
                           Icons.check_box,
-                          color: v.positions.contains(index)
+                          color: v.positions.contains(index.toString())
                               ? Colors.blue
                               : Colors.grey,
                         ),

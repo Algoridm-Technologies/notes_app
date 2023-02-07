@@ -12,6 +12,7 @@ import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
+import 'package:note/src/widget/success_with_field_dialogue.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/vertical_gap.dart';
@@ -123,8 +124,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
       ProcessingDialog.showProcessingDialog(
           context: context,
           title: "Adding Staff",
-          subtitle:
-              "Irure nulla utconsequat esse tempor voluptat in aliquip qui adipisicing reprehenderit cupidatat. Quis eiusmod excepteur tempor exercitation aliquip ea consectetur pariatur nostrud adipisicing.");
+          subtitle: "Adding new staff to the database");
       await AddUserApi.addUser(
               fullName: nameController.text,
               email: emailController.text,
@@ -132,7 +132,15 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
           .then((value) {
         print(value);
         ProcessingDialog.cancelDialog(context);
-        if (jsonDecode(value)['success'] != null) {
+        if (jsonDecode(value)['success'] != null &&
+            jsonDecode(value)['data'] != null) {
+          var password = jsonDecode(value)['data']['password'];
+          SuccessWithFieldDialog.showSuccessDialog(
+              context: context,
+              title: "Staff Added Successfully",
+              subtitle:
+                  "Staff has been successfully added to the staff list and the staff password has been successfully generated,",
+              password: password);
           CustomSnackBar.showSnackbar(
               context: context, title: jsonDecode(value)['success']);
         }

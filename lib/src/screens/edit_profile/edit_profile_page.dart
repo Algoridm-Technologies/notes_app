@@ -172,7 +172,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   updateProfile() async {
     ProcessingDialog.showProcessingDialog(
-        context: context, title: "title", subtitle: "subtitle");
+        context: context,
+        title: "Profile Update",
+        subtitle: "hold on while we update your details",);
     if (imageUrl == null) {
       await UpdateProfileApi.updateProfile(fullName: nameController.text)
           .then((value) {

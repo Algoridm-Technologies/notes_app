@@ -13,6 +13,7 @@ import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../provider/navigation/employer_navigation_provider.dart';
 
@@ -197,7 +198,10 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                                   ],
                                 ),
                                 onTap: () async {
+                                  var prefs =
+                                      await SharedPreferences.getInstance();
                                   await LogoutApi.logout().then((value) {
+                                    prefs.setString("token", "");
                                     Provider.of<EmployerNavigationProvider>(
                                             context,
                                             listen: false)
