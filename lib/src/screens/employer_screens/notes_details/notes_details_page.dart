@@ -45,7 +45,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                     children: [
                       const VerticalGap(gap: 20),
                       Text(
-                        value.isLoading ? "" : value.model!.text ?? "",
+                        value.isEmpty ? "" : value.model!.text ?? "",
                         style: layer2,
                       ),
                       const VerticalGap(gap: 400),

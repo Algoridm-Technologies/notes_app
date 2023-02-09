@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -33,6 +34,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
   var replyController = TextEditingController();
   var changes = ChangeStack();
   var body = "";
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -259,27 +261,36 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                                 ),
                               ),
                             ),
-                            CircleAvatar(
-                              radius: 20.r,
-                              child: IconButton(
-                                onPressed: () {
-                                  var noteId =
-                                      Provider.of<NoteDetailEmployeeProvider>(
-                                              context,
-                                              listen: false)
-                                          .model!
-                                          .id!;
-                                  sendReply(
-                                      noteId: noteId,
-                                      replyId: value.list.last.id!,
-                                      text: replyController.text);
-                                },
-                                icon: Icon(
-                                  Icons.send,
-                                  size: 25.sp,
-                                ),
-                              ),
-                            ),
+                            isLoading
+                                ? CircleAvatar(
+                                    radius: 20.r,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.r,
+                                    ))
+                                : CircleAvatar(
+                                    radius: 20.r,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        var noteId = Provider.of<
+                                                    NoteDetailEmployeeProvider>(
+                                                context,
+                                                listen: false)
+                                            .model!
+                                            .id!;
+                                        sendReply(
+                                            noteId: noteId,
+                                            replyId: value.list.last.id!,
+                                            text: replyController.text);
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        size: 25.sp,
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),
@@ -384,27 +395,36 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                                 ),
                               ),
                             ),
-                            CircleAvatar(
-                              radius: 20.r,
-                              child: IconButton(
-                                onPressed: () {
-                                  var noteId =
-                                      Provider.of<NoteDetailEmployeeProvider>(
-                                              context,
-                                              listen: false)
-                                          .model!
-                                          .id!;
-                                  sendReply(
-                                      noteId: noteId,
-                                      replyId: value.list.last.id!,
-                                      text: replyController.text);
-                                },
-                                icon: Icon(
-                                  Icons.send,
-                                  size: 25.sp,
-                                ),
-                              ),
-                            ),
+                            isLoading
+                                ? CircleAvatar(
+                                    radius: 20.r,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.r,
+                                    ))
+                                : CircleAvatar(
+                                    radius: 20.r,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        var noteId = Provider.of<
+                                                    NoteDetailEmployeeProvider>(
+                                                context,
+                                                listen: false)
+                                            .model!
+                                            .id!;
+                                        sendReply(
+                                            noteId: noteId,
+                                            replyId: value.list.last.id!,
+                                            text: replyController.text);
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        size: 25.sp,
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),
@@ -445,10 +465,12 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
     required String text,
   }) async {
     await RefreshToken.refreshToken();
-   
+
     await NoteReplyApi.noteReply(noteId: noteId, replyId: replyId, text: text)
         .then((value) {
-    
+      setState(() {
+        isLoading = false;
+      });
       Provider.of<NoteDetailEmployeeProvider>(context, listen: false)
           .getFacility(noteId);
     });

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/employee_and_note_api.dart';
 import 'package:note/src/api/list_all_employee_api.dart';
+import 'package:note/src/api/list_all_note_api.dart';
 import 'package:note/src/model/employee_and_note_model.dart';
 
 class EmployeeAndNoteProvider extends ChangeNotifier {
@@ -12,6 +13,7 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
   List<Employees?> get em => _em;
   bool _isLoading = true;
   bool get isLoading => _isLoading;
+  
   getFacility() async {
     _isLoading = true;
     notifyListeners();
@@ -47,6 +49,27 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
       _em = model
           .map<Employees>(
               (data) => Employees.fromJson(data as Map<String, Object?>))
+          .toList();
+      _isLoading = false;
+
+      notifyListeners();
+    }
+  }
+
+  getNote() async {
+    _isLoading = true;
+    notifyListeners();
+    var facility = await ListAllNotesApi.listEmployees();
+    
+
+    if (facility == "Failed" || facility == "Error") {
+      _list = [];
+      _isLoading = false;
+      notifyListeners();
+    } else {
+      var model = jsonDecode(facility)['data'];
+      _list = model
+          .map<Notes>((data) => Notes.fromJson(data as Map<String, Object?>))
           .toList();
       _isLoading = false;
 

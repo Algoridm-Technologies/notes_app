@@ -20,7 +20,7 @@ class CurrentFacilityProvider extends ChangeNotifier {
   getAccess() async {
     var prefs = await SharedPreferences.getInstance();
     var facilityName = prefs.getString('facilityName');
-    var facilityId = prefs.getString('facilityName');
+    var facilityId = prefs.getString('facilityId');
     prefs.getString('facilityId');
     _model = CurrentFacilityModel(
       facilityName: facilityName,

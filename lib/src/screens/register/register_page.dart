@@ -235,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
-          context: context, title: "title", subtitle: "subtitle");
+          context: context, title: "New User", subtitle: "Creating New User");
 
       await RegisterUserApi.registerUser(
               fullName: nameController.text,
@@ -243,7 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
               isEmployer: prefs.getBool('isEmployer') ?? false,
               password: passwordController.text)
           .then((value) {
-  
+        print(value);
         ProcessingDialog.cancelDialog(context);
         // print(value['success']);
         if (jsonDecode(value)["email"] != null) {

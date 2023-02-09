@@ -5,6 +5,7 @@ import 'package:note/src/screens/staffs_note/staffs_note.dart';
 import 'package:note/src/utils/refresh_token.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/constants.dart';
 
@@ -15,10 +16,19 @@ class StaffsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          await RefreshToken.refreshToken().then((value) {
-            Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-                .getFacility();
-          });
+          var prefs = await SharedPreferences.getInstance();
+          var name = prefs.getString('facilityId');
+          if (name == "0") {
+            await RefreshToken.refreshToken().then((value) {
+              Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+                  .getEmployee();
+            });
+          } else {
+            await RefreshToken.refreshToken().then((value) {
+              Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+                  .getFacility();
+            });
+          }
         },
         child: Consumer<EmployeeAndNoteProvider>(
           builder: (context, value, child) {

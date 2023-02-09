@@ -35,12 +35,17 @@ class _EmployerMainPageState extends State<EmployerMainPage> {
 
   refreshAndFetchData() async {
     await RefreshToken.refreshToken().then((value) {
+     Provider.of<CurrentFacilityProvider>(context, listen: false)
+            .setAccess(facilityName: "All", facilityId: "0");
       Provider.of<AccessProvider>(context, listen: false).setAccess();
       Provider.of<FacilityProvider>(context, listen: false).getFacility();
       Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
       Provider.of<CurrentFacilityProvider>(context, listen: false).getAccess();
       Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-          .getFacility();
+          .getEmployee();
+          Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+          .getNote();
+          
     });
   }
 

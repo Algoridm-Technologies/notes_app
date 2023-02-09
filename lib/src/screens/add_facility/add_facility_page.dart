@@ -68,8 +68,8 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
   updateProfile() async {
     ProcessingDialog.showProcessingDialog(
         context: context,
-        title: "Add facility",
-        subtitle: "Adding new facility ");
+        title: "Add facility...",
+        subtitle: "Just hold on a second trying to make your perfect Dashboard with your Chosen Information");
     await AddFacilityApi.addFacility(
             name: nameController.text,
             location: locationController.text,

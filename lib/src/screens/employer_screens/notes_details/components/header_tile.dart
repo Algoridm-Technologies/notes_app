@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -36,38 +37,44 @@ class HeaderTile extends StatelessWidget {
                       return Text(
                         value.isLoggedIn
                             ? value.model!.facilityName ?? ""
-                            : 'Nazasmart Facility',
+                            : ' ',
                         style: heading3,
                       );
                     },
                   ),
                   const Spacer(),
-                  IconButton(
-                    onPressed: () async {
-                      ProcessingDialog.showProcessingDialog(
-                          context: context,
-                          title: "Deleting Note",
-                          subtitle: 'Deleting this note(s)');
-                      var list = <String>[value.model!.id!];
-                      await RefreshToken.refreshToken();
-                      await DeleteNoteApi.deleteNote(id: list).then((value) {
-                        print(value);
-                        ProcessingDialog.cancelDialog(context);
-                        if (jsonDecode(value)['success'] != null) {
-                          CustomSnackBar.showSnackbar(
-                              context: context,
-                              title: jsonDecode(value)['success']);
-                          Provider.of<EmployeeAndNoteProvider>(context,
-                                  listen: false)
-                              .getFacility();
-                          Navigator.pop(context);
-                        }
-                      });
-                    },
-                    icon: const Icon(
-                      Iconsax.trash,
-                    ),
-                  ),
+                  value.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CupertinoActivityIndicator(),
+                        )
+                      : IconButton(
+                          onPressed: () async {
+                            ProcessingDialog.showProcessingDialog(
+                                context: context,
+                                title: "Deleting Note",
+                                subtitle: 'Deleting this note(s)');
+                            var list = <String>[value.model!.id!];
+                            await RefreshToken.refreshToken();
+                            await DeleteNoteApi.deleteNote(id: list)
+                                .then((value) {
+                              print(value);
+                              ProcessingDialog.cancelDialog(context);
+                              if (jsonDecode(value)['success'] != null) {
+                                CustomSnackBar.showSnackbar(
+                                    context: context,
+                                    title: jsonDecode(value)['success']);
+                                Provider.of<EmployeeAndNoteProvider>(context,
+                                        listen: false)
+                                    .getFacility();
+                                Navigator.pop(context);
+                              }
+                            });
+                          },
+                          icon: const Icon(
+                            Iconsax.trash,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -111,7 +118,9 @@ class HeaderTile extends StatelessWidget {
                   CircleAvatar(
                     radius: 15.sp,
                     backgroundColor: kPrimaryColor1.withOpacity(0.2),
-                    child: Text(value.model!.user![0].toUpperCase()),
+                    child: Text(value.isEmpty
+                        ? ""
+                        : value.model!.user![0].toUpperCase()),
                   ),
                   const HorizontalGap(gap: 10),
                   Text(

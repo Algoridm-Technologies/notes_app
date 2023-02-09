@@ -35,7 +35,7 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
               builder: (context, value, child) {
                 return Text(
                   !value.isLoggedIn
-                      ? "No facility Selected"
+                      ? "Recent Notes On All Facility"
                       : "Recent Notes On ${value.model!.facilityName} Facility",
                   style: layer1,
                 );

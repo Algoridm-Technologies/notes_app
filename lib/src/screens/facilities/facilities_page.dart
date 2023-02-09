@@ -15,8 +15,6 @@ import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/list_all_note_api.dart';
-
 class EmployerFacilitiesPage extends StatefulWidget {
   const EmployerFacilitiesPage({Key? key}) : super(key: key);
 
@@ -25,7 +23,7 @@ class EmployerFacilitiesPage extends StatefulWidget {
 }
 
 class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
-  List<Facilities?> list = [];
+  // List<Facilities?> list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +45,20 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                 },
                 child: Consumer<FacilityProvider>(
                   builder: (context, model, child) {
-                    list = model.list;
-                    if (!list.contains(const Facilities(
-                        id: "0",
-                        title: "All",
-                        location: "All",
-                        image: "All"))) {
-                      list.add(const Facilities(
-                          id: "0",
-                          title: "All",
-                          location: "All",
-                          image: "All"));
-                    }
+                    // list = model.list;
+                    // if (!list.contains(const Facilities(
+                    //     id: "0",
+                    //     title: "All",
+                    //     location: "All",
+                    //     image: "All"))) {
+                    //   list.add(const Facilities(
+                    //       id: "0",
+                    //       title: "All",
+                    //       location: "All",
+                    //       image: "All"));
+                    // }
 
-                    List<Facilities?> newList = list
+                    List<Facilities?> newList = model.list
                       ..sort(
                         (a, b) => a!.id!
                             .toLowerCase()
@@ -68,7 +66,7 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                       );
                     return model.isLoading
                         ? const Center(child: CircularProgressIndicator())
-                        : model.list.isEmpty
+                        : newList.isEmpty
                             ? const Center(child: Text("No item"))
                             : LayoutBuilder(builder: (context, value) {
                                 return GridView.builder(
@@ -93,41 +91,24 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                                         width: 100,
                                         child: Column(
                                           children: [
-                                            index == 0
-                                                ? Container(
-                                                    height: 80,
-                                                    width: 80,
-                                                    decoration: BoxDecoration(
-                                                      color: kPrimaryColor1
-                                                          .withOpacity(0.3),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(data.title![0]
-                                                          .toUpperCase()),
-                                                    ),
-                                                  )
-                                                : Container(
-                                                    height: 80,
-                                                    width: 80,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      image: DecorationImage(
-                                                        image: NetworkImage(
-                                                            data.image!),
-                                                        fit: BoxFit.cover,
-                                                        onError: (exception,
-                                                                stackTrace) =>
-                                                            Container(
-                                                          color: kGreyColor,
-                                                        ),
-                                                      ),
-                                                    ),
+                                            Container(
+                                              height: 80,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image:
+                                                      NetworkImage(data.image!),
+                                                  fit: BoxFit.cover,
+                                                  onError:
+                                                      (exception, stackTrace) =>
+                                                          Container(
+                                                    color: kGreyColor,
                                                   ),
+                                                ),
+                                              ),
+                                            ),
                                             Text(data.title!),
                                             Text(data.location!),
                                           ],
@@ -182,6 +163,7 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
 
         Provider.of<EmployeeAndNoteProvider>(context, listen: false)
             .getEmployee();
+        Provider.of<EmployeeAndNoteProvider>(context, listen: false).getNote();
         Provider.of<CurrentFacilityProvider>(context, listen: false)
             .setAccess(facilityName: name, facilityId: id);
         Provider.of<CurrentFacilityProvider>(context, listen: false)
@@ -208,4 +190,5 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
       });
     }
   }
+
 }
