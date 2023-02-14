@@ -45,7 +45,7 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                 },
                 child: Consumer<FacilityProvider>(
                   builder: (context, model, child) {
-                    // list = model.list;
+                    var newList = model.list;
                     // if (!list.contains(const Facilities(
                     //     id: "0",
                     //     title: "All",
@@ -58,12 +58,12 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                     //       image: "All"));
                     // }
 
-                    List<Facilities?> newList = model.list
-                      ..sort(
-                        (a, b) => a!.id!
-                            .toLowerCase()
-                            .compareTo(b!.id!.toLowerCase()),
-                      );
+                    // List<Facilities?> newList = model.list
+                    //   ..sort(
+                    //     (a, b) => a!.id!
+                    //         .toLowerCase()
+                    //         .compareTo(b!.id!.toLowerCase()),
+                    //   );
                     return model.isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : newList.isEmpty

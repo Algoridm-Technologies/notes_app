@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:note/src/model/facility_model.dart';
 import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/screens/add_staff/add_staffs_page.dart';
 import 'package:note/src/screens/staffs/components/staff_list.dart';
 import 'package:note/src/utils/constants.dart';
+import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/select_facility_api.dart';
@@ -13,8 +15,16 @@ import '../../provider/database/employee_and_note_provider.dart';
 import '../../utils/refresh_token.dart';
 import '../../widget/vertical_gap.dart';
 
-class EmployerStaffsPage extends StatelessWidget {
+class EmployerStaffsPage extends StatefulWidget {
   const EmployerStaffsPage({Key? key}) : super(key: key);
+
+  @override
+  State<EmployerStaffsPage> createState() => _EmployerStaffsPageState();
+}
+
+class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
+  var selected = const Facilities(
+      id: "0", title: "All Staff", location: "All", image: "All");
   @override
   Widget build(BuildContext context) {
     List<Facilities?> list = [];
@@ -57,11 +67,19 @@ class EmployerStaffsPage extends StatelessWidget {
                         ),
                         width: MediaQuery.of(context).size.width / 2,
                         child: DropdownButtonFormField(
+                          style: heading3White,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: kWhiteColor,
+                          ),
+                          dropdownColor: kPrimaryColor1,
                           decoration: const InputDecoration(
+                            iconColor: kWhiteColor,
                             border: InputBorder.none,
                             errorBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
                           ),
+                          value: selected,
                           items: newList
                               .map(
                                 (e) => DropdownMenuItem(
@@ -142,6 +160,15 @@ class EmployerStaffsPage extends StatelessWidget {
   }
 
   Widget buildFacilityItem(Facilities? e) {
-    return Text(e!.title ?? "");
+    return Row(
+      children: [
+        const Icon(
+          Iconsax.note_favorite,
+          color: kWhiteColor,
+        ),
+        const HorizontalGap(gap: 20),
+        Text(e!.title ?? ""),
+      ],
+    );
   }
 }

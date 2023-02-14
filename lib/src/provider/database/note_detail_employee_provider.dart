@@ -9,13 +9,13 @@ class NoteDetailEmployeeProvider extends ChangeNotifier {
   List<Replies> get list => _list;
   NoteDetailModel? _model;
   NoteDetailModel? get model => _model;
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
   getFacility(String noteId) async {
     _isLoading = true;
+    notifyListeners();
     var facility = await GetSingleNoteEmployeeDetailApi.getSingleNoteDetail(
         noteId: noteId);
-   
 
     if (facility == "Failed" || facility == "Error") {
       _list = [];

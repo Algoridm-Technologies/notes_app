@@ -33,28 +33,32 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
         appBar: CustomAppBar(
           title: '',
         ),
-        body: Column(
-          children: [
-            const HeaderTile(),
-            Expanded(
-              child: Consumer<NoteDetailEmployerProvider>(
-                builder: (context, value, child) {
-                  return ListView(
-                    padding: screenPadding,
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      const VerticalGap(gap: 20),
-                      Text(
-                        value.isEmpty ? "" : value.model!.text ?? "",
-                        style: layer2,
-                      ),
-                      const VerticalGap(gap: 400),
-                    ],
-                  );
-                },
-              ),
-            )
-          ],
+        body: Consumer<NoteDetailEmployerProvider>(
+          builder: (context, value, child) {
+            return Column(
+              children: [
+                const HeaderTile(),
+                Expanded(
+                        child: Consumer<NoteDetailEmployerProvider>(
+                          builder: (context, value, child) {
+                            return ListView(
+                              padding: screenPadding,
+                              physics: const BouncingScrollPhysics(),
+                              children: [
+                                const VerticalGap(gap: 20),
+                                Text(
+                                  value.isEmpty ? "" : value.model!.text ?? "",
+                                  style: layer2,
+                                ),
+                                const VerticalGap(gap: 400),
+                              ],
+                            );
+                          },
+                        ),
+                      )
+              ],
+            );
+          },
         ),
         bottomSheet: Consumer<SetStateProvider>(builder: (con, v, c) {
           return v.isReplying

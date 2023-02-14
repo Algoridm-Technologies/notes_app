@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:undo/undo.dart';
 
 import '../../../widget/custom_snackbar.dart';
+import '../../../widget/default_button.dart';
+import '../../../widget/outline_button.dart';
 import '../../../widget/processing_dialogue.dart';
 
 class EmployeeAddNotesPage extends StatefulWidget {
@@ -39,13 +41,27 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-       
+        showExitDialog();
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          leading: customBackButton(context),
+          leading: Container(
+                  height: 5,
+                  width: 5,
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: kWhiteColor,
+                  ),
+                  child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        showExitDialog();
+                      },
+                      icon: const Icon(Iconsax.arrow_left_2)),
+                ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 4),
@@ -181,6 +197,70 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
       ),
     );
   }
+   showExitDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return editDialogBody();
+      },
+    );
+  }
+
+  Widget editDialogBody() {
+    return AlertDialog(
+      content: SizedBox(
+        height: 300.h,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ),
+            ),
+            Text(
+              "Save Or Discard Changes?",
+              style: heading2,
+            ),
+            Text(
+              "Do you want to Save your Changes Or Discard Them?",
+              textAlign: TextAlign.center,
+              style: layer2,
+            ),
+            DefaultButton(
+                widget: Text(
+                  "Save",
+                  style: buttonWhite,
+                ),
+                onTap: () {
+                  addNote();
+                }),
+            OutlineButton(
+                widget: Text(
+                  "Discard",
+                  style: buttonPrimary,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   addNote() async {
     ProcessingDialog.showProcessingDialog(
@@ -189,6 +269,7 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
       title: titleTextController.text,
       body: bodyTextController.text,
     ).then((value) {
+      print(value);
       Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
 
       ProcessingDialog.cancelDialog(context);

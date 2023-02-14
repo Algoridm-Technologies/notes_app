@@ -38,7 +38,6 @@ class HeaderTile extends StatelessWidget {
                     );
                   }),
                   const Spacer(),
-                 
                 ],
               ),
             ),
@@ -94,15 +93,22 @@ class HeaderTile extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 15.sp,
+                    backgroundColor: kPrimaryColor1.withOpacity(0.3),
+                    child: Text(
+                      value.isLoading
+                          ? "Loading"
+                          : value.model!.user![0].toUpperCase(),
+                      style: layer2,
+                    ),
                   ),
                   const HorizontalGap(gap: 10),
                   Text(
-                    value.model == null ? "Loading" : value.model!.user ?? "",
+                    value.isLoading ? "Loading" : value.model!.user ?? "",
                     style: layer2,
                   ),
                   const HorizontalGap(gap: 10),
                   Text(
-                    value.model == null
+                    value.isLoading
                         ? "Loading"
                         : DateFormat()
                             .format(DateTime.parse(value.model!.updatedAt!)),

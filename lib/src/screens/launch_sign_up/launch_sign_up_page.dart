@@ -46,21 +46,21 @@ class _LaunchSignUpPageState extends State<LaunchSignUpPage> {
                 style: layer2,
               ),
               const VerticalGap(gap: 30),
-              OutlineButton(
-                  widget: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset("assets/icons/google.svg"),
-                      const HorizontalGap(gap: 10),
-                      Text(
-                        "Sign up with google",
-                        style: heading3Default,
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    googleSign();
-                  }),
+              // OutlineButton(
+              //     widget: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         SvgPicture.asset("assets/icons/google.svg"),
+              //         const HorizontalGap(gap: 10),
+              //         Text(
+              //           "Sign up with google",
+              //           style: heading3Default,
+              //         ),
+              //       ],
+              //     ),
+              //     onTap: () {
+              //       googleSign();
+              //     }),
               const VerticalGap(gap: 30),
               DefaultButton(
                   widget: Row(

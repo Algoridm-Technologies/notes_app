@@ -17,9 +17,8 @@ import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/provider/util/tab_provider.dart';
 import 'package:note/src/provider/util/user_type_provider.dart';
-import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
-import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/launch/launch_page.dart';
+import 'package:note/src/screens/wrapper/auth_wrapper.dart';
 import 'package:note/src/style/style.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,9 +75,10 @@ class MyApp extends StatelessWidget {
             theme: appTheme,
             home: token == ""
                 ? const LaunchPage()
-                : isEmployer
-                    ? const EmployerMainPage()
-                    : const EmployeeMainPage(),
+                : AuthWrapper(isEmployer: isEmployer, )
+                // : isEmployer
+                //     ? const EmployerMainPage()
+                //     : const EmployeeMainPage(),
             // home: TestPage(),
           );
         },

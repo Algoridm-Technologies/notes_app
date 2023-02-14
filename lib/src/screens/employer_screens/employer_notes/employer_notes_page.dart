@@ -8,7 +8,6 @@ import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/utils/refresh_token.dart';
 import 'package:note/src/widget/custom_snackbar.dart';
-import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:provider/provider.dart';
 
@@ -37,19 +36,6 @@ class EmployerNotesPage extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Padding(
-              padding: screenPadding,
-              child: Row(
-                children: [
-                  const Icon(Iconsax.note_favorite),
-                  const HorizontalGap(gap: 20),
-                  Text(
-                    'Nazasmart Facility',
-                    style: heading3,
-                  ),
-                ],
-              ),
-            ),
             Padding(
               padding: screenPadding,
               child: const NoteHeaderTile(),

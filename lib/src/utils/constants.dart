@@ -85,14 +85,14 @@ final layer2 = TextStyle(
   fontWeight: FontWeight.normal,
   color: Colors.black,
 );
-const buttonWhite = TextStyle(
-  fontSize: 18,
+final buttonWhite = TextStyle(
+  fontSize: 18.sp,
   fontWeight: FontWeight.w500,
   color: kWhiteColor,
   height: 1.5,
 );
-const buttonPrimary = TextStyle(
-  fontSize: 18,
+final buttonPrimary = TextStyle(
+  fontSize: 18.sp,
   fontWeight: FontWeight.w500,
   color: kPrimaryColor1,
   height: 1.5,

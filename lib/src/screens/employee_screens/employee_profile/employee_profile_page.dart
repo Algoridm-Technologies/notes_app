@@ -150,21 +150,21 @@ class EmployeeProfilePage extends StatelessWidget {
                               "Manage your informations Details names, Email, Etc.",
                             ),
                           ),
-                          ListTile(
-                            onTap: () {},
-                            title: const Text(
-                              "Security",
-                            ),
-                            trailing: const Icon(
-                              Iconsax.arrow_right_3,
-                            ),
-                            leading: const Icon(
-                              Iconsax.user,
-                            ),
-                            subtitle: const Text(
-                              "Manage your informations Details names, Email, Etc.",
-                            ),
-                          ),
+                          // ListTile(
+                          //   onTap: () {},
+                          //   title: const Text(
+                          //     "Security",
+                          //   ),
+                          //   trailing: const Icon(
+                          //     Iconsax.arrow_right_3,
+                          //   ),
+                          //   leading: const Icon(
+                          //     Iconsax.user,
+                          //   ),
+                          //   subtitle: const Text(
+                          //     "Manage your informations Details names, Email, Etc.",
+                          //   ),
+                          // ),
                           const VerticalGap(gap: 50),
                           Hero(
                             tag: "button",
