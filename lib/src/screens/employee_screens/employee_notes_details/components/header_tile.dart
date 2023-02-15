@@ -6,6 +6,7 @@ import 'package:note/src/provider/database/note_detail_employee_provider.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../provider/util/setstate_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widget/horizontal_gap.dart';
 
@@ -62,7 +63,7 @@ class HeaderTile extends StatelessWidget {
                   //   value.model == null ? "Loading" : value.model!.title ?? "",
                   //   style: heading1,
                   // ),
-                  const Spacer(),
+                  // const Spacer(),
                   IconButton(
                     onPressed: () {
                       // if (Provider.of<SetStateProvider>(context, listen: false)
@@ -74,13 +75,26 @@ class HeaderTile extends StatelessWidget {
                       //       .changeState(true);
                       // }
                     },
-                    icon: CircleAvatar(
-                      radius: 20.r,
-                      backgroundColor: kAccentColor,
-                      child: Icon(
-                        Icons.check,
-                        size: 25.r,
-                        color: kWhiteColor,
+                    icon: IconButton(
+                      onPressed: () {
+                        if (Provider.of<SetStateProvider>(context,
+                                listen: false)
+                            .isReplying) {
+                          Provider.of<SetStateProvider>(context, listen: false)
+                              .changeState(false);
+                        } else {
+                          Provider.of<SetStateProvider>(context, listen: false)
+                              .changeState(true);
+                        }
+                      },
+                      icon: CircleAvatar(
+                        radius: 20.r,
+                        backgroundColor: kAccentColor,
+                        child: Icon(
+                          Iconsax.message,
+                          size: 25.r,
+                          color: kWhiteColor,
+                        ),
                       ),
                     ),
                   ),
@@ -110,7 +124,7 @@ class HeaderTile extends StatelessWidget {
                   Text(
                     value.isLoading
                         ? "Loading"
-                        : DateFormat()
+                        : DateFormat("EEEE, MMM d, yyyy")
                             .format(DateTime.parse(value.model!.updatedAt!)),
                     style: layer2,
                   )

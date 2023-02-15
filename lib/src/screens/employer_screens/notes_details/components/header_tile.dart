@@ -131,7 +131,7 @@ class HeaderTile extends StatelessWidget {
                   Text(
                     value.isEmpty
                         ? ""
-                        : "${DateFormat().format(DateTime.parse(value.model!.createdAt!))}  ",
+                        : "${DateFormat("EEEE, MMM d, yyyy").format(DateTime.parse(value.model!.createdAt!))}  ",
                     style: layer2,
                   )
                 ],

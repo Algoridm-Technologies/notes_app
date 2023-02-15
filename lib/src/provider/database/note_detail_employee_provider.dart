@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/get_single_note_employee_api.dart';
 import 'package:note/src/model/note_detail_model.dart';
+import 'package:note/src/utils/refresh_token.dart';
 
 class NoteDetailEmployeeProvider extends ChangeNotifier {
   List<Replies> _list = [];
@@ -11,7 +12,8 @@ class NoteDetailEmployeeProvider extends ChangeNotifier {
   NoteDetailModel? get model => _model;
   bool _isLoading = true;
   bool get isLoading => _isLoading;
-  getFacility(String noteId) async {
+  getNoteDetails(String noteId) async {
+    await RefreshToken.refreshToken();
     _isLoading = true;
     notifyListeners();
     var facility = await GetSingleNoteEmployeeDetailApi.getSingleNoteDetail(

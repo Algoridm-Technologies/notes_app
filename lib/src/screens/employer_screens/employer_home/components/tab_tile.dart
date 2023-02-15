@@ -80,7 +80,7 @@ class TabTile extends StatelessWidget {
                     style: heading3White,
                   ),
                   Text(
-                    subtitle,
+                    "",
                     style: subTitle,
                   ),
                 ],

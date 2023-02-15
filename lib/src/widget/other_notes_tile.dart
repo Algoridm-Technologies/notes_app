@@ -71,27 +71,29 @@ class OtherNotesTile extends StatelessWidget {
                             const VerticalGap(gap: 5),
                             Row(
                               children: [
-                                isUser
-                                    ? const SizedBox()
+                                note.user!.avatar == null
+                                    ? CircleAvatar(
+                                        radius: 15.sp,
+                                        backgroundColor:
+                                            kPrimaryColor1.withOpacity(0.1),
+                                        child: Text(note.user!.fullName![0]
+                                            .toUpperCase()),
+                                      )
                                     : CircleAvatar(
                                         radius: 15.sp,
                                         backgroundImage:
                                             NetworkImage(note.user!.avatar!),
                                       ),
-                                isUser
-                                    ? const SizedBox()
-                                    : const HorizontalGap(gap: 10),
-                                isUser
+                                const HorizontalGap(gap: 10),
+                                note.user!.avatar == null
                                     ? const SizedBox()
                                     : Text(
                                         "${note.user!.fullName}",
                                         style: subTitle,
                                       ),
-                                isUser
-                                    ? const SizedBox()
-                                    : const HorizontalGap(gap: 10),
+                                const HorizontalGap(gap: 10),
                                 Text(
-                                  DateFormat()
+                                  DateFormat("EEEE, MMM d, yyyy")
                                       .format(DateTime.parse(note.updatedAt!)),
                                   style: subTitle,
                                 )

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/update_note_api.dart';
 import 'package:note/src/provider/database/note_detail_employee_provider.dart';
+import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/reply_other_tile.dart';
 import 'package:note/src/widget/vertical_gap.dart';
@@ -135,7 +136,14 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                     padding: const EdgeInsets.only(right: 4),
                     child: IconButton(
                       onPressed: () {
-                        addEdit(noteId: value.model!.id!);
+                        if (tileTextController.text.isEmpty ||
+                            bodyTextController.text.isEmpty) {
+                          CustomSnackBar.showSnackbar(
+                              context: context,
+                              title: "Body or title field cannot be empty");
+                          return;
+                        }
+                        addEdit(noteId: value.model!.id!, pop: false);
                       },
                       icon: const Icon(
                         Icons.save,
@@ -202,130 +210,147 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                   )
                 ],
               ),
-              bottomSheet: Consumer<NoteDetailEmployeeProvider>(
-                builder: (context, value, child) {
-                  return SizedBox(
-                    height: 400.h,
-                    child: Column(
-                      children: [
-                        const VerticalGap(gap: 20),
-                        Padding(
-                          padding: screenPadding,
-                          child: Row(
-                            children: [
-                              Text(
-                                "Replies",
-                                style: layer1,
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  showButtonSheet();
-                                },
-                                child: Hero(
-                                  tag: "text",
-                                  child: Text(
-                                    "View All",
-                                    style: layer1,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const VerticalGap(gap: 20),
-                        Expanded(
-                          child:value.list.isEmpty
-                  ? const Center(
-                      child: Text("No Replies"),
-                    )
-                  : ListView.builder(
-                            padding: screenPadding,
-                            itemCount: value.list.length,
-                            itemBuilder: (c, i) {
-                              return ReplyOtherTile(
-                                reply: value.list[i],
-                              );
-                            },
-                          ),
-                        ),
-                      value.list.isEmpty
-                  ? const Center(
-                      child: SizedBox(),
-                    )
-                  :  Container(
-                          margin: screenPadding,
-                          padding: const EdgeInsets.only(
-                            bottom: 5,
-                          ),
-                          height: 54.h,
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                    right: 10,
-                                  ),
-                                  padding: const EdgeInsets.all(
-                                    10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: kGreyColor,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: TextField(
-                                      controller: replyController,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        suffixIcon: Icon(
-                                          Iconsax.microphone_slash_1,
-                                          size: 25.sp,
+              bottomSheet: Consumer<SetStateProvider>(
+                builder: (context, v, child) {
+                  return v.isReplying
+                      ? const SizedBox()
+                      : Consumer<NoteDetailEmployeeProvider>(
+                          builder: (context, value, child) {
+                            return SizedBox(
+                              height: 400.h,
+                              child: Column(
+                                children: [
+                                  const VerticalGap(gap: 20),
+                                  Padding(
+                                    padding: screenPadding,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Replies",
+                                          style: layer1,
                                         ),
-                                      ),
+                                        const Spacer(),
+                                     value.list.isEmpty?const SizedBox():   GestureDetector(
+                                          onTap: () {
+                                            showButtonSheet();
+                                          },
+                                          child: Hero(
+                                            tag: "text",
+                                            child: Text(
+                                              "View All",
+                                              style: layer1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ),
-                              isLoading
-                                  ? CircleAvatar(
-                                      radius: 20.r,
-                                      child: CupertinoActivityIndicator(
-                                        radius: 15.r,
-                                      ))
-                                  : CircleAvatar(
-                                      radius: 20.r,
-                                      child: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-                                          var noteId = Provider.of<
-                                                      NoteDetailEmployeeProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .model!
-                                              .id!;
-                                          sendReply(
-                                              noteId: noteId,
-                                              replyId: value.list.last.id!,
-                                              text: replyController.text);
-                                        },
-                                        icon: Icon(
-                                          Icons.send,
-                                          size: 25.sp,
+                                  const VerticalGap(gap: 20),
+                                  Expanded(
+                                    child: value.list.isEmpty
+                                        ? const Center(
+                                            child: Text("No Replies"),
+                                          )
+                                        : ListView.builder(
+                                            padding: screenPadding,
+                                            itemCount: value.list.length,
+                                            itemBuilder: (c, i) {
+                                              return ReplyOtherTile(
+                                                reply: value.list[i],
+                                              );
+                                            },
+                                          ),
+                                  ),
+                                  value.list.isEmpty
+                                      ? const Center(
+                                          child: SizedBox(),
+                                        )
+                                      : Container(
+                                          margin: screenPadding,
+                                          padding: const EdgeInsets.only(
+                                            bottom: 5,
+                                          ),
+                                          height: 54.h,
+                                          width: double.infinity,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                    right: 10,
+                                                  ),
+                                                  padding: const EdgeInsets.all(
+                                                    10,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: kGreyColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  child: Center(
+                                                    child: TextField(
+                                                      controller:
+                                                          replyController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        enabledBorder:
+                                                            InputBorder.none,
+                                                        focusedBorder:
+                                                            InputBorder.none,
+                                                        
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              isLoading
+                                                  ? CircleAvatar(
+                                                      radius: 20.r,
+                                                      child:
+                                                          CupertinoActivityIndicator(
+                                                        radius: 15.r,
+                                                      ))
+                                                  : CircleAvatar(
+                                                      radius: 20.r,
+                                                      child: IconButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            isLoading = true;
+                                                          });
+                                                          var noteId = Provider
+                                                                  .of<NoteDetailEmployeeProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                              .model!
+                                                              .id!;
+                                                          sendReply(
+                                                              noteId: noteId,
+                                                              replyId: value
+                                                                  .list
+                                                                  .last
+                                                                  .id!,
+                                                              text:
+                                                                  replyController
+                                                                      .text);
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.send,
+                                                          size: 25.sp,
+                                                        ),
+                                                      ),
+                                                    ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                                ],
+                              ),
+                            );
+                          },
+                        );
                 },
               )),
         );
@@ -350,36 +375,36 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
         builder: (context, s) {
           return Consumer<NoteDetailEmployeeProvider>(
             builder: (context, value, child) {
-              return  Container(
-                      decoration: const BoxDecoration(
-                          color: kWhiteColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          )),
-                      child: Scaffold(
-                        body: Column(
-                          children: [
-                            const VerticalGap(gap: 20),
-                            Padding(
-                              padding: screenPadding,
-                              child: Center(
-                                  child: Hero(
-                                      tag: "text",
-                                      child: Text(
-                                        "All Replies",
-                                        style: heading3,
-                                      ))),
-                            ),
-                            const VerticalGap(gap: 20),
-                            Expanded(
-                              child: Consumer<NoteDetailEmployeeProvider>(
-                                builder: (context, value, child) {
-                                  return value.list.isEmpty
-                  ? const Center(
-                      child: Text("No Replies"),
-                    )
-                  : ListView.builder(
+              return Container(
+                decoration: const BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )),
+                child: Scaffold(
+                  body: Column(
+                    children: [
+                      const VerticalGap(gap: 20),
+                      Padding(
+                        padding: screenPadding,
+                        child: Center(
+                            child: Hero(
+                                tag: "text",
+                                child: Text(
+                                  "All Replies",
+                                  style: heading3,
+                                ))),
+                      ),
+                      const VerticalGap(gap: 20),
+                      Expanded(
+                        child: Consumer<NoteDetailEmployeeProvider>(
+                          builder: (context, value, child) {
+                            return value.list.isEmpty
+                                ? const Center(
+                                    child: Text("No Replies"),
+                                  )
+                                : ListView.builder(
                                     padding: screenPadding,
                                     physics: const BouncingScrollPhysics(),
                                     itemCount: value.list.length,
@@ -389,107 +414,107 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                                       );
                                     },
                                   );
-                                },
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: screenPadding,
+                        padding: const EdgeInsets.only(
+                          bottom: 5,
+                        ),
+                        height: 54.h,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 10,
+                                ),
+                                padding: const EdgeInsets.all(
+                                  10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: kGreyColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: TextField(
+                                    controller: replyController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                     
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            Container(
-                              margin: screenPadding,
-                              padding: const EdgeInsets.only(
-                                bottom: 5,
-                              ),
-                              height: 54.h,
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                        right: 10,
-                                      ),
-                                      padding: const EdgeInsets.all(
-                                        10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: kGreyColor,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Center(
-                                        child: TextField(
-                                          controller: replyController,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            suffixIcon: Icon(
-                                              Iconsax.microphone_slash_1,
-                                              size: 25.sp,
-                                            ),
-                                          ),
-                                        ),
+                            isLoading
+                                ? CircleAvatar(
+                                    radius: 20.r,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.r,
+                                    ))
+                                : CircleAvatar(
+                                    radius: 20.r,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        var noteId = Provider.of<
+                                                    NoteDetailEmployeeProvider>(
+                                                context,
+                                                listen: false)
+                                            .model!
+                                            .id!;
+                                        sendReply(
+                                            noteId: noteId,
+                                            replyId: value.list.last.id!,
+                                            text: replyController.text);
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        size: 25.sp,
                                       ),
                                     ),
                                   ),
-                                  isLoading
-                                      ? CircleAvatar(
-                                          radius: 20.r,
-                                          child: CupertinoActivityIndicator(
-                                            radius: 15.r,
-                                          ))
-                                      : CircleAvatar(
-                                          radius: 20.r,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                isLoading = true;
-                                              });
-                                              var noteId = Provider.of<
-                                                          NoteDetailEmployeeProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .model!
-                                                  .id!;
-                                              sendReply(
-                                                  noteId: noteId,
-                                                  replyId: value.list.last.id!,
-                                                  text: replyController.text);
-                                            },
-                                            icon: Icon(
-                                              Icons.send,
-                                              size: 25.sp,
-                                            ),
-                                          ),
-                                        ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
-                    );
+                    ],
+                  ),
+                ),
+              );
             },
           );
         });
   }
 
-  addEdit({required String noteId}) async {
+  addEdit({required String noteId, required bool pop}) async {
     ProcessingDialog.showProcessingDialog(
         context: context, title: "Editing Note", subtitle: "Editing note Note");
-    await UpdateNoteApi.updateNote(
-            title: tileTextController.text,
-            text: bodyTextController.text,
-            noteId: noteId)
-        .then((value) {
-      Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+    await RefreshToken.refreshToken().then((value) async {
+      await UpdateNoteApi.updateNote(
+              title: tileTextController.text,
+              text: bodyTextController.text,
+              noteId: noteId)
+          .then((value) {
+        print(value);
+        Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
 
-      ProcessingDialog.cancelDialog(context);
-      if (jsonDecode(value)['success'] != null) {
-        CustomSnackBar.showSnackbar(
-            context: context, title: jsonDecode(value)['success']);
-      }
-      if (jsonDecode(value)['email'] != null) {
-        CustomSnackBar.showSnackbar(
-            context: context, title: jsonDecode(value)['email'][0]);
-      }
+        ProcessingDialog.cancelDialog(context);
+        if (pop) Navigator.pop(context);
+        Navigator.pop(context);
+        if (jsonDecode(value)['id'] != null) {
+          CustomSnackBar.showSnackbar(context: context, title: "Note Updated");
+        } else {
+          CustomSnackBar.showSnackbar(
+              context: context, title: "Something went wrong");
+        }
+      });
     });
   }
 
@@ -513,16 +538,17 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
             Align(
               alignment: Alignment.topRight,
               child: Container(
+                height: 30,
+                width: 30,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(),
                 ),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.close),
-                ),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.close)),
               ),
             ),
             Text(
@@ -540,7 +566,15 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                   style: buttonWhite,
                 ),
                 onTap: () {
-                  addEdit(noteId: value.model!.id!);
+                  if (tileTextController.text.isEmpty ||
+                      bodyTextController.text.isEmpty) {
+                    CustomSnackBar.showSnackbar(
+                        context: context,
+                        title: "Body or title field cannot be empty");
+                    Navigator.pop(context);
+                    return;
+                  }
+                  addEdit(noteId: value.model!.id!, pop: true);
                 }),
             OutlineButton(
                 widget: Text(
@@ -570,7 +604,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
         isLoading = false;
       });
       Provider.of<NoteDetailEmployeeProvider>(context, listen: false)
-          .getFacility(noteId);
+          .getNoteDetails(noteId);
     });
   }
 }

@@ -7,6 +7,7 @@ import 'package:note/src/widget/my_notes_tile.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../provider/database/note_detail_employee_provider.dart';
+import '../../../../provider/util/setstate_provider.dart';
 
 class YourNotesList extends StatelessWidget {
   const YourNotesList({Key? key}) : super(key: key);
@@ -34,9 +35,11 @@ class YourNotesList extends StatelessWidget {
                           index: index,
                           note: value.myList[index]!,
                           onTap: () {
+                                 Provider.of<SetStateProvider>(context, listen: false)
+                              .changeState(true);
                             Provider.of<NoteDetailEmployeeProvider>(context,
                                     listen: false)
-                                .getFacility(value.myList[index]!.id!);
+                                .getNoteDetails(value.myList[index]!.id!);
                             Navigator.of(context).push(
                               PageRouteBuilder(
                                 transitionDuration: kAnimationDuration,

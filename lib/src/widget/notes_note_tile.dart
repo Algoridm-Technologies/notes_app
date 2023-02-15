@@ -107,7 +107,7 @@ class NotesNoteTile extends StatelessWidget {
                                     ? const SizedBox()
                                     : const HorizontalGap(gap: 10),
                                 Text(
-                                  DateFormat()
+                                  DateFormat("EEEE, MMM d, yyyy")
                                       .format(DateTime.parse(note.updatedAt!)),
                                   style: subTitle,
                                 )

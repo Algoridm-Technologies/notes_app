@@ -6,6 +6,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/other_notes_tile.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../provider/util/setstate_provider.dart';
 import '../../../../utils/refresh_token.dart';
 
 class OtherNotesList extends StatelessWidget {
@@ -20,6 +21,7 @@ class OtherNotesList extends StatelessWidget {
         });
       },
       child: Consumer<EmployeeNoteProvider>(builder: (context, value, child) {
+        print(value.em);
         return value.isLoading
             ? const Center(child: CircularProgressIndicator())
             : value.em.isEmpty
@@ -33,9 +35,11 @@ class OtherNotesList extends StatelessWidget {
                         index: index,
                         note: value.em[index]!,
                         onTap: () {
+                               Provider.of<SetStateProvider>(context, listen: false)
+                              .changeState(true);
                           Provider.of<NoteDetailEmployeeProvider>(context,
                                   listen: false)
-                              .getFacility(value.em[index]!.id!);
+                              .getNoteDetails(value.em[index]!.id!);
                           Navigator.of(context).push(
                             PageRouteBuilder(
                               transitionDuration: kAnimationDuration,

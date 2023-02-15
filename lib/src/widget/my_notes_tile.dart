@@ -71,7 +71,7 @@ class MyNotesTile extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  DateFormat()
+                                  DateFormat("EEEE, MMM d, yyyy")
                                       .format(DateTime.parse(note.updatedAt!)),
                                   style: subTitle,
                                 )

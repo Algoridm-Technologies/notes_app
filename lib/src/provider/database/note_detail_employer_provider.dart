@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/get_single_note_employer_api.dart';
 import 'package:note/src/model/note_detail_model.dart';
+import 'package:note/src/utils/refresh_token.dart';
 
 class NoteDetailEmployerProvider extends ChangeNotifier {
   List<Replies> _list = [];
@@ -13,8 +14,9 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isEmpty => model == null;
   getFacility(String noteId) async {
+    await RefreshToken.refreshToken();
     _isLoading = true;
-    print('1 $isEmpty');
+
     notifyListeners();
     var facility = await GetSingleNoteEmployerDetailApi.getSingleNoteDetail(
         noteId: noteId);
@@ -24,7 +26,6 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
       _list = [];
       _model = null;
       _isLoading = false;
-      print('2 $isEmpty');
       notifyListeners();
     } else {
       var myModel = NoteDetailModel.fromJson(jsonDecode(facility));
@@ -32,7 +33,6 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
       _list = myModel.replies!;
 
       _isLoading = false;
-      print('3 $isEmpty');
       notifyListeners();
     }
   }

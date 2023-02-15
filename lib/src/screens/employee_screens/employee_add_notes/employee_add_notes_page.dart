@@ -7,7 +7,7 @@ import 'package:note/src/api/add_note_api.dart';
 import 'package:note/src/provider/database/employee_note_provider.dart';
 
 import 'package:note/src/utils/constants.dart';
-import 'package:note/src/widget/custom_back_button.dart';
+import 'package:note/src/utils/refresh_token.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
 import 'package:provider/provider.dart';
 import 'package:undo/undo.dart';
@@ -48,20 +48,20 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
         appBar: AppBar(
           elevation: 0,
           leading: Container(
-                  height: 5,
-                  width: 5,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: kWhiteColor,
-                  ),
-                  child: IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        showExitDialog();
-                      },
-                      icon: const Icon(Iconsax.arrow_left_2)),
-                ),
+            height: 5,
+            width: 5,
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: kWhiteColor,
+            ),
+            child: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  showExitDialog();
+                },
+                icon: const Icon(Iconsax.arrow_left_2)),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 4),
@@ -120,7 +120,14 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
               padding: const EdgeInsets.only(right: 4),
               child: IconButton(
                 onPressed: () {
-                  addNote();
+                  if (titleTextController.text.isEmpty ||
+                      bodyTextController.text.isEmpty) {
+                    CustomSnackBar.showSnackbar(
+                        context: context,
+                        title: "Body or title field cannot be empty");
+                    return;
+                  }
+                  addNote(false);
                 },
                 icon: const Icon(
                   Icons.save,
@@ -197,7 +204,8 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
       ),
     );
   }
-   showExitDialog() {
+
+  showExitDialog() {
     showDialog(
       context: context,
       builder: (context) {
@@ -217,16 +225,17 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
             Align(
               alignment: Alignment.topRight,
               child: Container(
+                height: 30,
+                width: 30,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(),
                 ),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.close),
-                ),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.close)),
               ),
             ),
             Text(
@@ -244,7 +253,15 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
                   style: buttonWhite,
                 ),
                 onTap: () {
-                  addNote();
+                  if (titleTextController.text.isEmpty ||
+                      bodyTextController.text.isEmpty) {
+                    CustomSnackBar.showSnackbar(
+                        context: context,
+                        title: "Body or title field cannot be empty");
+                    Navigator.pop(context);
+                    return;
+                  }
+                  addNote(true);
                 }),
             OutlineButton(
                 widget: Text(
@@ -261,26 +278,27 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
     );
   }
 
-
-  addNote() async {
+  addNote(bool pop) async {
     ProcessingDialog.showProcessingDialog(
         context: context, title: "Adding Note", subtitle: "Adding new Note");
-    await AddNoteApi.addNote(
-      title: titleTextController.text,
-      body: bodyTextController.text,
-    ).then((value) {
-      print(value);
-      Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+    await RefreshToken.refreshToken().then((value) async {
+      await AddNoteApi.addNote(
+        title: titleTextController.text,
+        body: bodyTextController.text,
+      ).then((value) {
+        print(value);
+        Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
 
-      ProcessingDialog.cancelDialog(context);
-      if (jsonDecode(value)['success'] != null) {
-        CustomSnackBar.showSnackbar(
-            context: context, title: jsonDecode(value)['success']);
-      }
-      if (jsonDecode(value)['email'] != null) {
-        CustomSnackBar.showSnackbar(
-            context: context, title: jsonDecode(value)['email'][0]);
-      }
+        ProcessingDialog.cancelDialog(context);
+        if (pop) Navigator.pop(context);
+        Navigator.pop(context);
+        if (jsonDecode(value)['id'] != null) {
+          CustomSnackBar.showSnackbar(context: context, title: "Note added");
+        } else {
+          CustomSnackBar.showSnackbar(
+              context: context, title: "something went wrong");
+        }
+      });
     });
   }
 }
