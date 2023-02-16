@@ -23,7 +23,9 @@ import '../../../widget/processing_dialogue.dart';
 import 'components/header_tile.dart';
 
 class EmployeeNotesDetailPage extends StatefulWidget {
-  const EmployeeNotesDetailPage({Key? key}) : super(key: key);
+  final bool isUser;
+  const EmployeeNotesDetailPage({Key? key, required this.isUser})
+      : super(key: key);
 
   @override
   State<EmployeeNotesDetailPage> createState() =>
@@ -42,7 +44,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       bodyTextController.addListener(() {
-        setState(() {});
+        // setState(() {});
       });
     });
   }
@@ -53,6 +55,11 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
   Widget build(BuildContext context) {
     return Consumer<NoteDetailEmployeeProvider>(
       builder: (context, value, child) {
+        if (value.isLoading) {
+          return Container(
+              color: kWhiteColor,
+              child: const Center(child: CircularProgressIndicator()));
+        }
         return WillPopScope(
           onWillPop: () async {
             showExitDialog(value);
@@ -136,6 +143,12 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                     padding: const EdgeInsets.only(right: 4),
                     child: IconButton(
                       onPressed: () {
+                        if (widget.isUser) {
+                          CustomSnackBar.showSnackbar(
+                              context: context,
+                              title: "You cannot edit this note");
+                          return;
+                        }
                         if (tileTextController.text.isEmpty ||
                             bodyTextController.text.isEmpty) {
                           CustomSnackBar.showSnackbar(
@@ -162,7 +175,9 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
               ),
               body: Column(
                 children: [
-                  HeaderTile(tileTextController: tileTextController),
+                  HeaderTile(
+                      tileTextController: tileTextController,
+                      isUser: widget.isUser),
                   Expanded(
                     child: Consumer<NoteDetailEmployeeProvider>(
                       builder: (context, value, child) {
@@ -177,6 +192,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                           children: [
                             const VerticalGap(gap: 20),
                             TextField(
+                              readOnly: widget.isUser,
                               controller: bodyTextController,
                               onChanged: (value) {
                                 changes.add(Change(
@@ -230,18 +246,20 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                                           style: layer1,
                                         ),
                                         const Spacer(),
-                                     value.list.isEmpty?const SizedBox():   GestureDetector(
-                                          onTap: () {
-                                            showButtonSheet();
-                                          },
-                                          child: Hero(
-                                            tag: "text",
-                                            child: Text(
-                                              "View All",
-                                              style: layer1,
-                                            ),
-                                          ),
-                                        ),
+                                        value.list.isEmpty
+                                            ? const SizedBox()
+                                            : GestureDetector(
+                                                onTap: () {
+                                                  showButtonSheet();
+                                                },
+                                                child: Hero(
+                                                  tag: "text",
+                                                  child: Text(
+                                                    "View All",
+                                                    style: layer1,
+                                                  ),
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   ),
@@ -293,14 +311,13 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                                                       controller:
                                                           replyController,
                                                       decoration:
-                                                          InputDecoration(
+                                                          const InputDecoration(
                                                         border:
                                                             InputBorder.none,
                                                         enabledBorder:
                                                             InputBorder.none,
                                                         focusedBorder:
                                                             InputBorder.none,
-                                                        
                                                       ),
                                                     ),
                                                   ),
@@ -441,11 +458,10 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                                 child: Center(
                                   child: TextField(
                                     controller: replyController,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       enabledBorder: InputBorder.none,
                                       focusedBorder: InputBorder.none,
-                                     
                                     ),
                                   ),
                                 ),
@@ -502,7 +518,6 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
               text: bodyTextController.text,
               noteId: noteId)
           .then((value) {
-        print(value);
         Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
 
         ProcessingDialog.cancelDialog(context);

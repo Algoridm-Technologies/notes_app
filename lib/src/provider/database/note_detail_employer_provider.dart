@@ -10,14 +10,15 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
   List<Replies> get list => _list;
   NoteDetailModel? _model;
   NoteDetailModel? get model => _model;
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
   bool get isEmpty => model == null;
   getFacility(String noteId) async {
-    await RefreshToken.refreshToken();
     _isLoading = true;
 
     notifyListeners();
+    await RefreshToken.refreshToken();
+
     var facility = await GetSingleNoteEmployerDetailApi.getSingleNoteDetail(
         noteId: noteId);
     // print(facility);

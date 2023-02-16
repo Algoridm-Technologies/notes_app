@@ -7,7 +7,7 @@ import '../api/refresh.dart';
 class RefreshToken {
   static Future refreshToken() async {
     var refresh = await RefreshApi.refresh();
-    print(refresh);
+  
 if (jsonDecode(refresh)['error']!=null) {
   
 } else {

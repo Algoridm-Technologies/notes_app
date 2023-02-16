@@ -10,7 +10,7 @@ import 'package:note/src/provider/database/note_detail_employer_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../api/delect_note_api.dart';
+import '../../../../api/delete_note_api.dart';
 import '../../../../provider/database/employee_and_note_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/refresh_token.dart';
@@ -58,7 +58,7 @@ class HeaderTile extends StatelessWidget {
                             await RefreshToken.refreshToken();
                             await DeleteNoteApi.deleteNote(id: list)
                                 .then((value) {
-                              print(value);
+                        
                               ProcessingDialog.cancelDialog(context);
                               if (jsonDecode(value)['success'] != null) {
                                 CustomSnackBar.showSnackbar(

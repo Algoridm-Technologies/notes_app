@@ -40,7 +40,9 @@ class NotesList extends StatelessWidget {
                               pageBuilder: ((context, animation, _) {
                                 return FadeTransition(
                                   opacity: animation,
-                                  child: const EmployeeNotesDetailPage(),
+                                  child: const EmployeeNotesDetailPage(
+                                    isUser: false,
+                                  ),
                                 );
                               }),
                             ),

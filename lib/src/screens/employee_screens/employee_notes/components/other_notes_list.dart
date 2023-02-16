@@ -21,7 +21,7 @@ class OtherNotesList extends StatelessWidget {
         });
       },
       child: Consumer<EmployeeNoteProvider>(builder: (context, value, child) {
-        print(value.em);
+        
         return value.isLoading
             ? const Center(child: CircularProgressIndicator())
             : value.em.isEmpty
@@ -46,7 +46,7 @@ class OtherNotesList extends StatelessWidget {
                               pageBuilder: ((context, animation, _) {
                                 return FadeTransition(
                                   opacity: animation,
-                                  child: const EmployeeNotesDetailPage(),
+                                  child:  EmployeeNotesDetailPage(isUser: true,),
                                 );
                               }),
                             ),

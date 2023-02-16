@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:note/src/api/delect_note_api.dart';
+import 'package:note/src/api/delete_note_api.dart';
 import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/utils/constants.dart';
@@ -63,7 +63,7 @@ class EmployerNotesPage extends StatelessWidget {
                         var list = v.positions;
                         await RefreshToken.refreshToken();
                         await DeleteNoteApi.deleteNote(id: list).then((value) {
-                          print(value);
+                         
                           ProcessingDialog.cancelDialog(context);
                           if (jsonDecode(value)['success'] != null) {
                             Provider.of<CheckProvider>(context, listen: false)

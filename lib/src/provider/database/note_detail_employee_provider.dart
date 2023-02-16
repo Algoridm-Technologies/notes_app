@@ -13,9 +13,10 @@ class NoteDetailEmployeeProvider extends ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
   getNoteDetails(String noteId) async {
-    await RefreshToken.refreshToken();
     _isLoading = true;
     notifyListeners();
+    await RefreshToken.refreshToken();
+
     var facility = await GetSingleNoteEmployeeDetailApi.getSingleNoteDetail(
         noteId: noteId);
 

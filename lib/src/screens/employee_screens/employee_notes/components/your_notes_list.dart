@@ -35,8 +35,9 @@ class YourNotesList extends StatelessWidget {
                           index: index,
                           note: value.myList[index]!,
                           onTap: () {
-                                 Provider.of<SetStateProvider>(context, listen: false)
-                              .changeState(true);
+                            Provider.of<SetStateProvider>(context,
+                                    listen: false)
+                                .changeState(true);
                             Provider.of<NoteDetailEmployeeProvider>(context,
                                     listen: false)
                                 .getNoteDetails(value.myList[index]!.id!);
@@ -46,7 +47,9 @@ class YourNotesList extends StatelessWidget {
                                 pageBuilder: ((context, animation, _) {
                                   return FadeTransition(
                                     opacity: animation,
-                                    child: const EmployeeNotesDetailPage(),
+                                    child: const EmployeeNotesDetailPage(
+                                      isUser: false,
+                                    ),
                                   );
                                 }),
                               ),

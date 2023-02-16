@@ -286,7 +286,6 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
         title: titleTextController.text,
         body: bodyTextController.text,
       ).then((value) {
-        print(value);
         Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
 
         ProcessingDialog.cancelDialog(context);

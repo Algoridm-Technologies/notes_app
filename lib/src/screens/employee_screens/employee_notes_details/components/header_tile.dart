@@ -12,7 +12,9 @@ import '../../../../widget/horizontal_gap.dart';
 
 class HeaderTile extends StatelessWidget {
   final TextEditingController tileTextController;
-  const HeaderTile({Key? key, required this.tileTextController})
+  final bool isUser;
+  const HeaderTile(
+      {Key? key, required this.tileTextController, required this.isUser})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class HeaderTile extends StatelessWidget {
                   Expanded(
                     child: TextField(
                       style: heading1,
+                      readOnly: isUser,
                       controller: tileTextController,
                       decoration: InputDecoration(
                         hintText: "Title Goes Here",

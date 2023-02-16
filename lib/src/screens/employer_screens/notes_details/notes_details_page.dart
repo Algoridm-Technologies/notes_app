@@ -30,6 +30,14 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   Widget build(BuildContext context) {
     return Consumer<NoteDetailEmployerProvider>(
       builder: (context, value, child) {
+        if (value.isLoading) {
+          return Container(
+            color: kWhiteColor,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
         return Scaffold(
             appBar: CustomAppBar(
               title: '',

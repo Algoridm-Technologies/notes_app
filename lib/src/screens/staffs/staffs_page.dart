@@ -89,8 +89,8 @@ class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
                               )
                               .toList(),
                           onChanged: (v) async {
-                            print(v!.id);
-                            selectFacility(v.id!, v.title!, context);
+                         
+                            selectFacility(v!.id!, v.title!, context);
                           },
                         ),
                       );

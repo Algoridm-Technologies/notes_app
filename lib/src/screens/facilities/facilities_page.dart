@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:note/src/api/select_facility_api.dart';
-import 'package:note/src/model/facility_model.dart';
 import 'package:note/src/provider/database/current_facility_provider.dart';
 import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/database/facility_provider.dart';
@@ -15,6 +14,8 @@ import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/facility_model.dart';
+
 class EmployerFacilitiesPage extends StatefulWidget {
   const EmployerFacilitiesPage({Key? key}) : super(key: key);
 
@@ -23,12 +24,10 @@ class EmployerFacilitiesPage extends StatefulWidget {
 }
 
 class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
-  // List<Facilities?> list = [];
 
   @override
   Widget build(BuildContext context) {
-    // list.clear();
-    // ListAllNotesApi.listEmployees();
+
     return Scaffold(
       body: Padding(
         padding: screenPadding,
@@ -46,17 +45,17 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                 child: Consumer<FacilityProvider>(
                   builder: (context, model, child) {
                     var newList = model.list;
-                    // if (!list.contains(const Facilities(
-                    //     id: "0",
-                    //     title: "All",
-                    //     location: "All",
-                    //     image: "All"))) {
-                    //   list.add(const Facilities(
-                    //       id: "0",
-                    //       title: "All",
-                    //       location: "All",
-                    //       image: "All"));
-                    // }
+                    if (newList.contains(const Facilities(
+                        id: "0",
+                        title: "All Staff",
+                        location: "All",
+                        image: "All"))) {
+                      newList.remove(const Facilities(
+                          id: "0",
+                          title: "All Staff",
+                          location: "All",
+                          image: "All"));
+                    }
 
                     // List<Facilities?> newList = model.list
                     //   ..sort(
@@ -190,5 +189,4 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
       });
     }
   }
-
 }

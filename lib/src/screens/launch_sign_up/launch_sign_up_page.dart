@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/google_auth_api.dart';
 import 'package:note/src/screens/login/login_page.dart';
@@ -9,7 +8,6 @@ import 'package:note/src/screens/register/register_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/horizontal_gap.dart';
-import 'package:note/src/widget/outline_button.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 
 import '../../widget/custom_snackbar.dart';
@@ -119,7 +117,6 @@ class _LaunchSignUpPageState extends State<LaunchSignUpPage> {
 
     await GoogleAuthApi.googleAuthApi().then((value) {
       ProcessingDialog.cancelDialog(context);
-     
 
       if (jsonDecode(value)['error'] != null) {
         CustomSnackBar.showSnackbar(

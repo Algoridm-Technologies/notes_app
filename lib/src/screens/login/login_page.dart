@@ -160,29 +160,29 @@ class _LoginPageState extends State<LoginPage> {
           Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
 
           if (data["is_employer"] == true) {
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                transitionDuration: kAnimationDuration,
-                pageBuilder: ((context, animation, _) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: const EmployerMainPage(),
-                  );
-                }),
-              ),
-            );
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  transitionDuration: kAnimationDuration,
+                  pageBuilder: ((context, animation, _) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: const EmployerMainPage(),
+                    );
+                  }),
+                ),
+                (Route<dynamic> route) => false);
           } else {
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                transitionDuration: kAnimationDuration,
-                pageBuilder: ((context, animation, _) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: const EmployeeMainPage(),
-                  );
-                }),
-              ),
-            );
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  transitionDuration: kAnimationDuration,
+                  pageBuilder: ((context, animation, _) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: const EmployeeMainPage(),
+                    );
+                  }),
+                ),
+                (Route<dynamic> route) => false);
           }
         });
       });

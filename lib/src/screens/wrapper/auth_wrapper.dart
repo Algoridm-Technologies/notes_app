@@ -26,36 +26,36 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   init() async {
     RefreshApi.refresh().then((value) async {
-   
       if (jsonDecode(value)['error'] != null) {
-        Navigator.of(context).push(
-          PageRouteBuilder(
-            transitionDuration: kAnimationDuration,
-            pageBuilder: ((context, animation, _) {
-              return FadeTransition(
-                opacity: animation,
-                child: const LoginPage(),
-              );
-            }),
-          ),
-        );
+        Navigator.of(context).pushAndRemoveUntil(
+            PageRouteBuilder(
+              transitionDuration: kAnimationDuration,
+              pageBuilder: ((context, animation, _) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: const LoginPage(),
+                );
+              }),
+            ),
+            (Route<dynamic> route) => false);
       } else {
-           var prefs = await SharedPreferences.getInstance();
-    prefs.setString("refresh", jsonDecode(value)['refresh']);
-    prefs.setString("token", jsonDecode(value)['access']);
-        Navigator.of(context).push(
-          PageRouteBuilder(
-            transitionDuration: kAnimationDuration,
-            pageBuilder: ((context, animation, _) {
-              return FadeTransition(
-                opacity: animation,
-                child: widget.isEmployer
-                    ? const EmployerMainPage()
-                    : const EmployeeMainPage(),
-              );
-            }),
-          ),
-        );
+        SharedPreferences.getInstance().then((v) {
+          v.setString("refresh", jsonDecode(value)['refresh']);
+          v.setString("token", jsonDecode(value)['access']);
+          Navigator.of(context).pushAndRemoveUntil(
+              PageRouteBuilder(
+                transitionDuration: kAnimationDuration,
+                pageBuilder: ((context, animation, _) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: widget.isEmployer
+                        ? const EmployerMainPage()
+                        : const EmployeeMainPage(),
+                  );
+                }),
+              ),
+              (Route<dynamic> route) => false);
+        });
       }
     });
   }
