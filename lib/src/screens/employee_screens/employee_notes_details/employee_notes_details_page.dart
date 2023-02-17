@@ -35,16 +35,16 @@ class EmployeeNotesDetailPage extends StatefulWidget {
 class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
   var bodyTextController = TextEditingController();
   var tileTextController = TextEditingController();
- 
+
   var changes = ChangeStack();
   var body = "";
- 
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       bodyTextController.addListener(() {
-        // setState(() {});
+        setState(() {});
       });
     });
   }
@@ -62,8 +62,12 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
         }
         return WillPopScope(
             onWillPop: () async {
-              showExitDialog(value);
-              return false;
+              if (changes.canUndo || changes.canRedo) {
+                showExitDialog(value);
+                return false;
+              } else {
+                return true;
+              }
             },
             child: Scaffold(
                 appBar: AppBar(
@@ -78,7 +82,11 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                     child: IconButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          showExitDialog(value);
+                          if (changes.canUndo || changes.canRedo) {
+                            showExitDialog(value);
+                          } else {
+                            Navigator.pop(context);
+                          }
                         },
                         icon: const Icon(Iconsax.arrow_left_2)),
                   ),
@@ -474,6 +482,4 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
       ),
     );
   }
-
-
 }

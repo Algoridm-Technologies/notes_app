@@ -34,8 +34,7 @@ class _EmployeeMainPageState extends State<EmployeeMainPage> {
       Provider.of<AccessProvider>(context, listen: false).setAccess();
       Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
       Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
-       Provider.of<NotificationProvider>(context, listen: false)
-                .getFacility();
+      Provider.of<NotificationProvider>(context, listen: false).getFacility();
     });
   }
 
@@ -48,35 +47,45 @@ class _EmployeeMainPageState extends State<EmployeeMainPage> {
     ];
     return Consumer<EmployeeNavigationProvider>(
       builder: (context, value, child) {
-        return Scaffold(
-          body: SafeArea(
-            child: pages[value.currentPosition],
+        return WillPopScope(
+          onWillPop: () async {
+            if (value.currentPosition == 0) {
+              return true;
+            } else {
+              value.changePage(0);
+              return false;
+            }
+          },
+          child: Scaffold(
+            body: SafeArea(
+              child: pages[value.currentPosition],
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+                selectedItemColor: kPrimaryColor1,
+                unselectedItemColor: kGreyColor,
+                onTap: (v) {
+                  value.changePage(v);
+                },
+                currentIndex: value.currentPosition,
+                type: BottomNavigationBarType.fixed,
+                items: const [
+                  BottomNavigationBarItem(
+                      label: "Home",
+                      icon: Icon(
+                        Iconsax.home,
+                      )),
+                  BottomNavigationBarItem(
+                      label: "Notes",
+                      icon: Icon(
+                        Iconsax.note_21,
+                      )),
+                  BottomNavigationBarItem(
+                      label: "Profile",
+                      icon: Icon(
+                        Iconsax.user,
+                      )),
+                ]),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-              selectedItemColor: kPrimaryColor1,
-              unselectedItemColor: kGreyColor,
-              onTap: (v) {
-                value.changePage(v);
-              },
-              currentIndex: value.currentPosition,
-              type: BottomNavigationBarType.fixed,
-              items: const [
-                BottomNavigationBarItem(
-                    label: "Home",
-                    icon: Icon(
-                      Iconsax.home,
-                    )),
-                BottomNavigationBarItem(
-                    label: "Notes",
-                    icon: Icon(
-                      Iconsax.note_21,
-                    )),
-                BottomNavigationBarItem(
-                    label: "Profile",
-                    icon: Icon(
-                      Iconsax.user,
-                    )),
-              ]),
         );
       },
     );

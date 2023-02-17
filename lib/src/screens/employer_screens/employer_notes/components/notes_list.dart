@@ -40,30 +40,33 @@ class NotesList extends StatelessWidget {
                             physics: const AlwaysScrollableScrollPhysics(),
                             itemBuilder: ((context, index) {
                               var data = value.list[index]!;
-                              return NotesNoteTile(
-                                isUser: false,
-                                index: index,
-                                note: value.list[index]!,
-                                onTap: () {
-                                  Provider.of<NoteDetailEmployerProvider>(
-                                          context,
-                                          listen: false)
-                                      .getFacility(data.id!);
-                                  Provider.of<SetStateProvider>(context,
-                                          listen: false)
-                                      .changeState(false);
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      transitionDuration: kAnimationDuration,
-                                      pageBuilder: ((context, animation, _) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: const NotesDetailPage(),
-                                        );
-                                      }),
-                                    ),
-                                  );
-                                },
+                              return Hero(
+                                tag: "$index",
+                                child: NotesNoteTile(
+                                  isUser: false,
+                                  index: index,
+                                  note: value.list[index]!,
+                                  onTap: () {
+                                    Provider.of<NoteDetailEmployerProvider>(
+                                            context,
+                                            listen: false)
+                                        .getFacility(data.id!);
+                                    Provider.of<SetStateProvider>(context,
+                                            listen: false)
+                                        .changeState(false);
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        transitionDuration: kAnimationDuration,
+                                        pageBuilder: ((context, animation, _) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: const NotesDetailPage(),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
                               );
                             }));
               },

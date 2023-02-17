@@ -41,8 +41,15 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        showExitDialog();
-        return false;
+        if (changes.canRedo ||
+            changes.canUndo ||
+            titleTextController.text.isNotEmpty ||
+            bodyTextController.text.isNotEmpty) {
+          showExitDialog();
+          return false;
+        } else {
+          return true;
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -58,7 +65,14 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
             child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  showExitDialog();
+                  if (changes.canRedo ||
+                      changes.canUndo ||
+                      titleTextController.text.isNotEmpty ||
+                      bodyTextController.text.isNotEmpty) {
+                    showExitDialog();
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
                 icon: const Icon(Iconsax.arrow_left_2)),
           ),
