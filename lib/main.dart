@@ -14,6 +14,7 @@ import 'package:note/src/provider/database/profile_detail_provider.dart';
 import 'package:note/src/provider/navigation/employee_navigation_provider.dart';
 import 'package:note/src/provider/navigation/employer_navigation_provider.dart';
 import 'package:note/src/provider/util/check_provider.dart';
+import 'package:note/src/provider/util/search_provider.dart';
 import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/provider/util/tab_provider.dart';
 import 'package:note/src/provider/util/user_type_provider.dart';
@@ -24,6 +25,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +54,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserTypeProvider()),
         Provider(create: (_) => UserAuthProvider()),
         ChangeNotifierProvider(create: (_) => TabProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
         ChangeNotifierProvider(create: (_) => CheckProvider()),
         ChangeNotifierProvider(create: (_) => EmployerNavigationProvider()),
         ChangeNotifierProvider(create: (_) => EmployeeNavigationProvider()),

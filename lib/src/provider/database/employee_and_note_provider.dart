@@ -72,7 +72,6 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
           .map<Notes>((data) => Notes.fromJson(data as Map<String, Object?>))
           .toList();
       _isLoading = false;
-
       notifyListeners();
     }
   }

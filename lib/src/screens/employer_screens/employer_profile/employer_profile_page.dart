@@ -206,17 +206,19 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                                             context,
                                             listen: false)
                                         .changePage(0);
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        transitionDuration: kAnimationDuration,
-                                        pageBuilder: ((context, animation, _) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: const LaunchPage(),
-                                          );
-                                        }),
-                                      ),
-                                    );
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        PageRouteBuilder(
+                                          transitionDuration:
+                                              kAnimationDuration,
+                                          pageBuilder:
+                                              ((context, animation, _) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: const LaunchPage(),
+                                            );
+                                          }),
+                                        ),
+                                        (Route<dynamic> route) => false);
                                   });
                                 }),
                           )

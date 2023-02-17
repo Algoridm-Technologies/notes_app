@@ -11,15 +11,26 @@ import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/delete_note_api.dart';
+import '../../../../api/note_reply_api.dart';
 import '../../../../provider/database/employee_and_note_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/refresh_token.dart';
 import '../../../../widget/custom_snackbar.dart';
 import '../../../../widget/horizontal_gap.dart';
 import '../../../../widget/processing_dialogue.dart';
+import '../../../../widget/reply_other_tile.dart';
+import '../../../../widget/vertical_gap.dart';
 
-class HeaderTile extends StatelessWidget {
+class HeaderTile extends StatefulWidget {
   const HeaderTile({Key? key}) : super(key: key);
+
+  @override
+  State<HeaderTile> createState() => _HeaderTileState();
+}
+
+class _HeaderTileState extends State<HeaderTile> {
+  var replyController = TextEditingController();
+  var loading = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<NoteDetailEmployerProvider>(
@@ -58,7 +69,6 @@ class HeaderTile extends StatelessWidget {
                             await RefreshToken.refreshToken();
                             await DeleteNoteApi.deleteNote(id: list)
                                 .then((value) {
-                        
                               ProcessingDialog.cancelDialog(context);
                               if (jsonDecode(value)['success'] != null) {
                                 CustomSnackBar.showSnackbar(
@@ -89,14 +99,7 @@ class HeaderTile extends StatelessWidget {
                   const Spacer(),
                   IconButton(
                     onPressed: () {
-                      if (Provider.of<SetStateProvider>(context, listen: false)
-                          .isReplying) {
-                        Provider.of<SetStateProvider>(context, listen: false)
-                            .changeState(false);
-                      } else {
-                        Provider.of<SetStateProvider>(context, listen: false)
-                            .changeState(true);
-                      }
+                      showButtonSheet(context);
                     },
                     icon: CircleAvatar(
                       radius: 20.r,
@@ -141,5 +144,146 @@ class HeaderTile extends StatelessWidget {
         );
       },
     );
+  }
+
+  showButtonSheet(BuildContext con) {
+    showModalBottomSheet(
+        context: con,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return buildSheet();
+        });
+  }
+
+  Widget buildSheet() {
+    return DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        // snap: true,
+        builder: (context, s) {
+          return Consumer<NoteDetailEmployerProvider>(
+            builder: (context, value, child) {
+              return Container(
+                decoration: const BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )),
+                child: Scaffold(
+                  body: Column(
+                    children: [
+                      const VerticalGap(gap: 20),
+                      Padding(
+                        padding: screenPadding,
+                        child: Center(
+                            child: Hero(
+                                tag: "text",
+                                child: Text(
+                                  "All Replies",
+                                  style: heading3,
+                                ))),
+                      ),
+                      const VerticalGap(gap: 20),
+                      Expanded(
+                        child: value.list.isEmpty
+                            ? const Center(child: Text("No reply"))
+                            : ListView.builder(
+                                padding: screenPadding,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: value.list.length,
+                                itemBuilder: (c, i) {
+                                  return ReplyOtherTile(
+                                    reply: value.list[i],
+                                  );
+                                },
+                              ),
+                      ),
+                      Container(
+                        margin: screenPadding,
+                        padding: const EdgeInsets.only(
+                          bottom: 5,
+                        ),
+                        height: 54.h,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 10,
+                                ),
+                                padding: const EdgeInsets.all(
+                                  10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: kGreyColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: TextField(
+                                    controller: replyController,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            loading
+                                ? CircleAvatar(
+                                    radius: 20.r,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.r,
+                                    ))
+                                : CircleAvatar(
+                                    radius: 20.r,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        sendReply(
+                                            noteId: value.model!.id!,
+                                            replyId: "",
+                                            text: replyController.text);
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        size: 25.sp,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  sendReply({
+    required String noteId,
+    required String replyId,
+    required String text,
+  }) async {
+    setState(() {
+      loading = true;
+    });
+    await RefreshToken.refreshToken();
+    await NoteReplyApi.noteReply(
+      noteId: noteId,
+      replyId: replyId,
+      text: text,
+    ).then((value) {
+      setState(() {
+        loading = false;
+      });
+      Provider.of<NoteDetailEmployerProvider>(context, listen: false)
+          .getFacility(noteId);
+    });
   }
 }

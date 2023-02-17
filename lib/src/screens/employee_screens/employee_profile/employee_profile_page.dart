@@ -193,7 +193,7 @@ class EmployeeProfilePage extends StatelessWidget {
                                             context,
                                             listen: false)
                                         .changePage(0);
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushAndRemoveUntil(
                                       PageRouteBuilder(
                                         transitionDuration: kAnimationDuration,
                                         pageBuilder: ((context, animation, _) {
@@ -203,7 +203,8 @@ class EmployeeProfilePage extends StatelessWidget {
                                           );
                                         }),
                                       ),
-                                    );
+
+                                          (Route<dynamic> route) => false);
                                   });
                                 }),
                           )
