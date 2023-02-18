@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/login_user_api.dart';
+import 'package:note/src/provider/util/user_type_provider.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
 import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
@@ -13,6 +14,7 @@ import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -141,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       ).then((value) async {
         ProcessingDialog.cancelDialog(context);
+        print(value);
 
         if (value == "Error") {
           CustomSnackBar.showSnackbar(
@@ -154,10 +157,28 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         var prefs = await SharedPreferences.getInstance();
+         Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
+           var selectedUser =
+              Provider.of<UserTypeProvider>(context, listen: false).userType ==
+                      0
+                  ? true
+                  : false;
+          var loginUser = data['is_employer'];
+          // print(selectedUser);
+          // print(data['is_employer']);
+          if (selectedUser == loginUser) {
+            CustomSnackBar.showSnackbar(
+                context: context,
+                title: "You can't login as this type of user");
+            return;
+          }
+          print(selectedUser == loginUser);
+          // return;
         prefs.setString("refresh", jsonDecode(value)['refresh']);
 
         prefs.setString("token", jsonDecode(value)['access']).then((_) {
-          Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
+         
+        
 
           if (data["is_employer"] == true) {
             Navigator.of(context).pushAndRemoveUntil(

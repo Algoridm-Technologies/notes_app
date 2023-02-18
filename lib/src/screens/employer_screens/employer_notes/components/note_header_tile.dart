@@ -203,7 +203,9 @@ class CustomSearchDelegate extends SearchDelegate {
         mineMatchQuery.add(fruit);
       }
     }
-
+    if (mineMatchQuery.isEmpty) {
+      return const Center(child: Text("No Search found"));
+    }
     return ListView.separated(
         padding: screenPadding,
         itemBuilder: (context, index) {
@@ -243,44 +245,15 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<Notes?> mineMatchQuery = [];
     for (var fruit in mine) {
-       if (fruit!.title!.toLowerCase().contains(query.toLowerCase()) ||
+      if (fruit!.title!.toLowerCase().contains(query.toLowerCase()) ||
           fruit.user!.fullName!.toLowerCase().contains(query.toLowerCase())) {
         mineMatchQuery.add(fruit);
       }
     }
     if (mineMatchQuery.isEmpty) {
-      return const Center(child: Text("Search is found"));
+      return const Center(child: Text("No Search found"));
     }
 
-    return ListView.separated(
-        padding: screenPadding,
-        itemBuilder: (context, index) {
-          return NotesNoteTile(
-            isUser: false,
-            index: index,
-            note: mineMatchQuery[index]!,
-            onTap: () {
-              Provider.of<NoteDetailEmployerProvider>(context, listen: false)
-                  .getFacility(mineMatchQuery[index]!.id!);
-              Provider.of<SetStateProvider>(context, listen: false)
-                  .changeState(false);
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  transitionDuration: kAnimationDuration,
-                  pageBuilder: ((context, animation, _) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: const NotesDetailPage(),
-                    );
-                  }),
-                ),
-              );
-            },
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const VerticalGap(gap: 10);
-        },
-        itemCount: mineMatchQuery.length);
+    return const Center(child: Text("type to start searching"));
   }
 }

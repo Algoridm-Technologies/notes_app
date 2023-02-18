@@ -37,7 +37,6 @@ class NoteHeaderTile extends StatelessWidget {
           IconButton(
             onPressed: () {
               var v = Provider.of<TabProvider>(context, listen: false).tab;
-             
 
               showSearch(
                   context: context,
@@ -108,6 +107,9 @@ class CustomSearchDelegate extends SearchDelegate {
       if (fruit!.title!.toLowerCase().contains(query.toLowerCase())) {
         mineMatchQuery.add(fruit);
       }
+    }
+    if (user == 0 ? mineMatchQuery.isEmpty : teamMatchQuery.isEmpty) {
+      return const Center(child: Text("No Search found"));
     }
 
     return ListView.separated(
@@ -185,68 +187,7 @@ class CustomSearchDelegate extends SearchDelegate {
         mineMatchQuery.add(fruit);
       }
     }
-    if (user == 0 ? mineMatchQuery.isEmpty : teamMatchQuery.isEmpty) {
-      return Center(child: const Text("Search is found"));
-    }
 
-    return ListView.separated(
-        padding: screenPadding,
-        itemBuilder: (context, index) {
-          return user == 0
-              ? MyNotesTile(
-                  isUser: true,
-                  index: index,
-                  note: mineMatchQuery[index]!,
-                  onTap: () {
-                    Provider.of<SetStateProvider>(context, listen: false)
-                        .changeState(true);
-                    Provider.of<NoteDetailEmployeeProvider>(context,
-                            listen: false)
-                        .getNoteDetails(mineMatchQuery[index]!.id!);
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const EmployeeNotesDetailPage(
-                              isUser: false,
-                            ),
-                          );
-                        }),
-                      ),
-                    );
-                  },
-                )
-              : OtherNotesTile(
-                  isUser: false,
-                  index: index,
-                  note: teamMatchQuery[index]!,
-                  onTap: () {
-                    Provider.of<SetStateProvider>(context, listen: false)
-                        .changeState(true);
-                    Provider.of<NoteDetailEmployeeProvider>(context,
-                            listen: false)
-                        .getNoteDetails(teamMatchQuery[index]!.id!);
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: kAnimationDuration,
-                        pageBuilder: ((context, animation, _) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: const EmployeeNotesDetailPage(
-                              isUser: true,
-                            ),
-                          );
-                        }),
-                      ),
-                    );
-                  },
-                );
-        },
-        separatorBuilder: (context, index) {
-          return const VerticalGap(gap: 10);
-        },
-        itemCount: user == 0 ? mineMatchQuery.length : teamMatchQuery.length);
+    return const Text('');
   }
 }

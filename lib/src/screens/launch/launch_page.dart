@@ -66,7 +66,7 @@ class LaunchPage extends StatelessWidget {
                     var prefs = await SharedPreferences.getInstance();
                     prefs.setBool("isEmployer", true).then((value) {
                       Provider.of<UserTypeProvider>(context, listen: false)
-                          .changeState(0);
+                          .changeState(1);
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           transitionDuration: kAnimationDuration,
