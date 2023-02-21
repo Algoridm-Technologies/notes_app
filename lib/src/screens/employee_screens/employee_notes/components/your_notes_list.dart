@@ -17,7 +17,7 @@ class YourNotesList extends StatelessWidget {
       onRefresh: () async {
         await RefreshToken.refreshToken().then((value) {
           Provider.of<EmployeeNoteProvider>(context, listen: false)
-              .getFacility();
+              .getNotesAndEmployee();
         });
       },
       child: Consumer<EmployeeNoteProvider>(
@@ -30,9 +30,7 @@ class YourNotesList extends StatelessWidget {
                       itemCount: value.myList.length,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: ((context, index) {
-                        return 
-                        
-                        MyNotesTile(
+                        return MyNotesTile(
                           isUser: true,
                           index: index,
                           note: value.myList[index]!,
@@ -58,7 +56,6 @@ class YourNotesList extends StatelessWidget {
                             );
                           },
                         );
-                    
                       }));
         },
       ),

@@ -9,9 +9,9 @@ class EmployeeNoteProvider extends ChangeNotifier {
   List<TeamMatesNotes?> _teamList = [];
   List<MyNotes?> get myList => _myList;
   List<TeamMatesNotes?> get em => _teamList;
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
-  getFacility() async {
+  getNotesAndEmployee() async {
     _isLoading = true;
     notifyListeners();
     var facility =

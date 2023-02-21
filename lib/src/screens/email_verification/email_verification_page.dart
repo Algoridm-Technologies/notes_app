@@ -85,7 +85,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
-          context: context, title: "title", subtitle: "subtitle");
+          context: context, title: "Otp", subtitle: "Verifying user");
 
       await VerifyEmailApi.verifyEmail(
               email: widget.email, otp: codeController.text)
@@ -95,6 +95,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
         if (jsonDecode(value)['error'] != null) {
           CustomSnackBar.showSnackbar(
+            backgroundColor: kErrorColor1,
               context: context, title: jsonDecode(value)['error']);
         }
         if (jsonDecode(value)['success'] != null) {
@@ -118,7 +119,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
       ProcessingDialog.showProcessingDialog(
-          context: context, title: "title", subtitle: "subtitle");
+          context: context, title: "Otp", subtitle: "checking user");
 
       await CheckPasswordResetOtpApi.checkPasswordResetOtp(
               email: widget.email, otp: codeController.text)
@@ -148,7 +149,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
   resendEmailOtp() async {
     ProcessingDialog.showProcessingDialog(
-        context: context, title: "title", subtitle: "subtitle");
+        context: context, title: "Otp", subtitle: "resending otp");
 
     await ResendEmailVerificationApi.resendEmailVerification(
             email: widget.email)

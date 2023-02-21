@@ -243,16 +243,16 @@ class _RegisterPageState extends State<RegisterPage> {
               isEmployer: prefs.getBool('isEmployer') ?? false,
               password: passwordController.text)
           .then((value) {
-     
         ProcessingDialog.cancelDialog(context);
         // print(value['success']);
         if (jsonDecode(value)["email"] != null) {
           CustomSnackBar.showSnackbar(
+            backgroundColor: kErrorColor1,
               context: context, title: jsonDecode(value)["email"][0]);
         }
         if (jsonDecode(value)["success"] != null) {
           CustomSnackBar.showSnackbar(
-              context: context, title: jsonDecode(value)["success"][0]);
+              context: context, title: jsonDecode(value)["success"]);
           Navigator.of(context).push(
             PageRouteBuilder(
               transitionDuration: kAnimationDuration,

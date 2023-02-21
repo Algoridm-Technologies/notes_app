@@ -300,7 +300,8 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
         title: titleTextController.text,
         body: bodyTextController.text,
       ).then((value) {
-        Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+        Provider.of<EmployeeNoteProvider>(context, listen: false)
+            .getNotesAndEmployee();
 
         ProcessingDialog.cancelDialog(context);
         if (pop) Navigator.pop(context);

@@ -11,6 +11,7 @@ class ListFacilityApi {
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
       });
+      print(response.body);
       if (response.statusCode.toString()[0] == "2") {
         return response.body;
       } else {

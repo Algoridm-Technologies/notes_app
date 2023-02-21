@@ -1,19 +1,15 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/update_note_api.dart';
 import 'package:note/src/provider/database/note_detail_employee_provider.dart';
-import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/utils/constants.dart';
-import 'package:note/src/widget/reply_other_tile.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
 import 'package:undo/undo.dart';
 
-import '../../../api/note_reply_api.dart';
 import '../../../provider/database/employee_note_provider.dart';
 import '../../../utils/refresh_token.dart';
 import '../../../widget/custom_snackbar.dart';
@@ -395,7 +391,8 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
               text: bodyTextController.text,
               noteId: noteId)
           .then((value) {
-        Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+        Provider.of<EmployeeNoteProvider>(context, listen: false)
+            .getNotesAndEmployee();
 
         ProcessingDialog.cancelDialog(context);
         if (pop) Navigator.pop(context);

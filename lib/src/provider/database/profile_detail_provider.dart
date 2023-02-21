@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/profile_detail_api.dart';
 import 'package:note/src/model/profile_detail_model.dart';
@@ -11,7 +13,8 @@ class ProfileDetailProvider extends ChangeNotifier {
   getDetails() async {
     await RefreshToken.refreshToken();
     var data = await ProfileDetailApi.getProfileDetail();
-    
+    log(data);
+
     _model = ProfileDetailModel.fromJson(data);
     notifyListeners();
   }

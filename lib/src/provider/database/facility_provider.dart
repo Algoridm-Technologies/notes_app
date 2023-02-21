@@ -14,7 +14,7 @@ class FacilityProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     var facility = await ListFacilityApi.listFacility();
-
+print(facility);
     if (facility == "Failed" && facility == "Error") {
       _list = [];
       _isLoading = false;

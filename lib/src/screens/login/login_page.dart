@@ -8,6 +8,7 @@ import 'package:note/src/screens/employee_screens/employee_main/employee_main_pa
 import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
 import 'package:note/src/screens/register/register_page.dart';
+import 'package:note/src/screens/wrapper/facility_wrapper.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/default_button.dart';
@@ -16,6 +17,9 @@ import 'package:note/src/widget/vertical_gap.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../api/resend_email_otp_api.dart';
+import '../email_verification/email_verification_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -147,39 +151,47 @@ class _LoginPageState extends State<LoginPage> {
 
         if (value == "Error") {
           CustomSnackBar.showSnackbar(
-              context: context, title: "Something went wrong");
+              backgroundColor: kErrorColor1,
+              context: context,
+              title: "Something went wrong");
           return;
         }
-        if (jsonDecode(value)['error'] != null) {
+
+        if (jsonDecode(value)['error'] == "Invalid credentials") {
           CustomSnackBar.showSnackbar(
-              context: context, title: jsonDecode(value)['error']);
+              backgroundColor: kErrorColor1,
+              context: context,
+              title: jsonDecode(value)['error']);
           return;
+        }
+        if (jsonDecode(value)['error'] == "You must verify your email first") {
+          CustomSnackBar.showSnackbar(
+              backgroundColor: kErrorColor1,
+              context: context,
+              title: jsonDecode(value)['error']);
+          await resendEmailOtp();
         }
 
         var prefs = await SharedPreferences.getInstance();
-         Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
-           var selectedUser =
-              Provider.of<UserTypeProvider>(context, listen: false).userType ==
-                      0
-                  ? true
-                  : false;
-          var loginUser = data['is_employer'];
-          // print(selectedUser);
-          // print(data['is_employer']);
-          if (selectedUser == loginUser) {
-            CustomSnackBar.showSnackbar(
-                context: context,
-                title: "You can't login as this type of user");
-            return;
-          }
-          print(selectedUser == loginUser);
-          // return;
+        Map<String, dynamic> data = Jwt.parseJwt(jsonDecode(value)['access']);
+        print(data);
+        var selectedUser =
+            Provider.of<UserTypeProvider>(context, listen: false).userType == 0
+                ? true
+                : false;
+        var loginUser = data['is_employer'];
+        // print(selectedUser);
+        // print(data['is_employer']);
+        if (selectedUser == loginUser) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: "You can't login as this type of user");
+          return;
+        }
+        print(selectedUser == loginUser);
+        // return;
         prefs.setString("refresh", jsonDecode(value)['refresh']);
 
         prefs.setString("token", jsonDecode(value)['access']).then((_) {
-         
-        
-
           if (data["is_employer"] == true) {
             Navigator.of(context).pushAndRemoveUntil(
                 PageRouteBuilder(
@@ -199,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: const EmployeeMainPage(),
+                      child: const FacilityWrapper(),
                     );
                   }),
                 ),
@@ -208,6 +220,39 @@ class _LoginPageState extends State<LoginPage> {
         });
       });
     }
+  }
+
+  resendEmailOtp() async {
+    ProcessingDialog.showProcessingDialog(
+        context: context, title: "Otp", subtitle: "resending otp");
+
+    await ResendEmailVerificationApi.resendEmailVerification(
+            email: emailController.text)
+        .then((value) {
+      ProcessingDialog.cancelDialog(context);
+
+      if (jsonDecode(value)['error'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['error']);
+      }
+      if (jsonDecode(value)['success'] != null) {
+        CustomSnackBar.showSnackbar(
+            context: context, title: jsonDecode(value)['success']);
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            transitionDuration: kAnimationDuration,
+            pageBuilder: ((context, animation, _) {
+              return FadeTransition(
+                  opacity: animation,
+                  child: EmailVerificationPage(
+                    email: emailController.text,
+                    source: "register",
+                  ));
+            }),
+          ),
+        );
+      }
+    });
   }
 
   Widget buildEmailField() {

@@ -32,8 +32,11 @@ class _EmployeeMainPageState extends State<EmployeeMainPage> {
   refreshAndFetchData() async {
     await RefreshToken.refreshToken().then((value) {
       Provider.of<AccessProvider>(context, listen: false).setAccess();
-      Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
-      Provider.of<EmployeeNoteProvider>(context, listen: false).getFacility();
+      Provider.of<ProfileDetailProvider>(context, listen: false)
+          .getDetails();
+        
+      Provider.of<EmployeeNoteProvider>(context, listen: false)
+          .getNotesAndEmployee();
       Provider.of<NotificationProvider>(context, listen: false).getFacility();
     });
   }

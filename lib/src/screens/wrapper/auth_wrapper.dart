@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
 import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
+import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/screens/login/login_page.dart';
+import 'package:note/src/screens/wrapper/facility_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/refresh.dart';
@@ -21,11 +23,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    init();
+    // init();
   }
 
   init() async {
     RefreshApi.refresh().then((value) async {
+      if (value == "Error") {}
       if (jsonDecode(value)['error'] != null) {
         Navigator.of(context).pushAndRemoveUntil(
             PageRouteBuilder(
@@ -33,7 +36,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
               pageBuilder: ((context, animation, _) {
                 return FadeTransition(
                   opacity: animation,
-                  child: const LoginPage(),
+                  child: const LaunchPage(),
                 );
               }),
             ),
@@ -50,7 +53,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                     opacity: animation,
                     child: widget.isEmployer
                         ? const EmployerMainPage()
-                        : const EmployeeMainPage(),
+                        :  FacilityWrapper(),
                   );
                 }),
               ),
@@ -62,8 +65,20 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+    return Scaffold(
+      body: FutureBuilder(
+          future: init(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return Center(
+                  child: IconButton(
+                      onPressed: () => setState(() {}),
+                      icon: const Icon(Icons.refresh)));
+            }
+          }),
     );
   }
 }

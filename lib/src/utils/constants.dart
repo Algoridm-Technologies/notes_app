@@ -34,7 +34,7 @@ const kDefaultColor2 = Color(0xFF808080);
 const kDefaultColor3 = Color(0xFFB3B3B3);
 const kDefaultColor4 = Color(0xFFCCCCCC);
 
-const kAnimationDuration = Duration(milliseconds: 650);
+const kAnimationDuration = Duration(milliseconds: 300);
 
 final EdgeInsets screenPadding = EdgeInsets.symmetric(horizontal: 24.h);
 final heading = TextStyle(
@@ -137,7 +137,7 @@ final RegExp passwordValidatorRegExp = RegExp(r"(?=.*[A-Z])(?=.*[a-z])\w+");
 const String kEmailNullError = "Please Enter your email";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kInvalidPasswordError =
-    "Password should contain at least 1 uppercase, 1 lowercase, 1 symbol and number,";
+    "Password should contain at least \n1 uppercase, 1 lowercase,\n1 symbol and 1 number,";
 const String kPassNullError = "Please Enter your password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";

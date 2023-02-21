@@ -17,11 +17,10 @@ class OtherNotesList extends StatelessWidget {
       onRefresh: () async {
         await RefreshToken.refreshToken().then((value) {
           Provider.of<EmployeeNoteProvider>(context, listen: false)
-              .getFacility();
+              .getNotesAndEmployee();
         });
       },
       child: Consumer<EmployeeNoteProvider>(builder: (context, value, child) {
-        
         return value.isLoading
             ? const Center(child: CircularProgressIndicator())
             : value.em.isEmpty
@@ -35,7 +34,7 @@ class OtherNotesList extends StatelessWidget {
                         index: index,
                         note: value.em[index]!,
                         onTap: () {
-                               Provider.of<SetStateProvider>(context, listen: false)
+                          Provider.of<SetStateProvider>(context, listen: false)
                               .changeState(true);
                           Provider.of<NoteDetailEmployeeProvider>(context,
                                   listen: false)
@@ -46,7 +45,9 @@ class OtherNotesList extends StatelessWidget {
                               pageBuilder: ((context, animation, _) {
                                 return FadeTransition(
                                   opacity: animation,
-                                  child:  EmployeeNotesDetailPage(isUser: true,),
+                                  child: EmployeeNotesDetailPage(
+                                    isUser: true,
+                                  ),
                                 );
                               }),
                             ),

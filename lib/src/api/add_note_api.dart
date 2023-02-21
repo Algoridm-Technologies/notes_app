@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,8 +18,8 @@ class AddNoteApi {
       }, body: {
         'title': title,
         'text': body,
-        
       });
+      log(response.body);
 
       return response.body;
     } catch (e) {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/api/select_facility_api.dart';
+import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/screens/choose_facility/components/facility_list.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
+import 'package:note/src/utils/refresh_token.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/util/user_type_provider.dart';
@@ -49,28 +52,31 @@ class _ChooseFacilityPageState extends State<ChooseFacilityPage> {
                   "Next",
                   style: heading3White,
                 ),
-                onTap: () {
+                onTap: () async {
                   if (Provider.of<CheckProvider>(context, listen: false)
                           .selected ==
                       -1) {
                     return;
                   }
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: kAnimationDuration,
-                      pageBuilder: ((context, animation, _) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: Provider.of<UserTypeProvider>(context,
-                                          listen: false)
-                                      .userType ==
-                                  0
-                              ? const EmployeeMainPage()
-                              : const EmployerMainPage(),
-                        );
-                      }),
-                    ),
-                  );
+                  var id = Provider.of<FacilityProvider>(context, listen: false)
+                      .list[Provider.of<CheckProvider>(context, listen: false)
+                          .selected]!
+                      .id;
+                  await RefreshToken.refreshToken().then((value) async {
+                    await SelectFacilityApi.selectFacility(id: id!)
+                        .then((value) {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          transitionDuration: kAnimationDuration,
+                          pageBuilder: ((context, animation, _) {
+                            return FadeTransition(
+                                opacity: animation,
+                                child: const EmployeeMainPage());
+                          }),
+                        ),
+                      );
+                    });
+                  });
                 },
               ),
             ),
