@@ -401,6 +401,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
           CustomSnackBar.showSnackbar(context: context, title: "Note Updated");
         } else {
           CustomSnackBar.showSnackbar(
+            backgroundColor: kErrorColor1,
               context: context, title: "Something went wrong");
         }
       });

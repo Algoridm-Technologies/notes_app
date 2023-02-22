@@ -310,6 +310,7 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
           CustomSnackBar.showSnackbar(context: context, title: "Note added");
         } else {
           CustomSnackBar.showSnackbar(
+            backgroundColor: kErrorColor1,
               context: context, title: "something went wrong");
         }
       });

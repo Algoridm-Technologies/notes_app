@@ -51,9 +51,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                 pageBuilder: ((context, animation, _) {
                   return FadeTransition(
                     opacity: animation,
-                    child: widget.isEmployer
-                        ? const EmployerMainPage()
-                        :  FacilityWrapper(),
+                    child:  FacilityWrapper(),
                   );
                 }),
               ),
@@ -76,7 +74,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
               return Center(
                   child: IconButton(
                       onPressed: () => setState(() {}),
-                      icon: const Icon(Icons.refresh)));
+                      icon: const Center(child: CircularProgressIndicator())));
             }
           }),
     );

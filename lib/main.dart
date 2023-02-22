@@ -26,7 +26,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var isEmployer = false;
@@ -38,6 +37,7 @@ void main() async {
     Map<String, dynamic> data = Jwt.parseJwt(token);
 
     isEmployer = data["is_employer"];
+    prefs.setBool('is_employer', isEmployer);
   }
 
   runApp(MyApp(token: token, isEmployer: isEmployer));
@@ -73,17 +73,19 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         builder: (context, child) {
           return MaterialApp(
-            title: appName,
-            debugShowCheckedModeBanner: false,
-            theme: appTheme,
-            home: token == ""
-                ? const LaunchPage()
-                : AuthWrapper(isEmployer: isEmployer, )
-                // : isEmployer
-                //     ? const EmployerMainPage()
-                //     : const EmployeeMainPage(),
-            // home: TestPage(),
-          );
+              title: appName,
+              debugShowCheckedModeBanner: false,
+              theme: appTheme,
+              home: token == ""
+                  ? const LaunchPage()
+                  : AuthWrapper(
+                      isEmployer: isEmployer,
+                    )
+              // : isEmployer
+              //     ? const EmployerMainPage()
+              //     : const EmployeeMainPage(),
+              // home: TestPage(),
+              );
         },
         designSize: const Size(430, 932),
         minTextAdapt: true,

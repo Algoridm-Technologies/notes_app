@@ -6,6 +6,7 @@ import 'package:note/src/screens/choose_facility/components/facility_list.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
 import 'package:note/src/utils/refresh_token.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../provider/util/user_type_provider.dart';
 import '../../utils/constants.dart';
@@ -53,6 +54,8 @@ class _ChooseFacilityPageState extends State<ChooseFacilityPage> {
                   style: heading3White,
                 ),
                 onTap: () async {
+                  var v = await SharedPreferences.getInstance();
+                  var isEmplyer = v.getBool('is_employer') ?? false;
                   if (Provider.of<CheckProvider>(context, listen: false)
                           .selected ==
                       -1) {
@@ -65,13 +68,16 @@ class _ChooseFacilityPageState extends State<ChooseFacilityPage> {
                   await RefreshToken.refreshToken().then((value) async {
                     await SelectFacilityApi.selectFacility(id: id!)
                         .then((value) {
+                      print(value);
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           transitionDuration: kAnimationDuration,
                           pageBuilder: ((context, animation, _) {
                             return FadeTransition(
                                 opacity: animation,
-                                child: const EmployeeMainPage());
+                                child: isEmplyer
+                                    ? EmployerMainPage()
+                                    : EmployeeMainPage());
                           }),
                         ),
                       );

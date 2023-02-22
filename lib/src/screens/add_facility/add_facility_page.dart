@@ -81,6 +81,10 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
       if (jsonDecode(value)['success'] != null) {
         CustomSnackBar.showSnackbar(
             context: context, title: jsonDecode(value)['success']);
+      }else{
+           CustomSnackBar.showSnackbar(
+            backgroundColor: kErrorColor1,
+            context: context, title: "Something went wrong");
       }
     });
   }

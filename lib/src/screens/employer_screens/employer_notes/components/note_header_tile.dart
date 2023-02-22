@@ -197,10 +197,11 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     List<Notes?> mineMatchQuery = [];
-    for (var fruit in mine) {
-      if (fruit!.title!.toLowerCase().contains(query.toLowerCase()) ||
-          fruit.user!.fullName!.toLowerCase().contains(query.toLowerCase())) {
-        mineMatchQuery.add(fruit);
+    for (var notes in mine) {
+      if (notes!.title!.toLowerCase().contains(query.toLowerCase()) ||
+          notes.text!.toLowerCase().contains(query.toLowerCase()) ||
+          notes.user!.fullName!.toLowerCase().contains(query.toLowerCase())) {
+        mineMatchQuery.add(notes);
       }
     }
     if (mineMatchQuery.isEmpty) {

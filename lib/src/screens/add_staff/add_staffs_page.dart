@@ -146,6 +146,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
         }
         if (jsonDecode(value)['email'] != null) {
           CustomSnackBar.showSnackbar(
+            backgroundColor: kErrorColor1,
               context: context, title: jsonDecode(value)['email'][0]);
         }
       });

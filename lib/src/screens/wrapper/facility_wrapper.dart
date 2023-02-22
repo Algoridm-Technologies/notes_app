@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:note/src/provider/database/facility_provider.dart';
 import 'package:note/src/screens/choose_facility/choose_facility_page.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
+import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/profile_detail_api.dart';
@@ -34,7 +34,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
         SharedPreferences.getInstance().then((v) {
           v.setString("refresh", jsonDecode(value)['refresh']);
           v.setString("token", jsonDecode(value)['access']);
-
+          var isEmplyer = v.getBool('is_employer') ?? false;
           if (jsonDecode(va)['facility'] == null) {
             Navigator.of(context).pushAndRemoveUntil(
                 PageRouteBuilder(
@@ -54,7 +54,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: const EmployeeMainPage(),
+                      child: isEmplyer?EmployerMainPage(): EmployeeMainPage(),
                     );
                   }),
                 ),
@@ -78,7 +78,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
               return Center(
                   child: IconButton(
                       onPressed: () => setState(() {}),
-                      icon: const Icon(Icons.refresh)));
+                      icon: const Center(child: CircularProgressIndicator())));
             }
           }),
     );
