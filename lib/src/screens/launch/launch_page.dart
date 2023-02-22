@@ -40,7 +40,7 @@ class LaunchPage extends StatelessWidget {
                   ),
                   onTap: () async {
                     var prefs = await SharedPreferences.getInstance();
-                    prefs.setBool("isEmployer", false).then((value) {
+                    prefs.setBool("is_employer", false).then((value) {
                       Provider.of<UserTypeProvider>(context, listen: false)
                           .changeState(0);
                       Navigator.of(context).push(
@@ -64,7 +64,7 @@ class LaunchPage extends StatelessWidget {
                   ),
                   onTap: () async {
                     var prefs = await SharedPreferences.getInstance();
-                    prefs.setBool("isEmployer", true).then((value) {
+                    prefs.setBool("is_employer", true).then((value) {
                       Provider.of<UserTypeProvider>(context, listen: false)
                           .changeState(1);
                       Navigator.of(context).push(
