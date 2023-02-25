@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +16,7 @@ class EmployeeAndNoteApi {
         "Authorization": "Bearer $token",
         "cookie": "$session",
       });
+      log(jsonDecode(utf8.decode(response.bodyBytes)));
       if (response.statusCode.toString()[0] == "2") {
         return response.body;
       } else {

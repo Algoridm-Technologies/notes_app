@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/database/note_detail_employer_provider.dart';
@@ -24,6 +26,7 @@ class NotesList extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: ((context, index) {
                       var data = value.list[index];
+                      // log(data.toString());
                       return NotesTile(
                         isUser: false,
                         note: data!,

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +14,13 @@ class ListAllNotesApi {
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
       });
-      return response.body;
+      try {
+           log(jsonDecode(utf8.decode(response.bodyBytes)));
+      } catch (e) {
+        print(e); 
+      }
+    
+      return response.bodyBytes;
     } catch (e) {
       return 'Error';
     }

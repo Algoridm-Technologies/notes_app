@@ -231,6 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   registerUser() async {
     var prefs = await SharedPreferences.getInstance();
+    var isEmployer =  prefs.getBool('isEmployer') ?? false;
 
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
@@ -240,15 +241,16 @@ class _RegisterPageState extends State<RegisterPage> {
       await RegisterUserApi.registerUser(
               fullName: nameController.text,
               email: emailController.text,
-              isEmployer: prefs.getBool('isEmployer') ?? false,
+              isEmployer: isEmployer,
               password: passwordController.text)
           .then((value) {
         ProcessingDialog.cancelDialog(context);
         // print(value['success']);
         if (jsonDecode(value)["email"] != null) {
           CustomSnackBar.showSnackbar(
-            backgroundColor: kErrorColor1,
-              context: context, title: jsonDecode(value)["email"][0]);
+              backgroundColor: kErrorColor1,
+              context: context,
+              title: jsonDecode(value)["email"][0]);
         }
         if (jsonDecode(value)["success"] != null) {
           CustomSnackBar.showSnackbar(

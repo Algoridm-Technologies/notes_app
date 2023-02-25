@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/employee_and_note_api.dart';
@@ -13,7 +14,7 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
   List<Employees?> get em => _em;
   bool _isLoading = true;
   bool get isLoading => _isLoading;
-  
+
   getFacility() async {
     _isLoading = true;
     notifyListeners();
@@ -60,14 +61,14 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     var facility = await ListAllNotesApi.listEmployees();
-    
 
     if (facility == "Failed" || facility == "Error") {
       _list = [];
       _isLoading = false;
       notifyListeners();
     } else {
-      var model = jsonDecode(facility)['data'];
+      var model = jsonDecode(utf8.decode(facility))['data'];
+      log(model.toString());
       _list = model
           .map<Notes>((data) => Notes.fromJson(data as Map<String, Object?>))
           .toList();
