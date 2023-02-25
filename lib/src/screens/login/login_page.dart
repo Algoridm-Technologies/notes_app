@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:note/src/api/login_user_api.dart';
 import 'package:note/src/provider/util/user_type_provider.dart';
-import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
-import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/forgotten_password/forgotten_password_page.dart';
 import 'package:note/src/screens/register/register_page.dart';
 import 'package:note/src/screens/wrapper/facility_wrapper.dart';
@@ -199,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: const EmployerMainPage(),
+                      child: const FacilityWrapper(),
                     );
                   }),
                 ),

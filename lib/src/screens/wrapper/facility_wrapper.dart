@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:note/src/screens/choose_facility/choose_facility_page.dart';
@@ -30,7 +31,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
     RefreshApi.refresh().then((value) async {
       if (value == "Error") {}
       await ProfileDetailApi.getProfileDetail().then((va) {
-        print(value);
+        log(value);
         SharedPreferences.getInstance().then((v) {
           v.setString("refresh", jsonDecode(value)['refresh']);
           v.setString("token", jsonDecode(value)['access']);
@@ -54,7 +55,9 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: isEmployer?EmployerMainPage(): EmployeeMainPage(),
+                      child: isEmployer
+                          ? const EmployerMainPage()
+                          : const EmployeeMainPage(),
                     );
                   }),
                 ),
