@@ -3,7 +3,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentEmployeeAndFacilityApi {
-  static Future<String> currentEmployeeAndFacility() async {
+  static Future<dynamic> currentEmployeeAndFacility() async {
     try {
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString("token");
@@ -12,7 +12,7 @@ class CurrentEmployeeAndFacilityApi {
         "Authorization": "Bearer $token",
       });
       if (response.statusCode.toString()[0] == "2") {
-        return response.body;
+        return response.bodyBytes;
       } else {
         return "Failed";
       }

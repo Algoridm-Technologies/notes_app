@@ -34,7 +34,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
         SharedPreferences.getInstance().then((v) {
           v.setString("refresh", jsonDecode(value)['refresh']);
           v.setString("token", jsonDecode(value)['access']);
-          var isEmplyer = v.getBool('is_employer') ?? false;
+          var isEmployer = v.getBool('isEmployer') ?? false;
           if (jsonDecode(va)['facility'] == null) {
             Navigator.of(context).pushAndRemoveUntil(
                 PageRouteBuilder(
@@ -54,7 +54,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: isEmplyer?EmployerMainPage(): EmployeeMainPage(),
+                      child: isEmployer?EmployerMainPage(): EmployeeMainPage(),
                     );
                   }),
                 ),

@@ -3,7 +3,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetSingleNoteEmployeeDetailApi {
-  static Future<String> getSingleNoteDetail({
+  static Future<dynamic> getSingleNoteDetail({
     required String noteId,
   }) async {
     try {
@@ -14,7 +14,7 @@ class GetSingleNoteEmployeeDetailApi {
         "Authorization": "Bearer $token",
       });
       if (response.statusCode.toString()[0] == "2") {
-        return response.body;
+        return response.bodyBytes;
       } else {
         return "Failed";
       }

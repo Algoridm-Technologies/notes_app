@@ -188,7 +188,7 @@ class _EmployeeNotesDetailPageState extends State<EmployeeNotesDetailPage> {
                       child: Consumer<NoteDetailEmployeeProvider>(
                         builder: (context, value, child) {
                           if (value.model != null) {
-                            if (bodyTextController.text.isEmpty) {
+                            if (bodyTextController.text.isEmpty && !(changes.canRedo || changes.canUndo) ) {
                               bodyTextController.text = value.model!.text ?? "";
                             }
                           }

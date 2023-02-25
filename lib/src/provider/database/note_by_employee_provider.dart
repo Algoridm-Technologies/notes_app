@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:note/src/api/note_by_employee_api.dart';
@@ -19,14 +20,16 @@ class NoteByEmployeeProvider extends ChangeNotifier {
 
     var facility =
         await NoteByEmployeeApi.noteByEmployee(employeeId: employeeId);
+   
 
     if (facility == "Failed" || facility == "Error") {
       _myList = [];
       _isLoading = false;
       notifyListeners();
     } else {
-      var model = NoteByEmployeeModel.fromJson(jsonDecode(facility));
-
+      var model =
+          NoteByEmployeeModel.fromJson(jsonDecode(utf8.decode(facility)));
+ log(model.toString());
       _myList = model.notes!;
       _isLoading = false;
 

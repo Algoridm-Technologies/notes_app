@@ -3,7 +3,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NoteByEmployeeApi {
-  static Future<String> noteByEmployee({
+  static Future<dynamic> noteByEmployee({
     required String employeeId,
   }) async {
     try {
@@ -15,7 +15,7 @@ class NoteByEmployeeApi {
         "Authorization": "Bearer $token",
         "cookie": "$session",
       });
-      return response.body;
+      return response.bodyBytes;
     } catch (e) {
       return 'Error';
     }

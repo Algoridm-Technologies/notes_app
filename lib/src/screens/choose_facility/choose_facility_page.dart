@@ -25,69 +25,71 @@ class _ChooseFacilityPageState extends State<ChooseFacilityPage> {
   var emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: screenPadding,
-        child: Column(
-          children: [
-            const VerticalGap(gap: 100),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Choose Facility",
-                style: heading1,
-              ),
-            ),
-            const VerticalGap(gap: 20),
-            Text(
-              "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
-              style: layer2,
-            ),
-            const VerticalGap(gap: 30),
-            const FacilityList(),
-            const VerticalGap(gap: 30),
-            Hero(
-              tag: "button",
-              child: DefaultButton(
-                widget: Text(
-                  "Next",
-                  style: heading3White,
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: screenPadding,
+          child: Column(
+            children: [
+              const VerticalGap(gap: 100),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Choose Facility",
+                  style: heading1,
                 ),
-                onTap: () async {
-                  var v = await SharedPreferences.getInstance();
-                  var isEmplyer = v.getBool('is_employer') ?? false;
-                  if (Provider.of<CheckProvider>(context, listen: false)
-                          .selected ==
-                      -1) {
-                    return;
-                  }
-                  var id = Provider.of<FacilityProvider>(context, listen: false)
-                      .list[Provider.of<CheckProvider>(context, listen: false)
-                          .selected]!
-                      .id;
-                  await RefreshToken.refreshToken().then((value) async {
-                    await SelectFacilityApi.selectFacility(id: id!)
-                        .then((value) {
-                      print(value);
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          transitionDuration: kAnimationDuration,
-                          pageBuilder: ((context, animation, _) {
-                            return FadeTransition(
-                                opacity: animation,
-                                child: isEmplyer
-                                    ? EmployerMainPage()
-                                    : EmployeeMainPage());
-                          }),
-                        ),
-                      );
-                    });
-                  });
-                },
               ),
-            ),
-            const VerticalGap(gap: 30),
-          ],
+              const VerticalGap(gap: 20),
+              Text(
+                "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
+                style: layer2,
+              ),
+              const VerticalGap(gap: 30),
+              const FacilityList(),
+              const VerticalGap(gap: 30),
+              Hero(
+                tag: "button",
+                child: DefaultButton(
+                  widget: Text(
+                    "Next",
+                    style: heading3White,
+                  ),
+                  onTap: () async {
+                    var v = await SharedPreferences.getInstance();
+                    var isEmployer = v.getBool('isEmployer') ?? false;
+                    if (Provider.of<CheckProvider>(context, listen: false)
+                            .selected ==
+                        -1) {
+                      return;
+                    }
+                    var id = Provider.of<FacilityProvider>(context, listen: false)
+                        .list[Provider.of<CheckProvider>(context, listen: false)
+                            .selected]!
+                        .id;
+                    await RefreshToken.refreshToken().then((value) async {
+                      await SelectFacilityApi.selectFacility(id: id!)
+                          .then((value) {
+                        print(value);
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            transitionDuration: kAnimationDuration,
+                            pageBuilder: ((context, animation, _) {
+                              return FadeTransition(
+                                  opacity: animation,
+                                  child: isEmployer
+                                      ? const EmployerMainPage()
+                                      : const EmployeeMainPage());
+                            }),
+                          ),
+                        );
+                      });
+                    });
+                  },
+                ),
+              ),
+              const VerticalGap(gap: 30),
+            ],
+          ),
         ),
       ),
     );

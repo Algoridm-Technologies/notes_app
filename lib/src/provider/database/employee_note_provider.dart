@@ -23,7 +23,7 @@ class EmployeeNoteProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } else {
-      var model = EmployeeNoteModel.fromJson(jsonDecode(facility));
+      var model = EmployeeNoteModel.fromJson(jsonDecode(utf8.decode(facility)));
 
       _myList = model.myNotes!;
       _teamList = model.teamMatesNotes!;

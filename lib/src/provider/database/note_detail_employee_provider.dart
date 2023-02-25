@@ -26,7 +26,7 @@ class NoteDetailEmployeeProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } else {
-      var myModel = NoteDetailModel.fromJson(jsonDecode(facility));
+      var myModel = NoteDetailModel.fromJson(jsonDecode(utf8.decode(facility)));
       _model = myModel;
       _list = myModel.replies!;
       _isLoading = false;

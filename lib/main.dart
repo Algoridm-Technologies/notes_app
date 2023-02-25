@@ -37,7 +37,7 @@ void main() async {
     Map<String, dynamic> data = Jwt.parseJwt(token);
 
     isEmployer = data["is_employer"];
-    prefs.setBool('is_employer', isEmployer);
+    prefs.setBool('isEmployer', isEmployer);
   }
 
   runApp(MyApp(token: token, isEmployer: isEmployer));
