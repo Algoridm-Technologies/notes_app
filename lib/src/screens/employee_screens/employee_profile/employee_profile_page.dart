@@ -85,10 +85,17 @@ class EmployeeProfilePage extends StatelessWidget {
                                           ? value.model!.avatar == null
                                               ? CircleAvatar(
                                                   radius: 50.r,
-                                                  child: Text(value.isLoggedIn
-                                                      ? value.model!.fullName
-                                                          .toString()[0]
-                                                      : ""),
+                                                  backgroundColor:
+                                                      kPrimaryColor1
+                                                          .withOpacity(0.5),
+                                                  child: Text(
+                                                    value.isLoggedIn
+                                                        ? value.model!.fullName
+                                                            .toString()[0]
+                                                        : "",
+                                                    style: const TextStyle(
+                                                        fontSize: 25),
+                                                  ),
                                                 )
                                               : CircleAvatar(
                                                   radius: 50.r,
@@ -194,17 +201,18 @@ class EmployeeProfilePage extends StatelessWidget {
                                             listen: false)
                                         .changePage(0);
                                     Navigator.of(context).pushAndRemoveUntil(
-                                      PageRouteBuilder(
-                                        transitionDuration: kAnimationDuration,
-                                        pageBuilder: ((context, animation, _) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: const LaunchPage(),
-                                          );
-                                        }),
-                                      ),
-
-                                          (Route<dynamic> route) => false);
+                                        PageRouteBuilder(
+                                          transitionDuration:
+                                              kAnimationDuration,
+                                          pageBuilder:
+                                              ((context, animation, _) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: const LaunchPage(),
+                                            );
+                                          }),
+                                        ),
+                                        (Route<dynamic> route) => false);
                                   });
                                 }),
                           )

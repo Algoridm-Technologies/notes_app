@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
@@ -28,6 +29,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   init() async {
     RefreshApi.refresh().then((value) async {
+      log(value.toString());
       if (value == "Error") {}
       if (jsonDecode(value)['error'] != null) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -51,7 +53,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                 pageBuilder: ((context, animation, _) {
                   return FadeTransition(
                     opacity: animation,
-                    child:  FacilityWrapper(),
+                    child: FacilityWrapper(),
                   );
                 }),
               ),

@@ -26,7 +26,7 @@ class StaffsList extends StatelessWidget {
           } else {
             await RefreshToken.refreshToken().then((value) {
               Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-                  .getFacility();
+                  .getEmployeeBy(facilityId: "1");
             });
           }
         },

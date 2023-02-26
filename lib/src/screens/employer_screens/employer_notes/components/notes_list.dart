@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note/src/provider/database/current_facility_provider.dart';
 import 'package:note/src/provider/database/employee_and_note_provider.dart';
 import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/provider/util/search_provider.dart';
@@ -18,8 +19,16 @@ class NotesList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async {
         await RefreshToken.refreshToken().then((value) {
-          Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-              .getFacility();
+          if (Provider.of<CurrentFacilityProvider>(context, listen: false)
+                  .model!
+                  .facilityId ==
+              "0") {
+            Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+                .getEmployee();
+          } else {
+            Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+                .getNoteBy(facilityId: "1");
+          }
         });
       },
       child: Consumer<SearchProvider>(

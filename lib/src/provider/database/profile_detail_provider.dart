@@ -13,7 +13,7 @@ class ProfileDetailProvider extends ChangeNotifier {
   getDetails() async {
     await RefreshToken.refreshToken();
     var data = await ProfileDetailApi.getProfileDetail();
-    log(data);
+    log(data.toString());
 
     _model = ProfileDetailModel.fromJson(data);
     notifyListeners();

@@ -86,10 +86,16 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                                     ? value.model!.avatar == null
                                         ? CircleAvatar(
                                             radius: 50.r,
-                                            child: Text(value.isLoggedIn
-                                                ? value.model!.fullName
-                                                    .toString()[0]
-                                                : ""),
+                                            backgroundColor: kPrimaryColor1,
+                                            child: Text(
+                                              value.isLoggedIn
+                                                  ? value.model!.fullName
+                                                      .toString()[0]
+                                                  : "",
+                                              style: const TextStyle(
+                                                  fontSize: 25,
+                                                  color: kAccentColor),
+                                            ),
                                           )
                                         : CircleAvatar(
                                             radius: 50.r,

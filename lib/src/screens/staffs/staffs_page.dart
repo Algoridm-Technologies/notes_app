@@ -24,7 +24,7 @@ class EmployerStaffsPage extends StatefulWidget {
 
 class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
   var selected = const Facilities(
-      id: "0", title: "All Staff", location: "All", image: "All");
+      id: "0", title: "All Facility", location: "All", image: "All");
   @override
   Widget build(BuildContext context) {
     List<Facilities?> list = [];
@@ -43,12 +43,12 @@ class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
                       list = value.list;
                       if (!list.contains(const Facilities(
                           id: "0",
-                          title: "All Staff",
+                          title: "All Facility",
                           location: "All",
                           image: "All"))) {
                         list.add(const Facilities(
                             id: "0",
-                            title: "All Staff",
+                            title: "All Facility",
                             location: "All",
                             image: "All"));
                       }
@@ -89,7 +89,6 @@ class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
                               )
                               .toList(),
                           onChanged: (v) async {
-                         
                             selectFacility(v!.id!, v.title!, context);
                           },
                         ),
@@ -137,23 +136,12 @@ class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
       await RefreshToken.refreshToken().then((value) {
         Provider.of<EmployeeAndNoteProvider>(context, listen: false)
             .getEmployee();
-        Provider.of<EmployeeAndNoteProvider>(context, listen: false).getNote();
-        Provider.of<CurrentFacilityProvider>(context, listen: false)
-            .setAccess(facilityName: name, facilityId: id);
-        Provider.of<CurrentFacilityProvider>(context, listen: false)
-            .getAccess();
       });
     } else {
       await RefreshToken.refreshToken().then((value) {
         SelectFacilityApi.selectFacility(id: id).then((value) async {
-          Provider.of<CurrentFacilityProvider>(context, listen: false)
-              .setAccess(facilityName: name, facilityId: id);
-
-          Provider.of<CurrentFacilityProvider>(context, listen: false)
-              .getAccess();
-
           Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-              .getFacility();
+              .getEmployeeBy(facilityId: id);
         });
       });
     }

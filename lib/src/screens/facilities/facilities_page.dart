@@ -24,10 +24,8 @@ class EmployerFacilitiesPage extends StatefulWidget {
 }
 
 class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Padding(
         padding: screenPadding,
@@ -47,12 +45,12 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
                     var newList = model.list;
                     if (newList.contains(const Facilities(
                         id: "0",
-                        title: "All Staff",
+                        title: "All Facility",
                         location: "All",
                         image: "All"))) {
                       newList.remove(const Facilities(
                           id: "0",
-                          title: "All Staff",
+                          title: "All Facility",
                           location: "All",
                           image: "All"));
                     }
@@ -153,40 +151,23 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
         title: "Changing Facility",
         subtitle: "Changing to $name ");
 
-    if (id == "0") {
-      await RefreshToken.refreshToken().then((value) {
+    await RefreshToken.refreshToken().then((value) {
+      SelectFacilityApi.selectFacility(id: id).then((value) async {
         ProcessingDialog.cancelDialog(context);
 
-        CustomSnackBar.showSnackbar(
-            context: context, title: "All Facility Selected");
-
-        Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-            .getEmployee();
-        Provider.of<EmployeeAndNoteProvider>(context, listen: false).getNote();
+        if (jsonDecode(value)["success"] != null) {
+          CustomSnackBar.showSnackbar(
+              context: context, title: jsonDecode(value)["success"]);
+        }
         Provider.of<CurrentFacilityProvider>(context, listen: false)
             .setAccess(facilityName: name, facilityId: id);
+
         Provider.of<CurrentFacilityProvider>(context, listen: false)
             .getAccess();
+
+        Provider.of<EmployeeAndNoteProvider>(context, listen: false)
+            .getFacility();
       });
-    } else {
-      await RefreshToken.refreshToken().then((value) {
-        SelectFacilityApi.selectFacility(id: id).then((value) async {
-          ProcessingDialog.cancelDialog(context);
-
-          if (jsonDecode(value)["success"] != null) {
-            CustomSnackBar.showSnackbar(
-                context: context, title: jsonDecode(value)["success"]);
-          }
-          Provider.of<CurrentFacilityProvider>(context, listen: false)
-              .setAccess(facilityName: name, facilityId: id);
-
-          Provider.of<CurrentFacilityProvider>(context, listen: false)
-              .getAccess();
-
-          Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-              .getFacility();
-        });
-      });
-    }
+    });
   }
 }

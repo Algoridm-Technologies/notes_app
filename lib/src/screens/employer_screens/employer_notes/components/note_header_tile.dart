@@ -23,7 +23,7 @@ class NoteHeaderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var selected = const Facilities(
-        id: "0", title: "All Staff", location: "All", image: "All");
+        id: "0", title: "All Facility", location: "All", image: "All");
     List<Facilities?> list = [];
     return Consumer<SearchProvider>(
       builder: (context, value, child) {
@@ -42,12 +42,12 @@ class NoteHeaderTile extends StatelessWidget {
                         list = value.list;
                         if (!list.contains(const Facilities(
                             id: "0",
-                            title: "All Staff",
+                            title: "All Facility",
                             location: "All",
                             image: "All"))) {
                           list.add(const Facilities(
                               id: "0",
-                              title: "All Staff",
+                              title: "All Facility",
                               location: "All",
                               image: "All"));
                         }
@@ -137,17 +137,16 @@ class NoteHeaderTile extends StatelessWidget {
   selectFacility(String id, String name, BuildContext context) async {
     if (id == "0") {
       await RefreshToken.refreshToken().then((value) {
-        Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-            .getEmployee();
         Provider.of<EmployeeAndNoteProvider>(context, listen: false).getNote();
         Provider.of<CurrentFacilityProvider>(context, listen: false)
-            .setAccess(facilityName: name, facilityId: id);
+            .setAccess(facilityName: name, facilityId: "0");
         Provider.of<CurrentFacilityProvider>(context, listen: false)
             .getAccess();
       });
     } else {
       await RefreshToken.refreshToken().then((value) {
         SelectFacilityApi.selectFacility(id: id).then((value) async {
+          print(value);
           Provider.of<CurrentFacilityProvider>(context, listen: false)
               .setAccess(facilityName: name, facilityId: id);
 
@@ -155,7 +154,7 @@ class NoteHeaderTile extends StatelessWidget {
               .getAccess();
 
           Provider.of<EmployeeAndNoteProvider>(context, listen: false)
-              .getFacility();
+              .getNoteBy(facilityId: id);
         });
       });
     }

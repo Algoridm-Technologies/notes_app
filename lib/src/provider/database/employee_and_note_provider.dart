@@ -7,6 +7,8 @@ import 'package:note/src/api/list_all_employee_api.dart';
 import 'package:note/src/api/list_all_note_api.dart';
 import 'package:note/src/model/employee_and_note_model.dart';
 
+import '../../api/note_by_facility_api.dart';
+
 class EmployeeAndNoteProvider extends ChangeNotifier {
   List<Notes?> _list = [];
   List<Employees?> _em = [];
@@ -60,7 +62,7 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
   getNote() async {
     _isLoading = true;
     notifyListeners();
-    var facility = await ListAllNotesApi.listEmployees();
+    var facility = await ListAllNotesApi.listNotes();
 
     if (facility == "Failed" || facility == "Error") {
       _list = [];
@@ -73,6 +75,47 @@ class EmployeeAndNoteProvider extends ChangeNotifier {
           .map<Notes>((data) => Notes.fromJson(data as Map<String, Object?>))
           .toList();
       _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  getNoteBy({required String facilityId}) async {
+    _isLoading = true;
+    notifyListeners();
+    var facility = await NotesByFacilityApi.listNotes(facilityId: facilityId);
+
+    if (facility == "Failed" || facility == "Error") {
+      _list = [];
+      _isLoading = false;
+      notifyListeners();
+    } else {
+      var model = jsonDecode(utf8.decode(facility))['notes'];
+      print(model.toString());
+      _list = model
+          .map<Notes>((data) => Notes.fromJson(data as Map<String, Object?>))
+          .toList();
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+    getEmployeeBy({required String facilityId}) async {
+    _isLoading = true;
+    notifyListeners();
+    var facility = await NotesByFacilityApi.listNotes(facilityId: facilityId);
+
+     if (facility == "Failed" || facility == "Error") {
+      _em = [];
+      _isLoading = false;
+      notifyListeners();
+    } else {
+      var model = jsonDecode(utf8.decode(facility))['employees'];
+      _em = model
+          .map<Employees>(
+              (data) => Employees.fromJson(data as Map<String, Object?>))
+          .toList();
+      _isLoading = false;
+
       notifyListeners();
     }
   }

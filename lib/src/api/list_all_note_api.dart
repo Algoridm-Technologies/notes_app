@@ -6,7 +6,7 @@ import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListAllNotesApi {
-  static Future<dynamic> listEmployees() async {
+  static Future<dynamic> listNotes() async {
     try {
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString("token");
@@ -15,11 +15,11 @@ class ListAllNotesApi {
         "Authorization": "Bearer $token",
       });
       try {
-           log(jsonDecode(utf8.decode(response.bodyBytes)));
+        log(jsonDecode(utf8.decode(response.bodyBytes)));
       } catch (e) {
-        print(e); 
+        print(e);
       }
-    
+
       return response.bodyBytes;
     } catch (e) {
       return 'Error';

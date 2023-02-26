@@ -43,7 +43,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
                   pageBuilder: ((context, animation, _) {
                     return FadeTransition(
                       opacity: animation,
-                      child: const ChooseFacilityPage(),
+                      child: const EmployerMainPage(),
                     );
                   }),
                 ),
