@@ -28,7 +28,9 @@ class _FacilityListState extends State<FacilityList> {
       builder: (context, model, child) {
         var newList = model.list;
         return model.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: Hero(
+              tag: "progress",
+              child: CircularProgressIndicator()))
             : newList.isEmpty
                 ? const Center(child: Text("No item"))
                 : Consumer<CheckProvider>(builder: (context, v, c) {
@@ -59,7 +61,7 @@ class _FacilityListState extends State<FacilityList> {
                                       borderRadius: BorderRadius.circular(
                                         10.r,
                                       ),
-                                      image: DecorationImage(image: NetworkImage(newList[index]!.image??"")),
+                                      image: DecorationImage(image: NetworkImage(newList[index]!.image??"", ),fit: BoxFit.cover, ),
                                       border: Border.all()),
                                 ),
                               ),

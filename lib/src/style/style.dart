@@ -9,6 +9,9 @@ var appTheme = ThemeData(
   hoverColor: kPrimaryColor1.withOpacity(0.2),
   backgroundColor: kWhiteColor,
   scaffoldBackgroundColor: kWhiteColor,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: kPrimaryColor1,
+  ),
   primaryColor: kPrimaryColor1,
   primaryColorDark: kPrimaryColor1,
   primaryColorLight: kPrimaryColor1,

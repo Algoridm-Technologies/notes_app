@@ -39,9 +39,12 @@ class _LaunchSignUpPageState extends State<LaunchSignUpPage> {
                 ),
               ),
               const VerticalGap(gap: 10),
-              Text(
-                "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
-                style: layer2,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Not A Member On Note App? Sign up Here to get Started",
+                  style: layer2,
+                ),
               ),
               const VerticalGap(gap: 30),
               // OutlineButton(

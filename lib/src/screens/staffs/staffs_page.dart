@@ -29,79 +29,81 @@ class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
   Widget build(BuildContext context) {
     List<Facilities?> list = [];
     return Scaffold(
-      body: Column(
-        children: [
-          const VerticalGap(gap: 20),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: screenPadding,
-              child: Consumer<FacilityProvider>(
-                builder: (context, value, child) {
-                  return Consumer<CurrentFacilityProvider>(
-                    builder: (context, va, child) {
-                      list = value.list;
-                      if (!list.contains(const Facilities(
-                          id: "0",
-                          title: "All Facility",
-                          location: "All",
-                          image: "All"))) {
-                        list.add(const Facilities(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const VerticalGap(gap: 20),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: screenPadding,
+                child: Consumer<FacilityProvider>(
+                  builder: (context, value, child) {
+                    return Consumer<CurrentFacilityProvider>(
+                      builder: (context, va, child) {
+                        list = value.list;
+                        if (!list.contains(const Facilities(
                             id: "0",
                             title: "All Facility",
                             location: "All",
-                            image: "All"));
-                      }
-                      List<Facilities?> newList = list
-                        ..sort(
-                          (a, b) => a!.id!
-                              .toLowerCase()
-                              .compareTo(b!.id!.toLowerCase()),
+                            image: "All"))) {
+                          list.add(const Facilities(
+                              id: "0",
+                              title: "All Facility",
+                              location: "All",
+                              image: "All"));
+                        }
+                        List<Facilities?> newList = list
+                          ..sort(
+                            (a, b) => a!.id!
+                                .toLowerCase()
+                                .compareTo(b!.id!.toLowerCase()),
+                          );
+      
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor1,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: DropdownButtonFormField(
+                            style: heading3White,
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: kWhiteColor,
+                            ),
+                            dropdownColor: kPrimaryColor1,
+                            decoration: const InputDecoration(
+                              iconColor: kWhiteColor,
+                              border: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                            ),
+                            value: selected,
+                            items: newList
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: e,
+                                    child: buildFacilityItem(e),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (v) async {
+                              selectFacility(v!.id!, v.title!, context);
+                            },
+                          ),
                         );
-
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor1,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: DropdownButtonFormField(
-                          style: heading3White,
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: kWhiteColor,
-                          ),
-                          dropdownColor: kPrimaryColor1,
-                          decoration: const InputDecoration(
-                            iconColor: kWhiteColor,
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                          ),
-                          value: selected,
-                          items: newList
-                              .map(
-                                (e) => DropdownMenuItem(
-                                  value: e,
-                                  child: buildFacilityItem(e),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (v) async {
-                            selectFacility(v!.id!, v.title!, context);
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
+                      },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          const VerticalGap(gap: 20),
-          const StaffsList(),
-        ],
+            const VerticalGap(gap: 20),
+            const StaffsList(),
+          ],
+        ),
       ),
       floatingActionButton: CircleAvatar(
         radius: 30.r,

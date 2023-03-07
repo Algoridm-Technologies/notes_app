@@ -28,9 +28,12 @@ class LaunchPage extends StatelessWidget {
                 ),
               ),
               const VerticalGap(gap: 20),
-              Text(
-                "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
-                style: layer2,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Choose To sign Up As An Employee Or An Employer",
+                  style: layer2,
+                ),
               ),
               const VerticalGap(gap: 20),
               DefaultButton(

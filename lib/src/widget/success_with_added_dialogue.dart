@@ -9,13 +9,14 @@ class SuccessWithAddedDialog {
   static showSuccessDialog({
     required BuildContext context,
     required String title,
+    required VoidCallback onClick,
     required String subtitle,
   }) {
     showDialog(
         // barrierDismissible: false,
         context: context,
         builder: (c) {
-          return dialogContent(title: title, subtitle: subtitle);
+          return dialogContent(title: title, subtitle: subtitle,onClick:onClick );
         });
   }
 
@@ -24,7 +25,7 @@ class SuccessWithAddedDialog {
   }
 
   static Widget dialogContent(
-      {required String title, required String subtitle}) {
+      {required String title, required String subtitle, required VoidCallback onClick}) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
@@ -58,7 +59,7 @@ class SuccessWithAddedDialog {
                   "Okay",
                   style: heading3White,
                 ),
-                onTap: () {}),
+                onTap: onClick, ),
           ],
         ),
       ),

@@ -47,9 +47,15 @@ class TabTile extends StatelessWidget {
                             widget: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Text("Take note"),
+                                Text(
+                                  "Take note",
+                                  style: TextStyle(color: kPrimaryColor1),
+                                ),
                                 HorizontalGap(gap: 10),
-                                Icon(Icons.edit),
+                                Icon(
+                                  Icons.edit,
+                                  color: kPrimaryColor1,
+                                ),
                               ],
                             ),
                             onTap: () {

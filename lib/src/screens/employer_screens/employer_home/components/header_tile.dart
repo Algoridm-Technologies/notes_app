@@ -69,7 +69,7 @@ class HeaderTile extends StatelessWidget {
                   Text(
                     value.isLoggedIn
                         ? value.model!.fullName ?? ""
-                        : "Loading...",
+                        : "",
                     style: heading2,
                   ),
                   Text(

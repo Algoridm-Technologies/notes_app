@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:note/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +13,7 @@ class ProfileDetailApi {
       var response = await http.get(url, headers: {
         "Authorization": "Bearer $token",
       });
+      log("==>${response.body}");
       return response.body;
     } catch (e) {
       return 'Error';

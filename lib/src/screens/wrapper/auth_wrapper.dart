@@ -76,7 +76,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
               return Center(
                   child: IconButton(
                       onPressed: () => setState(() {}),
-                      icon: const Center(child: CircularProgressIndicator())));
+                      icon: const Center(child: Hero(
+                        tag: "progress",
+                        child: CircularProgressIndicator()))));
             }
           }),
     );

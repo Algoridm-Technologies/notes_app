@@ -5,6 +5,7 @@ import 'package:note/src/provider/util/check_provider.dart';
 import 'package:note/src/screens/choose_facility/components/facility_list.dart';
 import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
 import 'package:note/src/utils/refresh_token.dart';
+import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,33 +56,37 @@ class _ChooseFacilityPageState extends State<ChooseFacilityPage> {
                     style: heading3White,
                   ),
                   onTap: () async {
-                    var v = await SharedPreferences.getInstance();
-                    var isEmployer = v.getBool('isEmployer') ?? false;
-                    if (Provider.of<CheckProvider>(context, listen: false)
-                            .selected ==
-                        -1) {
-                      return;
-                    }
-                    var id = Provider.of<FacilityProvider>(context, listen: false)
-                        .list[Provider.of<CheckProvider>(context, listen: false)
-                            .selected]!
-                        .id;
-                    await RefreshToken.refreshToken().then((value) async {
-                      await SelectFacilityApi.selectFacility(id: id!)
-                          .then((value) {
-                        print(value);
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            transitionDuration: kAnimationDuration,
-                            pageBuilder: ((context, animation, _) {
-                              return FadeTransition(
-                                  opacity: animation,
-                                  child: isEmployer
-                                      ? const EmployerMainPage()
-                                      : const EmployeeMainPage());
-                            }),
-                          ),
-                        );
+                    await SharedPreferences.getInstance().then((_) async {
+                      if (Provider.of<CheckProvider>(context, listen: false)
+                              .selected ==
+                          -1) {
+                        return;
+                      }
+                      ProcessingDialog.showProcessingDialog(
+                          context: context,
+                          title: 'Facility',
+                          subtitle: 'Selecting Facility');
+                      var id = Provider.of<FacilityProvider>(context,
+                              listen: false)
+                          .list[
+                              Provider.of<CheckProvider>(context, listen: false)
+                                  .selected]!
+                          .id;
+                      await RefreshToken.refreshToken().then((value) async {
+                        await SelectFacilityApi.selectFacility(id: id!)
+                            .then((value) {
+                          Navigator.pop(context);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: kAnimationDuration,
+                              pageBuilder: ((context, animation, _) {
+                                return FadeTransition(
+                                    opacity: animation,
+                                    child: const EmployeeMainPage());
+                              }),
+                            ),
+                          );
+                        });
                       });
                     });
                   },

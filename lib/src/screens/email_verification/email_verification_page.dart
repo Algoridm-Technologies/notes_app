@@ -7,6 +7,7 @@ import 'package:note/src/api/verify_email_api.dart';
 import 'package:note/src/screens/new_password/new_password_page.dart';
 import 'package:note/src/widget/custom_snackbar.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
+import 'package:note/src/widget/success_with_added_dialogue.dart';
 
 import '../../utils/constants.dart';
 import '../../widget/default_button.dart';
@@ -90,13 +91,13 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       await VerifyEmailApi.verifyEmail(
               email: widget.email, otp: codeController.text)
           .then((value) {
-       
         ProcessingDialog.cancelDialog(context);
 
         if (jsonDecode(value)['error'] != null) {
           CustomSnackBar.showSnackbar(
-            backgroundColor: kErrorColor1,
-              context: context, title: jsonDecode(value)['error']);
+              backgroundColor: kErrorColor1,
+              context: context,
+              title: jsonDecode(value)['error']);
         }
         if (jsonDecode(value)['success'] != null) {
           CustomSnackBar.showSnackbar(
@@ -163,7 +164,11 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       if (jsonDecode(value)['success'] != null) {
         CustomSnackBar.showSnackbar(
             context: context, title: jsonDecode(value)['success']);
-        Navigator.of(context).push(
+        SuccessWithAddedDialog.showSuccessDialog(
+          context: context,
+          title: "Email Verified",
+          onClick: () {
+              Navigator.of(context).push(
           PageRouteBuilder(
             transitionDuration: kAnimationDuration,
             pageBuilder: ((context, animation, _) {
@@ -172,6 +177,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
             }),
           ),
         );
+          },
+          subtitle: "Your Email Address Have Been Verified successfully",
+        );
+      
       }
     });
   }

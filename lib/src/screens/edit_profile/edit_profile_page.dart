@@ -54,7 +54,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             emailController.text = value.model!.email ?? "";
             nameController.text = value.model!.fullName ?? "";
           }
-
+      
           return Column(
             children: [
               SizedBox(

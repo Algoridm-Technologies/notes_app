@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: heading,
               ),
               Text(
-                "Sunt dolor ea consectetur proident nisi cupidatat commodo velit anim dolor laborum.",
+                "Please assist us with your right details below and be on your way to explore the amazing features of note App",
                 style: layer2,
               ),
               const VerticalGap(gap: 30),
@@ -231,7 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   registerUser() async {
     var prefs = await SharedPreferences.getInstance();
-    var isEmployer =  prefs.getBool('isEmployer') ?? false;
+    var isEmployer = prefs.getBool('isEmployer') ?? false;
 
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();

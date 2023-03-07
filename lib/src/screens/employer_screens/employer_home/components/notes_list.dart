@@ -17,7 +17,9 @@ class NotesList extends StatelessWidget {
     return Consumer<EmployeeAndNoteProvider>(
       builder: (context, value, child) {
         return value.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: Hero(
+              tag: "progress",
+              child: CircularProgressIndicator()))
             : value.list.isEmpty
                 ? const Center(child: Text('No note'))
                 : ListView.builder(

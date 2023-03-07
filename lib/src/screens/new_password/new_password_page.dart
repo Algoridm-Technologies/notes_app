@@ -40,7 +40,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             ),
             const VerticalGap(gap: 20),
             Text(
-              "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
+              "With a new password you will be able to control your account next time. We're almost done",
               style: layer2,
             ),
             const VerticalGap(gap: 30),
@@ -199,7 +199,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       password: confirmPasswordController.text,
     ).then((value) {
       ProcessingDialog.cancelDialog(context);
-  
 
       if (jsonDecode(value)['error'] != null) {
         CustomSnackBar.showSnackbar(

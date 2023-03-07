@@ -168,6 +168,7 @@ class _LoginPageState extends State<LoginPage> {
               context: context,
               title: jsonDecode(value)['error']);
           await resendEmailOtp();
+          return;
         }
 
         var prefs = await SharedPreferences.getInstance();

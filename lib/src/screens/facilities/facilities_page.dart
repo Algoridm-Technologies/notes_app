@@ -27,119 +27,121 @@ class _EmployerFacilitiesPageState extends State<EmployerFacilitiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: screenPadding,
-        child: Column(
-          children: [
-            const VerticalGap(gap: 50),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await RefreshToken.refreshToken().then((value) {
-                    Provider.of<FacilityProvider>(context, listen: false)
-                        .getFacility();
-                  });
-                },
-                child: Consumer<FacilityProvider>(
-                  builder: (context, model, child) {
-                    var newList = model.list;
-                    if (newList.contains(const Facilities(
-                        id: "0",
-                        title: "All Facility",
-                        location: "All",
-                        image: "All"))) {
-                      newList.remove(const Facilities(
+      body: SafeArea(
+        child: Padding(
+          padding: screenPadding,
+          child: Column(
+            children: [
+              const VerticalGap(gap: 50),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await RefreshToken.refreshToken().then((value) {
+                      Provider.of<FacilityProvider>(context, listen: false)
+                          .getFacility();
+                    });
+                  },
+                  child: Consumer<FacilityProvider>(
+                    builder: (context, model, child) {
+                      var newList = model.list;
+                      if (newList.contains(const Facilities(
                           id: "0",
                           title: "All Facility",
                           location: "All",
-                          image: "All"));
-                    }
-
-                    // List<Facilities?> newList = model.list
-                    //   ..sort(
-                    //     (a, b) => a!.id!
-                    //         .toLowerCase()
-                    //         .compareTo(b!.id!.toLowerCase()),
-                    //   );
-                    return model.isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : newList.isEmpty
-                            ? const Center(child: Text("No item"))
-                            : LayoutBuilder(builder: (context, value) {
-                                return GridView.builder(
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    mainAxisSpacing: 8,
-                                    childAspectRatio: 1 / 2 / 0.6,
-                                    crossAxisSpacing: 12,
-                                  ),
-                                  itemCount: newList.length,
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    var data = newList[index]!;
-                                    return GestureDetector(
-                                      onTap: () {
-                                        selectFacility(data.id!, data.title!);
-                                      },
-                                      child: SizedBox(
-                                        height: 100,
-                                        width: 100,
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 80,
-                                              width: 80,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                image: DecorationImage(
-                                                  image:
-                                                      NetworkImage(data.image!),
-                                                  fit: BoxFit.cover,
-                                                  onError:
-                                                      (exception, stackTrace) =>
-                                                          Container(
-                                                    color: kGreyColor,
+                          image: "All"))) {
+                        newList.remove(const Facilities(
+                            id: "0",
+                            title: "All Facility",
+                            location: "All",
+                            image: "All"));
+                      }
+      
+                      // List<Facilities?> newList = model.list
+                      //   ..sort(
+                      //     (a, b) => a!.id!
+                      //         .toLowerCase()
+                      //         .compareTo(b!.id!.toLowerCase()),
+                      //   );
+                      return model.isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : newList.isEmpty
+                              ? const Center(child: Text("No item"))
+                              : LayoutBuilder(builder: (context, value) {
+                                  return GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      mainAxisSpacing: 8,
+                                      childAspectRatio: 1 / 2 / 0.6,
+                                      crossAxisSpacing: 12,
+                                    ),
+                                    itemCount: newList.length,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      var data = newList[index]!;
+                                      return GestureDetector(
+                                        onTap: () {
+                                          selectFacility(data.id!, data.title!);
+                                        },
+                                        child: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 80,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image:
+                                                        NetworkImage(data.image!),
+                                                    fit: BoxFit.cover,
+                                                    onError:
+                                                        (exception, stackTrace) =>
+                                                            Container(
+                                                      color: kGreyColor,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Text(data.title!),
-                                            Text(data.location!),
-                                          ],
+                                              Text(data.title!),
+                                              Text(data.location!),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              });
-                  },
+                                      );
+                                    },
+                                  );
+                                });
+                    },
+                  ),
                 ),
               ),
-            ),
-            DefaultButton(
-              widget: Text(
-                "Add Facility",
-                style: heading3White,
+              DefaultButton(
+                widget: Text(
+                  "Add Facility",
+                  style: heading3White,
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: kAnimationDuration,
+                      pageBuilder: ((context, animation, _) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: const AddFacilityPage(),
+                        );
+                      }),
+                    ),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    transitionDuration: kAnimationDuration,
-                    pageBuilder: ((context, animation, _) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: const AddFacilityPage(),
-                      );
-                    }),
-                  ),
-                );
-              },
-            ),
-            const VerticalGap(gap: 50),
-          ],
+              const VerticalGap(gap: 50),
+            ],
+          ),
         ),
       ),
     );

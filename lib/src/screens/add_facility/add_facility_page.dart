@@ -43,24 +43,29 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
           centerTitle: true,
         ),
         body: ListView(
-          padding: screenPadding,
+            padding: screenPadding,
           children: [
-            const Text("Add Facility to join the company"),
-            const VerticalGap(gap: 30),
-            buildNameField(),
-            const VerticalGap(gap: 10),
-            buildLocationField(),
-            const VerticalGap(gap: 10),
-            buildImageField(),
-            const VerticalGap(gap: 100),
-            DefaultButton(
-                widget: Text(
-                  "Add Facility",
-                  style: heading3White,
-                ),
-                onTap: () {
-                  updateProfile();
-                }),
+            Column(
+            
+              children: [
+                const Text("Add Facility to join the company"),
+                const VerticalGap(gap: 30),
+                buildNameField(),
+                const VerticalGap(gap: 10),
+                buildLocationField(),
+                const VerticalGap(gap: 10),
+                buildImageField(),
+                const VerticalGap(gap: 100),
+                DefaultButton(
+                    widget: Text(
+                      "Add Facility",
+                      style: heading3White,
+                    ),
+                    onTap: () {
+                      updateProfile();
+                    }),
+              ],
+            ),
           ],
         ));
   }
@@ -149,25 +154,25 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
           ),
         ),
         const VerticalGap(gap: 10),
-        SizedBox(
-          height: 52.h,
-          child: TextFormField(
-            controller: nameController,
-            validator: (value) {
-              if (nameController.text.isEmpty) {
-                return kNamelNullError;
-              }
-              return null;
-            },
-            onSaved: (String? value) {},
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            autofillHints: const [AutofillHints.name],
-            keyboardType: TextInputType.name,
-            decoration: const InputDecoration(
-              hintText: "Enter your facility name",
-              labelText: "Facility name",
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-            ),
+        TextFormField(
+          controller: nameController,
+        
+          validator: (value) {
+            if (nameController.text.isEmpty) {
+              return kNamelNullError;
+            }
+            return null;
+          },
+          onSaved: (String? value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: const [AutofillHints.name],
+          keyboardType: TextInputType.name,
+          decoration: const InputDecoration(
+            hintText: "Enter your facility name",
+            border: OutlineInputBorder(),
+            errorBorder: OutlineInputBorder(),
+            labelText: "Facility name",
+            floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
         )
       ],
@@ -186,25 +191,22 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
           ),
         ),
         const VerticalGap(gap: 10),
-        SizedBox(
-          height: 52.h,
-          child: TextFormField(
-            controller: locationController,
-            validator: (value) {
-              if (locationController.text.isEmpty) {
-                return FIELD_REQUIRED_MSG;
-              }
-              return null;
-            },
-            onSaved: (String? value) {},
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            autofillHints: const [AutofillHints.location],
-            keyboardType: TextInputType.streetAddress,
-            decoration: const InputDecoration(
-              hintText: "Enter your location",
-              labelText: "Location",
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-            ),
+        TextFormField(
+          controller: locationController,
+          validator: (value) {
+            if (locationController.text.isEmpty) {
+              return FIELD_REQUIRED_MSG;
+            }
+            return null;
+          },
+          onSaved: (String? value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: const [AutofillHints.location],
+          keyboardType: TextInputType.streetAddress,
+          decoration: const InputDecoration(
+            hintText: "Enter your location",
+            labelText: "Location",
+            floatingLabelBehavior: FloatingLabelBehavior.never,
           ),
         )
       ],

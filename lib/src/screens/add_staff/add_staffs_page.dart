@@ -89,7 +89,7 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
             showDialogue();
           },
           child: Container(
-              height: 52.h,
+              height: 68.h,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
@@ -165,28 +165,25 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
           ),
         ),
         const VerticalGap(gap: 10),
-        SizedBox(
-          height: 52.h,
-          child: TextFormField(
-            controller: nameController,
-            validator: (value) {
-              if (nameController.text.isEmpty) {
-                return kNamelNullError;
-              }
-              return null;
-            },
-            onSaved: (String? value) {},
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            autofillHints: const [AutofillHints.name],
-            keyboardType: TextInputType.name,
-            decoration: InputDecoration(
-              hintText: "Enter your full name",
-              labelText: "Full name",
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              prefixIcon: Icon(
-                Iconsax.user,
-                size: 24.r,
-              ),
+        TextFormField(
+          controller: nameController,
+          validator: (value) {
+            if (nameController.text.isEmpty) {
+              return kNamelNullError;
+            }
+            return null;
+          },
+          onSaved: (String? value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: const [AutofillHints.name],
+          keyboardType: TextInputType.name,
+          decoration: InputDecoration(
+            hintText: "Enter your full name",
+            labelText: "Full name",
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            prefixIcon: Icon(
+              Iconsax.user,
+              size: 24.r,
             ),
           ),
         )
@@ -206,30 +203,27 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
           ),
         ),
         const VerticalGap(gap: 10),
-        SizedBox(
-          height: 52.h,
-          child: TextFormField(
-            controller: emailController,
-            validator: (value) {
-              if (emailController.text.isEmpty) {
-                return kEmailNullError;
-              } else if (!emailValidatorRegExp.hasMatch(emailController.text)) {
-                return kInvalidEmailError;
-              }
-              return null;
-            },
-            onSaved: (String? value) {},
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            autofillHints: const [AutofillHints.email],
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              hintText: "Enter your email",
-              labelText: "Email",
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              prefixIcon: Icon(
-                Iconsax.sms,
-                size: 24.r,
-              ),
+        TextFormField(
+          controller: emailController,
+          validator: (value) {
+            if (emailController.text.isEmpty) {
+              return kEmailNullError;
+            } else if (!emailValidatorRegExp.hasMatch(emailController.text)) {
+              return kInvalidEmailError;
+            }
+            return null;
+          },
+          onSaved: (String? value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofillHints: const [AutofillHints.email],
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: "Enter your email",
+            labelText: "Email",
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            prefixIcon: Icon(
+              Iconsax.sms,
+              size: 24.r,
             ),
           ),
         )

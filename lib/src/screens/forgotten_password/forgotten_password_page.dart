@@ -37,11 +37,11 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
             ),
             const VerticalGap(gap: 20),
             Text(
-              "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
+              "Need help with your password? nso worries! enter the requested retails to recover your account in no time",
               style: layer2,
             ),
             const VerticalGap(gap: 30),
-            buildNameField(),
+            buildEmailField(),
             const VerticalGap(gap: 30),
             Hero(
               tag: "button",
@@ -72,7 +72,6 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
             email: emailController.text)
         .then((value) {
       ProcessingDialog.cancelDialog(context);
-   
 
       if (jsonDecode(value)['error'] != null) {
         CustomSnackBar.showSnackbar(
@@ -103,14 +102,14 @@ class _ForgottenPasswordPageState extends State<ForgottenPasswordPage> {
     });
   }
 
-  Widget buildNameField() {
+  Widget buildEmailField() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            'Enter Email',
+            'Type your Email',
             style: layer2,
           ),
         ),

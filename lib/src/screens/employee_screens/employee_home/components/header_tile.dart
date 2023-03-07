@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +14,16 @@ class HeaderTile extends StatelessWidget {
   const HeaderTile({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+     final currentTime = DateTime.now();
+    final currentHour = currentTime.hour;
+    var greeting = "Good Morning";
+    if (currentHour < 12) {
+      greeting = "Good Morning";
+    } else if (currentHour < 18) {
+      greeting = "Good Afternoon";
+    } else {
+      greeting = "Good Evening";
+    }
     return Consumer<ProfileDetailProvider>(
       builder: (context, value, child) {
         return SizedBox(
@@ -19,14 +32,33 @@ class HeaderTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              value.isLoggedIn
+              !value.isLoggedIn
                   ? CircleAvatar(
                       radius: 30.r,
-                      backgroundImage: NetworkImage(value.model!.avatar ?? ""),
+                      backgroundColor: kPrimaryColor1.withOpacity(0.5),
+                      child: const CupertinoActivityIndicator(),
                     )
-                  : CircleAvatar(
-                      radius: 30.r,
-                    ),
+                  : value.model!.avatar == null
+                      ? CircleAvatar(
+                          radius: 30.r,
+                          backgroundColor: kPrimaryColor1.withOpacity(0.5),
+                          child: Center(
+                            child: Text(
+                              value.model!.fullName![0],
+                              style: const TextStyle(
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                        )
+                      : CircleAvatar(
+                          radius: 30.r,
+                          onBackgroundImageError: (exception, stackTrace) {
+                            return log("cannot load");
+                          },
+                          backgroundImage:
+                              NetworkImage(value.model!.avatar ?? ""),
+                        ),
               const SizedBox(width: 10),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -35,11 +67,11 @@ class HeaderTile extends StatelessWidget {
                   Text(
                     value.isLoggedIn
                         ? value.model!.fullName ?? ""
-                        : "Not loggedin",
+                        : "",
                     style: heading2,
                   ),
                   Text(
-                    "Good day",
+                    greeting,
                     style: heading3,
                   ),
                 ],

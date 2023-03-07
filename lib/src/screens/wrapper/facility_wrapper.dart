@@ -35,8 +35,8 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
         SharedPreferences.getInstance().then((v) {
           v.setString("refresh", jsonDecode(value)['refresh']);
           v.setString("token", jsonDecode(value)['access']);
-          var isEmployer = v.getBool('isEmployer') ?? false;
-          if (jsonDecode(va)['facility'] == null) {
+          var isEmployer = jsonDecode(va)['facility']==null;
+          if (jsonDecode(va)['is_employer']) {
             Navigator.of(context).pushAndRemoveUntil(
                 PageRouteBuilder(
                   transitionDuration: kAnimationDuration,
@@ -56,7 +56,7 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
                     return FadeTransition(
                       opacity: animation,
                       child: isEmployer
-                          ? const EmployerMainPage()
+                          ? const ChooseFacilityPage()
                           : const EmployeeMainPage(),
                     );
                   }),
@@ -81,7 +81,9 @@ class _FacilityWrapperState extends State<FacilityWrapper> {
               return Center(
                   child: IconButton(
                       onPressed: () => setState(() {}),
-                      icon: const Center(child: CircularProgressIndicator())));
+                      icon: const Center(child: Hero(
+                        tag: "progress",
+                        child: CircularProgressIndicator()))));
             }
           }),
     );
