@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: heading,
               ),
               Text(
-                "Consectetur esse dolore magna ut proident.Amet ad velit Lorem quis.",
+                "Already Have an Account? enter the required details to continue",
                 style: layer2,
               ),
               const VerticalGap(gap: 20),

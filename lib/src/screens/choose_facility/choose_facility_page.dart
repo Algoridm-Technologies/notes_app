@@ -42,7 +42,7 @@ class _ChooseFacilityPageState extends State<ChooseFacilityPage> {
               ),
               const VerticalGap(gap: 20),
               Text(
-                "Consequat et laboris do aliqua amet aliqua esse commodo reprehenderit excepteur qui anim.",
+                "Choose a facility to get started",
                 style: layer2,
               ),
               const VerticalGap(gap: 30),

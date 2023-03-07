@@ -148,7 +148,7 @@ class _EmailVerificationResetPageState
 
   resendEmailOtp() async {
     ProcessingDialog.showProcessingDialog(
-        context: context, title: "title", subtitle: "subtitle");
+        context: context, title: "OTP", subtitle: "Sending OTP");
 
     await ResendEmailVerificationApi.resendEmailVerification(
             email: widget.email)
