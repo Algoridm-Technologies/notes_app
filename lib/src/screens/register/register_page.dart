@@ -196,7 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
             } else if (passwordController.text.length < 8) {
               return kShortPassError;
             } else if (!passwordController.text.contains(RegExp(
-                r"((?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+~?])(?=.*[0-9]))"))) {
+                r"((?=.*[A-Za-z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+~?])(?=.*[0-9]))"))) {
               return kInvalidPasswordError;
             }
             return null;
@@ -245,12 +245,18 @@ class _RegisterPageState extends State<RegisterPage> {
               password: passwordController.text)
           .then((value) {
         ProcessingDialog.cancelDialog(context);
-        // print(value['success']);
+        print(value);
         if (jsonDecode(value)["email"] != null) {
           CustomSnackBar.showSnackbar(
               backgroundColor: kErrorColor1,
               context: context,
               title: jsonDecode(value)["email"][0]);
+        }
+         if (jsonDecode(value)["password"] != null) {
+          CustomSnackBar.showSnackbar(
+              backgroundColor: kErrorColor1,
+              context: context,
+              title: jsonDecode(value)["password"][0]);
         }
         if (jsonDecode(value)["success"] != null) {
           CustomSnackBar.showSnackbar(
