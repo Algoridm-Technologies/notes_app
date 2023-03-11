@@ -19,14 +19,7 @@ class StaffsNotePage extends StatelessWidget {
       appBar: AppBar(
         leading: customBackButton(context),
         actions: [
-          Padding(
-            padding: screenPadding,
-            child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Iconsax.more,
-                )),
-          )
+         
         ],
       ),
       body: Column(

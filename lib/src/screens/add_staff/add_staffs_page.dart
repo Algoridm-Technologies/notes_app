@@ -121,10 +121,16 @@ class _AddStaffsPageState extends State<AddStaffsPage> {
   addStaff() async {
     if (_formkey.currentState!.validate()) {
       _formkey.currentState!.save();
+      if(selectedFacilityId.isEmpty){
+                              CustomSnackBar.showSnackbar(
+            context: context, title: "select facility to continue");
+                        return;
+                      }
       ProcessingDialog.showProcessingDialog(
           context: context,
           title: "Adding Staff",
           subtitle: "Adding new staff to the database");
+             
       await AddUserApi.addUser(
               fullName: nameController.text,
               email: emailController.text,

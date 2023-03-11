@@ -62,6 +62,22 @@ class _AddFacilityPageState extends State<AddFacilityPage> {
                       style: heading3White,
                     ),
                     onTap: () {
+                      if(nameController.text.isEmpty){
+                              CustomSnackBar.showSnackbar(
+            context: context, title: "enter the facility name");
+                        return;
+                      }
+                        if(locationController.text.isEmpty){
+                              CustomSnackBar.showSnackbar(
+            context: context, title: "enter the facility location");
+                        return;
+                      }
+                        if(imagePath==null){
+                              CustomSnackBar.showSnackbar(
+            context: context, title: "select an image");
+                        return;
+                      }
+
                       updateProfile();
                     }),
               ],

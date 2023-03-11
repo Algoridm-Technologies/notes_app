@@ -33,12 +33,12 @@ class StaffNoteHeaderTile extends StatelessWidget {
           const HorizontalGap(gap: 10),
           Text(name),
           const Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Iconsax.search_normal,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(
+          //     Iconsax.search_normal,
+          //   ),
+          // ),
         ],
       ),
     );

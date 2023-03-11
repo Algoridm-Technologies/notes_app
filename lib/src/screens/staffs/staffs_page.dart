@@ -107,6 +107,7 @@ class _EmployerStaffsPageState extends State<EmployerStaffsPage> {
       ),
       floatingActionButton: CircleAvatar(
         radius: 30.r,
+        backgroundColor: kPrimaryColor1,
         child: IconButton(
           onPressed: () {
             Navigator.of(context).push(

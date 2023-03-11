@@ -24,14 +24,7 @@ class EmployerNotesPage extends StatelessWidget {
           elevation: 0,
           automaticallyImplyLeading: false,
           actions: [
-            Padding(
-              padding: screenPadding,
-              child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Iconsax.more,
-                  )),
-            )
+           
           ],
         ),
         body: Column(
