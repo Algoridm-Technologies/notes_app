@@ -1,14 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:note/src/api/note_reply_api.dart';
 import 'package:note/src/provider/database/note_detail_employer_provider.dart';
-import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:note/src/screens/employer_screens/notes_details/components/header_tile.dart';
 import 'package:note/src/utils/constants.dart';
-import 'package:note/src/utils/refresh_token.dart';
-import 'package:note/src/widget/custom_appbar.dart';
-import 'package:note/src/widget/reply_other_tile.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
 
@@ -39,27 +32,27 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
           );
         }
         return Scaffold(
-            appBar: CustomAppBar(
-              title: '',
-            ),
+            // appBar: CustomAppBar(
+            //   title: '',
+            // ),
             body: Column(
+          children: [
+            const HeaderTile(),
+            Expanded(
+                child: ListView(
+              padding: screenPadding,
+              physics: const BouncingScrollPhysics(),
               children: [
-                const HeaderTile(),
-                Expanded(
-                    child: ListView(
-                  padding: screenPadding,
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    const VerticalGap(gap: 20),
-                    Text(
-                      value.isEmpty ? "" : value.model!.text ?? "",
-                      style: layer2,
-                    ),
-                    const VerticalGap(gap: 400),
-                  ],
-                ))
+                const VerticalGap(gap: 20),
+                Text(
+                  value.isEmpty ? "" : value.model!.text ?? "",
+                  style: layer2,
+                ),
+                const VerticalGap(gap: 400),
               ],
-            ));
+            ))
+          ],
+        ));
         // bottomSheet: Consumer<SetStateProvider>(builder: (con, v, c) {
         //   return v.isReplying
         //       ? SizedBox(
@@ -182,7 +175,4 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       },
     );
   }
-
-
-
 }
