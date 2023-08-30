@@ -28,6 +28,7 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(

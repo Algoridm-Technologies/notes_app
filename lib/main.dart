@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:note/src/provider/authentification/user_auth.dart';
 import 'package:note/src/provider/database/access_provider.dart';
@@ -22,7 +23,6 @@ import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/screens/wrapper/auth_wrapper.dart';
 import 'package:note/src/style/style.dart';
 import 'package:note/src/utils/constants.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,9 +30,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var isEmployer = false;
   var prefs = await SharedPreferences.getInstance();
-  // var token =  "";
   var token = prefs.getString("token") ?? "";
-  // token = "th";
+
   if (token != "") {
     Map<String, dynamic> data = Jwt.parseJwt(token);
 
@@ -73,19 +72,15 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         builder: (context, child) {
           return MaterialApp(
-              title: appName,
-              debugShowCheckedModeBanner: false,
-              theme: appTheme,
-              home: token == ""
-                  ? const LaunchPage()
-                  : AuthWrapper(
-                      isEmployer: isEmployer,
-                    )
-              // : isEmployer
-              //     ? const EmployerMainPage()
-              //     : const EmployeeMainPage(),
-              // home: TestPage(),
-              );
+            title: appName,
+            debugShowCheckedModeBanner: false,
+            theme: appTheme,
+            home: token == ""
+                ? const LaunchPage()
+                : AuthWrapper(
+                    isEmployer: isEmployer,
+                  ),
+          );
         },
         designSize: const Size(430, 932),
         minTextAdapt: true,

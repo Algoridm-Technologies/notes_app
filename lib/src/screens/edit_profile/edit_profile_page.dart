@@ -34,8 +34,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    var value = Provider.of<ProfileDetailProvider>(context, listen: false);
+    setState(() {
+      emailController.text = value.model!.email ?? "";
+      nameController.text = value.model!.fullName ?? "";
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: SizedBox(
+        height: 60,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DefaultButton(
+            color: Colors.red,
+            widget: Text(
+              "Delete Account",
+              style: heading3White,
+            ),
+            onTap: () {},
+          ),
+        ),
+      ),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
@@ -49,12 +73,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
       body: Consumer<ProfileDetailProvider>(
         builder: (context, value, child) {
-          if (value.isLoggedIn && emailController.text.isEmpty ||
-              nameController.text.isEmpty) {
-            emailController.text = value.model!.email ?? "";
-            nameController.text = value.model!.fullName ?? "";
-          }
-      
           return Column(
             children: [
               SizedBox(
@@ -172,15 +190,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   updateProfile() async {
     ProcessingDialog.showProcessingDialog(
-        context: context,
-        title: "Profile Update",
-        subtitle: "hold on while we update your details",);
+      context: context,
+      title: "Profile Update",
+      subtitle: "hold on while we update your details",
+    );
     if (imageUrl == null) {
       await UpdateProfileApi.updateProfile(fullName: nameController.text)
           .then((value) {
         Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
         ProcessingDialog.cancelDialog(context);
-     
       });
     } else {
       await UpdateProfileApi.updateProfile(
@@ -188,7 +206,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .then((value) {
         Provider.of<ProfileDetailProvider>(context, listen: false).getDetails();
         ProcessingDialog.cancelDialog(context);
-      
       });
     }
   }
