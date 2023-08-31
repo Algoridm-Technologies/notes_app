@@ -10,9 +10,17 @@ class NoteDetailEmployerProvider extends ChangeNotifier {
   List<Replies> get list => _list;
   NoteDetailModel? _model;
   NoteDetailModel? get model => _model;
+  bool _isProcessing = false;
+  bool get isProcessing => _isProcessing;
   bool _isLoading = true;
   bool get isLoading => _isLoading;
   bool get isEmpty => model == null;
+
+  setisProcessing(bool value) {
+    value = _isProcessing;
+    notifyListeners();
+  }
+
   getFacility(String noteId) async {
     _isLoading = true;
 

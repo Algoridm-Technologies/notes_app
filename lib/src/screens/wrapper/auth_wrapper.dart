@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:note/src/screens/employee_screens/employee_main/employee_main_page.dart';
-import 'package:note/src/screens/employer_screens/employer_main/employer_main_page.dart';
 import 'package:note/src/screens/launch/launch_page.dart';
-import 'package:note/src/screens/login/login_page.dart';
 import 'package:note/src/screens/wrapper/facility_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +21,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    // init();
+    init();
   }
 
   init() async {
@@ -53,7 +50,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                 pageBuilder: ((context, animation, _) {
                   return FadeTransition(
                     opacity: animation,
-                    child: FacilityWrapper(),
+                    child: const FacilityWrapper(),
                   );
                 }),
               ),
@@ -65,22 +62,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-          future: init(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active ||
-                snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return Center(
-                  child: IconButton(
-                      onPressed: () => setState(() {}),
-                      icon: const Center(child: Hero(
-                        tag: "progress",
-                        child: CircularProgressIndicator()))));
-            }
-          }),
+    return const Scaffold(
+      body: Center(
+          child: Hero(tag: "progress", child: CircularProgressIndicator())),
     );
   }
 }

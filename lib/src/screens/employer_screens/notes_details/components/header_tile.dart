@@ -7,7 +7,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:note/src/provider/database/current_facility_provider.dart';
 import 'package:note/src/provider/database/note_detail_employer_provider.dart';
-import 'package:note/src/provider/util/setstate_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/delete_note_api.dart';
@@ -126,15 +125,19 @@ class _HeaderTileState extends State<HeaderTile> {
                         : value.model!.user![0].toUpperCase()),
                   ),
                   const HorizontalGap(gap: 10),
-                  Text(
-                    value.isEmpty ? "" : value.model!.user!,
-                    style: layer2,
+                  Expanded(
+                    child: Text(
+                      value.isEmpty ? "" : value.model!.user!,
+                      maxLines: 1,
+                      style: layer2,
+                    ),
                   ),
                   const HorizontalGap(gap: 10),
                   Text(
                     value.isEmpty
                         ? ""
                         : "${DateFormat("EEEE, MMM d, yyyy").format(DateTime.parse(value.model!.createdAt!))}  ",
+                    overflow: TextOverflow.ellipsis,
                     style: layer2,
                   )
                 ],
@@ -232,27 +235,37 @@ class _HeaderTileState extends State<HeaderTile> {
                                 ),
                               ),
                             ),
-                            loading
-                                ? CircleAvatar(
-                                    radius: 20.r,
-                                    child: CupertinoActivityIndicator(
-                                      radius: 15.r,
-                                    ))
-                                : CircleAvatar(
-                                    radius: 20.r,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        sendReply(
-                                            noteId: value.model!.id!,
-                                            replyId: "",
-                                            text: replyController.text);
-                                      },
-                                      icon: Icon(
-                                        Icons.send,
-                                        size: 25.sp,
+                            Consumer<NoteDetailEmployerProvider>(
+                                builder: (context, p, _) {
+                              return value.isProcessing
+                                  ? CircleAvatar(
+                                      radius: 30.r,
+                                      child: CupertinoActivityIndicator(
+                                        radius: 15.r,
+                                      ))
+                                  : CircleAvatar(
+                                      radius: 30.r,
+                                      child: Center(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            if (replyController.text.isEmpty) {
+                                              return;
+                                            }
+                                            p.setisProcessing(true);
+
+                                            sendReply(
+                                                noteId: value.model!.id!,
+                                                replyId: "",
+                                                text: replyController.text);
+                                          },
+                                          icon: Icon(
+                                            Icons.send,
+                                            size: 25.sp,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                            }),
                           ],
                         ),
                       ),
@@ -270,18 +283,15 @@ class _HeaderTileState extends State<HeaderTile> {
     required String replyId,
     required String text,
   }) async {
-    setState(() {
-      loading = true;
-    });
     await RefreshToken.refreshToken();
     await NoteReplyApi.noteReply(
       noteId: noteId,
       replyId: replyId,
       text: text,
     ).then((value) {
-      setState(() {
-        loading = false;
-      });
+      Navigator.pop(context);
+      Provider.of<NoteDetailEmployerProvider>(context, listen: false)
+          .setisProcessing(false);
       Provider.of<NoteDetailEmployerProvider>(context, listen: false)
           .getFacility(noteId);
     });

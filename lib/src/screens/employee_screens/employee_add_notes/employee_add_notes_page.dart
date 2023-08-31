@@ -148,14 +148,14 @@ class _EmployeeAddNotesPageState extends State<EmployeeAddNotesPage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Iconsax.more,
-                  )),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 8),
+            //   child: IconButton(
+            //       onPressed: () {},
+            //       icon: const Icon(
+            //         Iconsax.more,
+            //       )),
+            // ),
           ],
         ),
         body: Column(
