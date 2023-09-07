@@ -85,6 +85,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 });
               }).onError((error, stackTrace) {
                 ProcessingDialog.cancelDialog(context);
+                 CustomSnackBar.showSnackbar(
+                      context: context, title: error.toString().substring(0,9) );
               });
             },
             child: const Text("Delete")),
