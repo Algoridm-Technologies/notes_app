@@ -5,14 +5,19 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:note/src/api/delete_account_api.dart';
 import 'package:note/src/api/update_profile_api.dart';
 import 'package:note/src/provider/database/profile_detail_provider.dart';
+import 'package:note/src/screens/launch/launch_page.dart';
 import 'package:note/src/utils/constants.dart';
 import 'package:note/src/widget/custom_back_button.dart';
 import 'package:note/src/widget/default_button.dart';
 import 'package:note/src/widget/processing_dialogue.dart';
 import 'package:note/src/widget/vertical_gap.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../widget/custom_snackbar.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -43,6 +48,50 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
+  Widget deleteBody() {
+    return AlertDialog(
+      title: const Text("Delete Account?"),
+      content: const Text("You cannot undo this action"),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancel")),
+        ElevatedButton(
+            onPressed: () {
+              ProcessingDialog.showProcessingDialog(
+                  context: context,
+                  title: "Delete Account",
+                  subtitle: "Deleting Account");
+              DeleteAccountApi.deleteAccount().then((value) async {
+                var prefs = await SharedPreferences.getInstance();
+
+                prefs.setString('token', "").then((value) {
+                  CustomSnackBar.showSnackbar(
+                      context: context, title: "Account Deleted Successfully");
+                  ProcessingDialog.cancelDialog(context);
+                  Navigator.of(context).pushAndRemoveUntil(
+                      PageRouteBuilder(
+                        transitionDuration: kAnimationDuration,
+                        pageBuilder: ((context, animation, _) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: const LaunchPage(),
+                          );
+                        }),
+                      ),
+                      (Route<dynamic> route) => false);
+                });
+              }).onError((error, stackTrace) {
+                ProcessingDialog.cancelDialog(context);
+              });
+            },
+            child: const Text("Delete")),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +105,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
               "Delete Account",
               style: heading3White,
             ),
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => deleteBody(),
+              );
+            },
           ),
         ),
       ),

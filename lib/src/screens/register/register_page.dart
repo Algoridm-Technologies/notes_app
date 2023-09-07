@@ -116,9 +116,10 @@ class _RegisterPageState extends State<RegisterPage> {
           validator: (value) {
             if (emailController.text.isEmpty) {
               return kEmailNullError;
-            } else if (!emailValidatorRegExp.hasMatch(emailController.text)) {
-              return kInvalidEmailError;
             }
+            //  else if (!emailValidatorRegExp.hasMatch(emailController.text)) {
+            //   return kInvalidEmailError;
+            // }
             return null;
           },
           onSaved: (String? value) {},
