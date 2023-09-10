@@ -51,7 +51,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget deleteBody() {
     return AlertDialog(
       title: const Text("Delete Account?"),
-      content: const Text("You cannot undo this action"),
+      content: const Text("Are you sure you want to delete your account?"),
       actions: [
         OutlinedButton(
             onPressed: () {
@@ -59,6 +59,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
             child: const Text("Cancel")),
         ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
             onPressed: () {
               ProcessingDialog.showProcessingDialog(
                   context: context,
@@ -85,11 +88,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 });
               }).onError((error, stackTrace) {
                 ProcessingDialog.cancelDialog(context);
-                 CustomSnackBar.showSnackbar(
-                      context: context, title: error.toString().substring(0,9) );
+                CustomSnackBar.showSnackbar(
+                    context: context, title: error.toString().substring(0, 9));
               });
             },
-            child: const Text("Delete")),
+            child: const Text(
+              "Delete",
+              style: TextStyle(color: kWhiteColor),
+            )),
       ],
     );
   }
